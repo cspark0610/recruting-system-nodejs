@@ -7,6 +7,7 @@ window.onload = () => {
   const finishButton = document.getElementById('btn-finish');
   const reRecordButton = document.getElementById('re-record');
 
+  finishButton.style.display = 'none';
   reRecordButton.style.display = 'none';
 
   navigator.mediaDevices
@@ -26,6 +27,7 @@ window.onload = () => {
       stopButton.onclick = () => {
         mediaRecorder.stop();
         stopButton.style.display = 'none';
+        finishButton.style.display = 'block';
         reRecordButton.style.display = 'block';
       };
 
@@ -50,6 +52,7 @@ window.onload = () => {
         alert('ATENCION!! Perderas el video anterior...');
 
         stopButton.style.display = 'block';
+        finishButton.style.display = 'none';
         reRecordButton.style.display = 'none';
         videoChunks.length = 0;
 
