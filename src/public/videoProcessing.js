@@ -2,12 +2,17 @@ window.onload = () => {
   const videoChunks = [];
   let mediaRecorder = undefined;
 
+  const startButton = document.getElementById('btn-start');
+  const stopButton = document.getElementById('btn-stop');
+  const finishButton = document.getElementById('btn-finish');
+  const reRecordButton = document.getElementById('re-record');
+
+  reRecordButton.style.display = 'none';
+
   navigator.mediaDevices
     .getUserMedia({ audio: true, video: true })
     .then((stream) => {
       document.getElementById('video').srcObject = stream;
-
-      const startButton = document.getElementById('btn-start');
 
       startButton.onclick = () => {
         mediaRecorder = new MediaRecorder(stream);
@@ -18,16 +23,15 @@ window.onload = () => {
         startButton.style.display = 'none';
       };
 
-      const stopButton = document.getElementById('btn-stop');
-
       stopButton.onclick = () => {
         mediaRecorder.stop();
         stopButton.style.display = 'none';
+        reRecordButton.style.display = 'block';
       };
 
-      document.getElementById('btn-finish').onclick = () => {
+      finishButton.onclick = () => {
         const blob = new Blob(videoChunks, {
-          type: 'video/webm',
+          type: 'video/mp4',
         });
         console.log(blob);
 
@@ -42,12 +46,19 @@ window.onload = () => {
         a.click();
       };
 
-      document.getElementById('re-record').onclick = () => {
+      reRecordButton.onclick = () => {
+        alert('ATENCION!! Perderas el video anterior...');
+
+        stopButton.style.display = 'block';
+        reRecordButton.style.display = 'none';
+        videoChunks.length = 0;
+
         mediaRecorder = new MediaRecorder(stream);
         mediaRecorder.start(10);
         mediaRecorder.ondataavailable = (e) => {
           videoChunks.push(e.data);
         };
       };
-    });
+    })
+    .catch((e) => console.error(e));
 };
