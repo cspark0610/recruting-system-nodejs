@@ -1,10 +1,12 @@
 window.onload = () => {
   let videoChunks = [];
   let mediaRecorder = undefined;
+
   navigator.mediaDevices
     .getUserMedia({ audio: true, video: true })
     .then((stream) => {
       document.getElementById('video').srcObject = stream;
+
       let startButton = document.getElementById('btn-start');
 
       startButton.onclick = () => {
