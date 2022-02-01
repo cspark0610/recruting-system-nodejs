@@ -1,5 +1,5 @@
 window.onload = () => {
-  let videoChunks = [];
+  const videoChunks = [];
   let mediaRecorder = undefined;
 
   navigator.mediaDevices
@@ -7,7 +7,7 @@ window.onload = () => {
     .then((stream) => {
       document.getElementById('video').srcObject = stream;
 
-      let startButton = document.getElementById('btn-start');
+      const startButton = document.getElementById('btn-start');
 
       startButton.onclick = () => {
         mediaRecorder = new MediaRecorder(stream);
@@ -18,7 +18,7 @@ window.onload = () => {
         startButton.style.display = 'none';
       };
 
-      let stopButton = document.getElementById('btn-stop');
+      const stopButton = document.getElementById('btn-stop');
 
       stopButton.onclick = () => {
         mediaRecorder.stop();
@@ -29,8 +29,10 @@ window.onload = () => {
         const blob = new Blob(videoChunks, {
           type: 'video/webm',
         });
+        console.log(blob);
 
         const url = URL.createObjectURL(blob);
+        console.log(url);
         const a = document.createElement('a');
 
         document.body.appendChild(a);
