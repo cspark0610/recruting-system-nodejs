@@ -1,3 +1,5 @@
+const axios = require('axios').default;
+
 window.onload = () => {
   const videoChunks = [];
   let mediaRecorder = undefined;
@@ -7,6 +9,7 @@ window.onload = () => {
   const finishButton = document.getElementById('btn-finish');
   const reRecordButton = document.getElementById('re-record');
 
+  stopButton.style.display = 'none';
   finishButton.style.display = 'none';
   reRecordButton.style.display = 'none';
 
@@ -21,6 +24,7 @@ window.onload = () => {
         mediaRecorder.ondataavailable = (e) => {
           videoChunks.push(e.data);
         };
+        stopButton.style.display = 'block';
         startButton.style.display = 'none';
       };
 
@@ -31,21 +35,25 @@ window.onload = () => {
         reRecordButton.style.display = 'block';
       };
 
-      finishButton.onclick = () => {
-        const blob = new Blob(videoChunks, {
-          type: 'video/mp4',
-        });
-        console.log(blob);
+      finishButton.onclick = async () => {
+        try {
+          const blob = new Blob(videoChunks, {
+            type: 'video/mp4',
+            name: 'first',
+          });
 
-        const url = URL.createObjectURL(blob);
-        console.log(url);
-        const a = document.createElement('a');
+          const formData = new FormData();
+          formData.append('video', blob);
 
-        document.body.appendChild(a);
-        a.style.display = 'none';
-        a.href = url;
-        a.download = 'test.mp4';
-        a.click();
+          const { data } = await axios.post(
+            'https://e050-186-58-42-123.ngrok.io/video/save',
+            formData,
+            { headers: { 'Content-Type': 'multipart/form-data' } },
+          );
+          console.log(data);
+        } catch (e) {
+          console.error(e);
+        }
       };
 
       reRecordButton.onclick = () => {
