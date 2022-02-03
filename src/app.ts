@@ -17,7 +17,4 @@ app.use(setHeaders);
 
 app.use('/', routes);
 
-app.set('view engine', 'ejs');
-app.set('public', path.join(__dirname, 'public'));
-
 export default app;
