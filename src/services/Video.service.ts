@@ -17,7 +17,7 @@ const s3 = new S3({
   region: AWS_BUCKET_REGION,
 });
 
-async function uploadVideoToS3(file: File) {
+export async function uploadVideoToS3(file: File) {
   try {
     const fileStream = createReadStream(file.path);
 
@@ -28,9 +28,20 @@ async function uploadVideoToS3(file: File) {
     };
 
     return await s3.upload(uploadParams).promise();
-  } catch (e) {
+  } catch (e: any) {
     console.error(e);
   }
 }
 
-export default uploadVideoToS3;
+export function GetVideoFromS3(key: string) {
+  try {
+    const getParams = {
+      Bucket: 'videorecorderbucket',
+      Key: key,
+    };
+
+    return s3.getObject(getParams).createReadStream();
+  } catch (e: any) {
+    console.error(e);
+  }
+}

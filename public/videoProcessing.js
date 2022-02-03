@@ -49,6 +49,8 @@ window.onload = () => {
             formData,
             { headers: { 'Content-Type': 'multipart/form-data' } },
           );
+          videoChunks.length = 0;
+          finishButton.style.display = 'none';
         } catch (e) {
           console.error(e);
         }
