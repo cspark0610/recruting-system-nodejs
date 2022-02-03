@@ -45,12 +45,11 @@ window.onload = () => {
           const formData = new FormData();
           formData.append('video', blob);
 
-          const { data } = await axios.post(
+          await axios.post(
             'https://e050-186-58-42-123.ngrok.io/video/save',
             formData,
             { headers: { 'Content-Type': 'multipart/form-data' } },
           );
-          console.log(data);
         } catch (e) {
           console.error(e);
         }
