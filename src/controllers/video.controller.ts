@@ -31,9 +31,9 @@ export const getVideoFromS3 = (req: Request, res: Response) => {
 
 export const uploadVideoToS3 = async (req: Request, res: Response) => {
   try {
-    const file = req.file;
+    const newCandidateVideo = req.file;
 
-    if (!file) {
+    if (!newCandidateVideo) {
       return res.status(400).send({
         status: 'failure',
         code: 400,
@@ -41,10 +41,10 @@ export const uploadVideoToS3 = async (req: Request, res: Response) => {
       });
     }
 
-    const result = await UploadVideoToS3(file);
+    const result = await UploadVideoToS3(newCandidateVideo);
 
-    console.log(file);
-    await unlinkFile(file.path);
+    console.log(newCandidateVideo);
+    await unlinkFile(newCandidateVideo.path);
 
     console.log(result);
 
