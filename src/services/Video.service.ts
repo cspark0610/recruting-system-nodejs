@@ -17,7 +17,7 @@ const s3 = new S3({
   region: AWS_BUCKET_REGION,
 });
 
-export async function uploadVideoToS3(file: File) {
+export async function UploadVideoToS3(file: File) {
   try {
     const fileStream = createReadStream(file.path);
 

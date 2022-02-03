@@ -1,11 +1,11 @@
 import { Request, Response } from 'express';
 import { createWriteStream, unlink } from 'fs';
 import { promisify } from 'util';
-import { uploadVideoToS3, GetVideoFromS3 } from '../services/Video.service';
+import { UploadVideoToS3, GetVideoFromS3 } from '../services/Video.service';
 
 const unlinkFile = promisify(unlink);
 
-export const saveVideoToS3 = async (req: Request, res: Response) => {
+export const uploadVideoToS3 = async (req: Request, res: Response) => {
   try {
     const file = req.file;
 
@@ -13,7 +13,7 @@ export const saveVideoToS3 = async (req: Request, res: Response) => {
       return res.status(400).send('No file was received');
     }
 
-    const result = await uploadVideoToS3(file);
+    const result = await UploadVideoToS3(file);
 
     console.log(file);
     await unlinkFile(file.path);
