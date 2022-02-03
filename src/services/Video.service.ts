@@ -1,9 +1,11 @@
-require('dotenv').config();
-const { createReadStream } = require('fs');
-const S3 = require('aws-sdk/clients/s3');
+import dotenv from 'dotenv';
+import { createReadStream } from 'fs';
+import S3 from 'aws-sdk/clients/s3';
+import File from '../interfaces/File.interface';
+
+dotenv.config();
 
 const {
-  AWS_BUCKET_NAME,
   AWS_BUCKET_REGION,
   AWS_BUCKET_ACCESS_KEY,
   AWS_BUCKET_SECRET_ACCESS_KEY,
@@ -15,20 +17,20 @@ const s3 = new S3({
   region: AWS_BUCKET_REGION,
 });
 
-async function uploadVideoToS3(file) {
+async function uploadVideoToS3(file: File) {
   try {
     const fileStream = createReadStream(file.path);
 
     const uploadParams = {
-      Bucket: AWS_BUCKET_NAME,
+      Bucket: 'videorecorderbucket',
       Body: fileStream,
       Key: file.filename,
     };
 
-    return await s3.putObject(uploadParams).promise();
+    return await s3.upload(uploadParams).promise();
   } catch (e) {
     console.error(e);
   }
 }
 
-module.exports = uploadVideoToS3;
+export default uploadVideoToS3;

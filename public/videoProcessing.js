@@ -39,14 +39,13 @@ window.onload = () => {
         try {
           const blob = new Blob(videoChunks, {
             type: 'video/mp4',
-            name: 'first',
           });
 
           const formData = new FormData();
           formData.append('video', blob);
 
           await axios.post(
-            'https://e050-186-58-42-123.ngrok.io/video/save',
+            'https://efa5-186-58-42-123.ngrok.io/video/save',
             formData,
             { headers: { 'Content-Type': 'multipart/form-data' } },
           );

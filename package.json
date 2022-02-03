@@ -1,10 +1,10 @@
 {
-  "name": "videointerview",
+  "name": "videointerview-typescript",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon index.js"
+    "start": "nodemon index.ts"
   },
   "keywords": [],
   "author": "",
@@ -17,7 +17,12 @@
     "multer": "^1.4.4"
   },
   "devDependencies": {
+    "@types/express": "^4.17.13",
+    "@types/morgan": "^1.9.3",
+    "@types/multer": "^1.4.7",
+    "@types/node": "^17.0.14",
     "morgan": "^1.10.0",
-    "nodemon": "^2.0.15"
+    "nodemon": "^2.0.15",
+    "ts-node": "^10.4.0"
   }
 }
