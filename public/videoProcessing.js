@@ -34,6 +34,7 @@ window.onload = () => {
         };
 
         watchContainer.style.display = 'block';
+
         interval = setInterval(startTimer, 1000);
 
         stopRecordingButton.style.display = 'block';
@@ -62,6 +63,7 @@ window.onload = () => {
             formData,
             { headers: { 'Content-Type': 'multipart/form-data' } },
           );
+
           videoChunks.length = 0;
           finishRecordingButton.style.display = 'none';
         } catch (e) {
@@ -107,6 +109,7 @@ window.onload = () => {
         if (watchSeconds > 60) {
           watchMinutes++;
           watchMinutesElement.innerHTML = '0' + watchMinutes;
+
           watchSeconds = 0;
           watchSecondsElement.innerHTML = '0' + 0;
         }
