@@ -99,7 +99,7 @@ window.onload = () => {
         watchSeconds++;
 
         if (watchSeconds <= 9) {
-          watchSecondsElement.innerHTML = '0' + watchSeconds;
+          watchSecondsElement.innerHTML = `0${watchSeconds}`;
         }
 
         if (watchSeconds > 9) {
@@ -108,7 +108,7 @@ window.onload = () => {
 
         if (watchSeconds > 60) {
           watchMinutes++;
-          watchMinutesElement.innerHTML = '0' + watchMinutes;
+          watchMinutesElement.innerHTML = `0${watchMinutes}`;
 
           watchSeconds = 0;
           watchSecondsElement.innerHTML = '0' + 0;
