@@ -2,6 +2,7 @@ import dotenv from 'dotenv';
 import { createReadStream } from 'fs';
 import S3 from 'aws-sdk/clients/s3';
 import File from '../interfaces/File.interface';
+import UploadParams from '../interfaces/UploadParams.interface';
 
 dotenv.config();
 
@@ -21,7 +22,7 @@ export async function UploadVideoToS3(file: File) {
   try {
     const fileStream = createReadStream(file.path);
 
-    const uploadParams = {
+    const uploadParams: UploadParams = {
       Bucket: 'videorecorderbucket',
       Body: fileStream,
       Key: file.filename,
