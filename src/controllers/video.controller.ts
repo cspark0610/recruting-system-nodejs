@@ -5,30 +5,6 @@ import { UploadVideoToS3, GetVideoFromS3 } from '../services/Video.service';
 
 const unlinkFile = promisify(unlink);
 
-export const uploadVideoToS3 = async (req: Request, res: Response) => {
-  try {
-    const file = req.file;
-
-    if (!file) {
-      return res.status(400).send('No file was received');
-    }
-
-    const result = await UploadVideoToS3(file);
-
-    console.log(file);
-    await unlinkFile(file.path);
-
-    console.log(result);
-
-    res.send({
-      status: 'uploaded successfully',
-      videoKey: result?.Key,
-    });
-  } catch (e: any) {
-    return new Error(e);
-  }
-};
-
 export const getVideoFromS3 = (req: Request, res: Response) => {
   try {
     const { key } = req.params;
@@ -48,6 +24,30 @@ export const getVideoFromS3 = (req: Request, res: Response) => {
     candidateVideo.pipe(stream);
 
     res.send('success');
+  } catch (e: any) {
+    return new Error(e);
+  }
+};
+
+export const uploadVideoToS3 = async (req: Request, res: Response) => {
+  try {
+    const file = req.file;
+
+    if (!file) {
+      return res.status(400).send('No file was received');
+    }
+
+    const result = await UploadVideoToS3(file);
+
+    console.log(file);
+    await unlinkFile(file.path);
+
+    console.log(result);
+
+    res.send({
+      status: 'uploaded successfully',
+      videoKey: result?.Key,
+    });
   } catch (e: any) {
     return new Error(e);
   }
