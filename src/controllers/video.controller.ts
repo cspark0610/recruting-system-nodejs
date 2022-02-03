@@ -34,9 +34,18 @@ export const getVideoFromS3 = (req: Request, res: Response) => {
     const { key } = req.params;
 
     const candidateVideo = GetVideoFromS3(key);
+
+    if (!candidateVideo) {
+      return res.status(404).send({
+        status: 'failure',
+        code: 404,
+        message: 'Video not found',
+      });
+    }
+
     const stream = createWriteStream(`./downloads/${key}`);
 
-    candidateVideo?.pipe(stream);
+    candidateVideo.pipe(stream);
 
     res.send('success');
   } catch (e: any) {
