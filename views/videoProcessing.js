@@ -21,6 +21,20 @@ window.onload = () => {
 
   watchContainer.style.display = 'none';
 
+  const setElementsDisplay = (
+    startReocordingButtonDisplay = 'block',
+    stopRecordingButtonDisplay = 'none',
+    finishRecordingButtonDisplay = 'none',
+    reRecordButtonDisplay = 'none',
+    watchContainerDisplay = 'none',
+  ) => {
+    startReocordingButton.style.display = startReocordingButtonDisplay;
+    stopRecordingButton.style.display = stopRecordingButtonDisplay;
+    finishRecordingButton.style.display = finishRecordingButtonDisplay;
+    reRecordButton.style.display = reRecordButtonDisplay;
+    watchContainer.style.display = watchContainerDisplay;
+  };
+
   const startTimer = () => {
     watchSeconds++;
 
@@ -52,20 +66,16 @@ window.onload = () => {
       videoChunks.push(e.data);
     };
 
-    watchContainer.style.display = 'block';
-
     interval = setInterval(startTimer, 1000);
 
-    stopRecordingButton.style.display = 'block';
-    startReocordingButton.style.display = 'none';
+    setElementsDisplay('none', 'block', 'none', 'none', 'block');
   };
 
   const stopRecording = () => {
     mediaRecorder.stop();
     clearInterval(interval);
-    stopRecordingButton.style.display = 'none';
-    finishRecordingButton.style.display = 'block';
-    reRecordButton.style.display = 'block';
+
+    setElementsDisplay('none', 'none', 'block', 'block');
   };
 
   const finishRecordingAndSendVideo = async () => {
@@ -82,7 +92,8 @@ window.onload = () => {
       });
 
       videoChunks.length = 0;
-      finishRecordingButton.style.display = 'none';
+
+      setElementsDisplay('none', 'none', 'none', 'block', 'none');
     } catch (e) {
       console.error(e);
     }
@@ -103,9 +114,8 @@ window.onload = () => {
       reRecordButton.onclick = () => {
         alert('ATENCION!! Perderas el video anterior...');
 
-        stopRecordingButton.style.display = 'block';
-        finishRecordingButton.style.display = 'none';
-        reRecordButton.style.display = 'none';
+        setElementsDisplay('none', 'block', 'none', 'none', 'block');
+
         videoChunks.length = 0;
 
         startRecording();
