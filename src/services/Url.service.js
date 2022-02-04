@@ -20,11 +20,9 @@ const GetUniqueUrl = async (url) => {
   }
 };
 
-const GenerateUrl = async (fullUrl) => {
+const GenerateUrl = async () => {
   try {
-    await Url.create({
-      fullUrl: fullUrl,
-    });
+    await Url.create();
   } catch (e) {
     console.error(e);
   }

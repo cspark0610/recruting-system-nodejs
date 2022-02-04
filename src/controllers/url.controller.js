@@ -1,4 +1,5 @@
 const Url = require('../db/schemas/Url.schema');
+require('dotnev').config();
 
 const {
   GetUrls,
@@ -43,7 +44,7 @@ const getUniqueUrl = async (req, res) => {
       });
     }
 
-    res.redirect(uniqueUrl.fullUrl);
+    res.redirect(process.env.REDIRECT_URL);
   } catch (e) {
     return res.send(e);
   }
@@ -51,16 +52,6 @@ const getUniqueUrl = async (req, res) => {
 
 const generateUrl = async (req, res) => {
   try {
-    const { fullUrl } = req.body;
-
-    if (!fullUrl) {
-      return res.status(400).send({
-        status: 'failure',
-        code: 400,
-        message: 'No url was received',
-      });
-    }
-
     await GenerateUrl(fullUrl);
 
     return res.status(201).send({
