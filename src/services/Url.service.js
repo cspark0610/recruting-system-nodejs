@@ -20,9 +20,9 @@ const GetUniqueUrl = async (url) => {
   }
 };
 
-const GenerateUrl = async () => {
+const GenerateUrl = async (redirect_url) => {
   try {
-    await Url.create();
+    await Url.create({ redirectUrl: redirect_url });
   } catch (e) {
     console.error(e);
   }

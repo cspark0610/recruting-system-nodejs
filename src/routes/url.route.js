@@ -8,7 +8,7 @@ const {
 
 router.get('/get', getUrls);
 
-router.get('/get/:shortUrl', getUniqueUrl);
+router.get('/validate', getUniqueUrl);
 
 router.post('/create', generateUrl);
 
