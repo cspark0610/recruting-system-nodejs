@@ -7,7 +7,7 @@ const {
   GenerateUrl,
 } = require('../services/Url.service');
 
-const getUrls = async (req, res) => {
+const getUrls = async (_req, res) => {
   try {
     const urls = await GetUrls();
 
@@ -32,9 +32,9 @@ const getUrls = async (req, res) => {
 
 const getUniqueUrl = async (req, res) => {
   try {
-    const { shortUrl } = req.params;
+    const { id } = req.query;
 
-    const uniqueUrl = await GetUniqueUrl(shortUrl);
+    const uniqueUrl = await GetUniqueUrl(id);
 
     if (!uniqueUrl || Object.entries(uniqueUrl).length === 0) {
       return res.status(404).send({
@@ -50,7 +50,7 @@ const getUniqueUrl = async (req, res) => {
   }
 };
 
-const generateUrl = async (req, res) => {
+const generateUrl = async (_req, res) => {
   try {
     await GenerateUrl(fullUrl);
 
