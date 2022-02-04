@@ -1,8 +1,6 @@
 const { createReadStream } = require('fs');
 const S3 = require('aws-sdk/clients/s3');
 require('dotenv').config();
-//import File from '../interfaces/File.interface';
-//import UploadParams from '../interfaces/UploadParams.interface';
 
 const {
   AWS_BUCKET_REGION,

@@ -1,5 +1,4 @@
 const router = require('express').Router();
-//import path from 'path';
 
 const videoRoutes = require('./video.route');
 
