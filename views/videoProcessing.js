@@ -83,14 +83,13 @@ window.onload = () => {
           videoChunks.push(e.data);
         };
 
-        clearInterval(interval);
+        interval = setInterval(startTimer, 1000);
+
         watchMinutes = '00';
         watchSeconds = '00';
 
         watchMinutesElement.innerHTML = watchMinutes;
         watchSecondsElement.innerHTML = watchSeconds;
-
-        setInterval(startTimer, 1000);
       };
 
       const startTimer = () => {
