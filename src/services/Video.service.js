@@ -1,8 +1,8 @@
 import dotenv from 'dotenv';
 import { createReadStream } from 'fs';
 import S3 from 'aws-sdk/clients/s3';
-import File from '../interfaces/File.interface';
-import UploadParams from '../interfaces/UploadParams.interface';
+//import File from '../interfaces/File.interface';
+//import UploadParams from '../interfaces/UploadParams.interface';
 
 dotenv.config();
 
@@ -18,23 +18,23 @@ const s3 = new S3({
   region: AWS_BUCKET_REGION,
 });
 
-export async function UploadVideoToS3(file: File) {
+export async function UploadVideoToS3(file) {
   try {
     const fileStream = createReadStream(file.path);
 
-    const uploadParams: UploadParams = {
+    const uploadParams = {
       Bucket: 'videorecorderbucket',
       Body: fileStream,
       Key: file.filename,
     };
 
     return await s3.upload(uploadParams).promise();
-  } catch (e: any) {
+  } catch (e) {
     console.error(e);
   }
 }
 
-export function GetVideoFromS3(key: string) {
+export function GetVideoFromS3(key) {
   try {
     const getParams = {
       Bucket: 'videorecorderbucket',
@@ -42,7 +42,7 @@ export function GetVideoFromS3(key: string) {
     };
 
     return s3.getObject(getParams).createReadStream();
-  } catch (e: any) {
+  } catch (e) {
     console.error(e);
   }
 }

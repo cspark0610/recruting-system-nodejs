@@ -1,0 +1,1 @@
+const generateUrl = (req, res) => {};
