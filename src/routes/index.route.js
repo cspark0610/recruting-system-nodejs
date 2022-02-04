@@ -1,12 +1,10 @@
-import { Router } from 'express';
-import path from 'path';
+const router = require('express').Router();
+//import path from 'path';
 
-import videoRoutes from './video.route';
-
-const router = Router();
+const videoRoutes = require('./video.route');
 
 router.get('', (_req, res) => {
-  res.sendFile(path.join(__dirname, '../public/index.html'));
+  res.render('index');
 });
 
 //router.get(':shortUrl', (req: Request, res: Response) => {
@@ -19,4 +17,4 @@ router.get('', (_req, res) => {
 
 router.use('/video', videoRoutes);
 
-export default router;
+module.exports = router;

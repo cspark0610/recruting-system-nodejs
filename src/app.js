@@ -1,17 +1,19 @@
-import express from 'express';
-import path from 'path';
-import cors from 'cors';
+const express = require('express');
+const path = require('path');
+const cors = require('cors');
 
-import routes from './routes/index.route';
+const routes = require('./routes/index.route');
 //import setHeaders from './middlewares/setHeaders';
 
 const app = express();
 
 app.use(express.urlencoded({ extended: true, limit: '25mb' }));
 app.use(express.json({ limit: '25mb' }));
-app.use(express.static(path.join(__dirname, './public')));
+app.use(express.static(path.join(__dirname, '../views')));
 //app.use(cors);
+
+app.set('view engine', 'ejs');
 
 app.use('/', routes);
 
-export default app;
+module.exports = app;

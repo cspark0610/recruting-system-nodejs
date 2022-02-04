@@ -1,4 +1,4 @@
-import { diskStorage } from 'multer';
+const { diskStorage } = require('multer');
 
 const storage = diskStorage({
   destination: (_req, _file, cb) => {
@@ -11,4 +11,4 @@ const storage = diskStorage({
   },
 });
 
-export default storage;
+module.exports = storage;

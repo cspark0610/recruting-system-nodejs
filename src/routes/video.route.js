@@ -1,13 +1,10 @@
-import { Router, Request, Response } from 'express';
-import path from 'path';
-import multer from 'multer';
-import storage from '../lib/multerConfig';
-import {
+const router = require('express').Router();
+const multer = require('multer');
+const storage = require('../lib/multerConfig');
+const {
   uploadVideoToS3,
   getVideoFromS3,
-} from '../controllers/video.controller';
-
-const router = Router();
+} = require('../controllers/video.controller');
 
 const upload = multer({ storage: storage });
 
@@ -15,4 +12,4 @@ router.get('/get/:key', getVideoFromS3);
 
 router.post('/save', upload.single('video'), uploadVideoToS3);
 
-export default router;
+module.exports = router;
