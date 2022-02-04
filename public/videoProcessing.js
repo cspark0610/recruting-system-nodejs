@@ -58,11 +58,9 @@ window.onload = () => {
           const formData = new FormData();
           formData.append('video', blob);
 
-          await axios.post(
-            'https://6687-186-58-42-123.ngrok.io/video/save',
-            formData,
-            { headers: { 'Content-Type': 'multipart/form-data' } },
-          );
+          await axios.post('/video/save', formData, {
+            headers: { 'Content-Type': 'multipart/form-data' },
+          });
 
           videoChunks.length = 0;
           finishRecordingButton.style.display = 'none';
