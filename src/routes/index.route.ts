@@ -6,7 +6,7 @@ import videoRoutes from './video.route';
 const router = Router();
 
 router.get('', (_req: Request, res: Response) => {
-  res.sendFile(path.join(__dirname, '../../public/index.html'));
+  res.sendFile(path.join(__dirname, '../public/index.html'));
 });
 
 //router.get(':shortUrl', (req: Request, res: Response) => {
