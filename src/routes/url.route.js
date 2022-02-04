@@ -1,11 +1,15 @@
 const router = require('express').Router();
 
-router.get('/get/:shortUrl', (req, res) => {
-  res.status(404).send({
-    status: 'failure',
-    code: 404,
-    message: 'Cannot GET /url/get',
-  });
-});
+const {
+  getUrls,
+  getUniqueUrl,
+  generateUrl,
+} = require('../controllers/url.controller');
+
+router.get('/get', getUrls);
+
+router.get('/get/:shortUrl', getUniqueUrl);
+
+router.post('/create', generateUrl);
 
 module.exports = router;
