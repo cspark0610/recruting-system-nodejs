@@ -21,53 +21,84 @@ window.onload = () => {
 
   watchContainer.style.display = 'none';
 
+  const startTimer = () => {
+    watchSeconds++;
+
+    if (watchSeconds <= 9) {
+      watchSecondsElement.innerHTML = `0${watchSeconds}`;
+    }
+
+    if (watchSeconds > 9) {
+      watchSecondsElement.innerHTML = watchSeconds;
+    }
+
+    if (watchSeconds > 60) {
+      watchMinutes++;
+      watchMinutesElement.innerHTML = `0${watchMinutes}`;
+
+      watchSeconds = 0;
+      watchSecondsElement.innerHTML = '0' + 0;
+    }
+
+    if (watchMinutes > 9) {
+      watchMinutesElement.innerHTML = watchMinutes;
+    }
+  };
+
+  const startRecording = () => {
+    mediaRecorder = new MediaRecorder(stream);
+    mediaRecorder.start(10);
+    mediaRecorder.ondataavailable = (e) => {
+      videoChunks.push(e.data);
+    };
+
+    watchContainer.style.display = 'block';
+
+    interval = setInterval(startTimer, 1000);
+
+    stopRecordingButton.style.display = 'block';
+    startReocordingButton.style.display = 'none';
+  };
+
+  const stopRecording = () => {
+    mediaRecorder.stop();
+    clearInterval(interval);
+    stopRecordingButton.style.display = 'none';
+    finishRecordingButton.style.display = 'block';
+    reRecordButton.style.display = 'block';
+  };
+
+  const finishRecordingAndSendVideo = async () => {
+    try {
+      const blob = new Blob(videoChunks, {
+        type: 'video/mp4',
+      });
+
+      const formData = new FormData();
+      formData.append('video', blob);
+
+      await axios.post('/video/save', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
+
+      videoChunks.length = 0;
+      finishRecordingButton.style.display = 'none';
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   navigator.mediaDevices
     .getUserMedia({ audio: true, video: true })
     .then((stream) => {
       document.getElementById('video').srcObject = stream;
 
-      startReocordingButton.onclick = () => {
-        mediaRecorder = new MediaRecorder(stream);
-        mediaRecorder.start(10);
-        mediaRecorder.ondataavailable = (e) => {
-          videoChunks.push(e.data);
-        };
+      startReocordingButton.onclick = () => startRecording();
 
-        watchContainer.style.display = 'block';
+      stopRecordingButton.onclick = () => stopRecording();
 
-        interval = setInterval(startTimer, 1000);
-
-        stopRecordingButton.style.display = 'block';
-        startReocordingButton.style.display = 'none';
-      };
-
-      stopRecordingButton.onclick = () => {
-        mediaRecorder.stop();
-        clearInterval(interval);
-        stopRecordingButton.style.display = 'none';
-        finishRecordingButton.style.display = 'block';
-        reRecordButton.style.display = 'block';
-      };
-
-      finishRecordingButton.onclick = async () => {
-        try {
-          const blob = new Blob(videoChunks, {
-            type: 'video/mp4',
-          });
-
-          const formData = new FormData();
-          formData.append('video', blob);
-
-          await axios.post('/video/save', formData, {
-            headers: { 'Content-Type': 'multipart/form-data' },
-          });
-
-          videoChunks.length = 0;
-          finishRecordingButton.style.display = 'none';
-        } catch (e) {
-          console.error(e);
-        }
-      };
+      finishRecordingButton.onclick = async () =>
+        await finishRecordingAndSendVideo();
 
       reRecordButton.onclick = () => {
         alert('ATENCION!! Perderas el video anterior...');
@@ -77,43 +108,13 @@ window.onload = () => {
         reRecordButton.style.display = 'none';
         videoChunks.length = 0;
 
-        mediaRecorder = new MediaRecorder(stream);
-        mediaRecorder.start(10);
-        mediaRecorder.ondataavailable = (e) => {
-          videoChunks.push(e.data);
-        };
-
-        interval = setInterval(startTimer, 1000);
+        startRecording();
 
         watchMinutes = '00';
         watchSeconds = '00';
 
         watchMinutesElement.innerHTML = watchMinutes;
         watchSecondsElement.innerHTML = watchSeconds;
-      };
-
-      const startTimer = () => {
-        watchSeconds++;
-
-        if (watchSeconds <= 9) {
-          watchSecondsElement.innerHTML = `0${watchSeconds}`;
-        }
-
-        if (watchSeconds > 9) {
-          watchSecondsElement.innerHTML = watchSeconds;
-        }
-
-        if (watchSeconds > 60) {
-          watchMinutes++;
-          watchMinutesElement.innerHTML = `0${watchMinutes}`;
-
-          watchSeconds = 0;
-          watchSecondsElement.innerHTML = '0' + 0;
-        }
-
-        if (watchMinutes > 9) {
-          watchMinutesElement.innerHTML = watchMinutes;
-        }
       };
     })
     .catch((e) => console.error(e));
