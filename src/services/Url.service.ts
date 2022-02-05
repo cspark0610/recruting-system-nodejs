@@ -1,6 +1,6 @@
-const Url = require('../db/schemas/Url.schema');
+import Url from '../db/schemas/Url.schema';
 
-const GetUrls = async () => {
+export const GetUrls = async () => {
   try {
     const urls = await Url.find();
 
@@ -10,7 +10,7 @@ const GetUrls = async () => {
   }
 };
 
-const GetUniqueUrl = async (url) => {
+export const GetUniqueUrl = async (url: string) => {
   try {
     const uniqueUrl = await Url.findOne({ shortUrl: url });
 
@@ -20,16 +20,10 @@ const GetUniqueUrl = async (url) => {
   }
 };
 
-const GenerateUrl = async (redirect_url) => {
+export const GenerateUrl = async (redirect_url: string) => {
   try {
     return await Url.create({ redirectUrl: redirect_url });
   } catch (e) {
     console.error(e);
   }
-};
-
-module.exports = {
-  GetUrls,
-  GetUniqueUrl,
-  GenerateUrl,
 };

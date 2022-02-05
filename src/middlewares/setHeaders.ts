@@ -1,4 +1,6 @@
-const setHeaders = (_req, res, next) => {
+import { Request, Response, NextFunction } from 'express';
+
+const setHeaders = (_req: Request, res: Response, next: NextFunction) => {
   res.header(
     'Access-Control-Allow-Origin',
     'https://6687-186-58-42-123.ngrok.io',
@@ -12,4 +14,4 @@ const setHeaders = (_req, res, next) => {
   next();
 };
 
-module.exports = setHeaders;
+export default setHeaders;

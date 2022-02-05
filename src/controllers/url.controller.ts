@@ -1,16 +1,14 @@
-require('dotenv').config();
+import { Request, Response } from 'express';
+import dotenv from 'dotenv';
+dotenv.config();
 
-const {
-  GetUrls,
-  GetUniqueUrl,
-  GenerateUrl,
-} = require('../services/Url.service');
+import { GetUrls, GetUniqueUrl, GenerateUrl } from '../services/Url.service';
 
-const getUrls = async (_req, res) => {
+export const getUrls = async (_req: Request, res: Response) => {
   try {
     const urls = await GetUrls();
 
-    if (urls.length === 0) {
+    if (urls?.length === 0) {
       return res.status(404).send({
         status: 'failure',
         code: 404,
@@ -29,9 +27,9 @@ const getUrls = async (_req, res) => {
   }
 };
 
-const getUniqueUrl = async (req, res) => {
+export const getUniqueUrl = async (req: Request, res: Response) => {
   try {
-    const { id } = req.query;
+    const id = req.query.id as string;
 
     const uniqueUrlId = await GetUniqueUrl(id);
 
@@ -49,7 +47,7 @@ const getUniqueUrl = async (req, res) => {
   }
 };
 
-const generateUrl = async (req, res) => {
+export const generateUrl = async (req: Request, res: Response) => {
   try {
     const { redirect_url } = req.body;
 
@@ -73,10 +71,4 @@ const generateUrl = async (req, res) => {
   } catch (e) {
     return res.send(e);
   }
-};
-
-module.exports = {
-  getUrls,
-  getUniqueUrl,
-  generateUrl,
 };

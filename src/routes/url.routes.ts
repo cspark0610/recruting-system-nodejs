@@ -1,10 +1,12 @@
-const router = require('express').Router();
+import { Router } from 'express';
 
-const {
+import {
   getUrls,
   getUniqueUrl,
   generateUrl,
-} = require('../controllers/url.controller');
+} from '../controllers/url.controller';
+
+const router = Router();
 
 router.get('/get', getUrls);
 
@@ -12,4 +14,4 @@ router.get('/validate', getUniqueUrl);
 
 router.post('/create', generateUrl);
 
-module.exports = router;
+export default router;

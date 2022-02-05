@@ -1,13 +1,11 @@
-const { createWriteStream, unlink } = require('fs');
-const { promisify } = require('util');
-const {
-  UploadVideoToS3,
-  GetVideoFromS3,
-} = require('../services/Video.service');
+import { Request, Response } from 'express';
+import { createWriteStream, unlink } from 'fs';
+import { promisify } from 'util';
+import { UploadVideoToS3, GetVideoFromS3 } from '../services/Video.service';
 
 const unlinkFile = promisify(unlink);
 
-const getVideoFromS3 = (req, res) => {
+export const getVideoFromS3 = (req: Request, res: Response) => {
   try {
     const { key } = req.params;
 
@@ -26,12 +24,12 @@ const getVideoFromS3 = (req, res) => {
     candidateVideo.pipe(stream);
 
     res.send('success');
-  } catch (e) {
+  } catch (e: any) {
     return new Error(e);
   }
 };
 
-const uploadVideoToS3 = async (req, res) => {
+export const uploadVideoToS3 = async (req: Request, res: Response) => {
   try {
     const newCandidateVideo = req.file;
 
@@ -54,12 +52,7 @@ const uploadVideoToS3 = async (req, res) => {
       status: 'uploaded successfully',
       videoKey: result?.Key,
     });
-  } catch (e) {
+  } catch (e: any) {
     return new Error(e);
   }
-};
-
-module.exports = {
-  getVideoFromS3,
-  uploadVideoToS3,
 };

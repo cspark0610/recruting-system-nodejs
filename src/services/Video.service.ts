@@ -1,6 +1,9 @@
-const { createReadStream } = require('fs');
-const S3 = require('aws-sdk/clients/s3');
-require('dotenv').config();
+import { createReadStream } from 'fs';
+import S3 from 'aws-sdk/clients/s3';
+import dotenv from 'dotenv';
+import File from '../interfaces/File.interface';
+import UploadParams from '../interfaces/UploadParams.interface';
+dotenv.config();
 
 const {
   AWS_BUCKET_REGION,
@@ -14,7 +17,7 @@ const s3 = new S3({
   region: AWS_BUCKET_REGION,
 });
 
-const GetVideoFromS3 = (key) => {
+export const GetVideoFromS3 = (key: string) => {
   try {
     const getParams = {
       Bucket: 'videorecorderbucket',
@@ -27,11 +30,11 @@ const GetVideoFromS3 = (key) => {
   }
 };
 
-const UploadVideoToS3 = async (file) => {
+export const UploadVideoToS3 = async (file: File) => {
   try {
     const fileStream = createReadStream(file.path);
 
-    const uploadParams = {
+    const uploadParams: UploadParams = {
       Bucket: 'videorecorderbucket',
       Body: fileStream,
       Key: file.filename,
@@ -41,9 +44,4 @@ const UploadVideoToS3 = async (file) => {
   } catch (e) {
     console.error(e);
   }
-};
-
-module.exports = {
-  GetVideoFromS3,
-  UploadVideoToS3,
 };
