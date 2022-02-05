@@ -1,7 +1,7 @@
 const router = require('express').Router();
 
-const videoRoutes = require('./video.route');
-const urlRoutes = require('./url.route');
+const videoRoutes = require('./video.routes');
+const urlRoutes = require('./url.routes');
 
 router.get('', (_req, res) => {
   res.render('pages/index');
