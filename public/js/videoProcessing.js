@@ -1,5 +1,3 @@
-const axios = require('axios').default;
-
 window.onload = () => {
   const videoChunks = [];
   let mediaRecorder = undefined;
@@ -82,8 +80,9 @@ window.onload = () => {
           const formData = new FormData();
           formData.append('video', blob);
 
-          await axios.post('/video/save', formData, {
-            headers: { 'Content-Type': 'multipart/form-data' },
+          await fetch('/video/save', {
+            method: 'post',
+            body: formData,
           });
 
           videoChunks.length = 0;
