@@ -22,7 +22,7 @@ const GetUniqueUrl = async (url) => {
 
 const GenerateUrl = async (redirect_url) => {
   try {
-    await Url.create({ redirectUrl: redirect_url });
+    return await Url.create({ redirectUrl: redirect_url });
   } catch (e) {
     console.error(e);
   }

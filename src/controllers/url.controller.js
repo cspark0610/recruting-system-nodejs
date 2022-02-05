@@ -61,12 +61,14 @@ const generateUrl = async (req, res) => {
       });
     }
 
-    await GenerateUrl(redirect_url);
+    const newUrl = await GenerateUrl(redirect_url);
+    console.log(newUrl);
 
     return res.status(201).send({
       status: 'success',
       code: 201,
       message: 'url created',
+      url: `${redirect_url}/url/validate?id=${newUrl.shortUrl}`,
     });
   } catch (e) {
     return res.send(e);
