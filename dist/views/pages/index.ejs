@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('../header.ejs') %>
+  <body>
+    <header>
+      <h2>FulltimeForce video recorder</h2>
+    </header>
+    <main>
+      <video muted id="video" autoplay></video>
+      <section class="container">
+        <p>
+          <span id="minutes">00</span> :
+          <span id="seconds">00</span>
+        </p>
+      </section>
+    </main>
+    <section class="buttons-section">
+      <button id="btn-start">Comenzar grabación</button>
+      <button id="btn-stop">Detener</button>
+      <button id="btn-finish">Finalizar y enviar</button>
+      <button id="re-record">Re-grabar</button>
+    </section>
+  </body>
+</html>

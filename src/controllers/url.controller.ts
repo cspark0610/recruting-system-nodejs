@@ -1,0 +1,74 @@
+import { Request, Response } from 'express';
+import dotenv from 'dotenv';
+dotenv.config();
+
+import { GetUrls, GetUniqueUrl, GenerateUrl } from '../services/Url.service';
+
+export const getUrls = async (_req: Request, res: Response) => {
+  try {
+    const urls = await GetUrls();
+
+    if (urls?.length === 0) {
+      return res.status(404).send({
+        status: 'failure',
+        code: 404,
+        message: 'No urls found',
+      });
+    }
+
+    return res.status(200).send({
+      status: 'success',
+      code: 200,
+      message: 'Urls found',
+      urls,
+    });
+  } catch (e) {
+    return res.send(e);
+  }
+};
+
+export const getUniqueUrl = async (req: Request, res: Response) => {
+  try {
+    const id = req.query.id as string;
+
+    const uniqueUrlId = await GetUniqueUrl(id);
+
+    if (!uniqueUrlId || Object.entries(uniqueUrlId).length === 0) {
+      return res.status(404).send({
+        status: 'failure',
+        code: 404,
+        message: 'Url not found. Probably not created yet or expired',
+      });
+    }
+
+    res.redirect(uniqueUrlId.redirectUrl);
+  } catch (e) {
+    return res.send(e);
+  }
+};
+
+export const generateUrl = async (req: Request, res: Response) => {
+  try {
+    const { redirect_url } = req.body;
+
+    if (!redirect_url) {
+      return res.status(400).send({
+        status: 'failure',
+        code: 400,
+        mesage: 'No base url was received',
+      });
+    }
+
+    const newUrl = await GenerateUrl(redirect_url);
+    console.log(newUrl);
+
+    return res.status(201).send({
+      status: 'success',
+      code: 201,
+      message: 'url created',
+      url: `${redirect_url}/url/validate?id=${newUrl.shortUrl}`,
+    });
+  } catch (e) {
+    return res.send(e);
+  }
+};
