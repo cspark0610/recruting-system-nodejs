@@ -14,7 +14,20 @@ const s3 = new S3({
   region: AWS_BUCKET_REGION,
 });
 
-async function UploadVideoToS3(file) {
+const GetVideoFromS3 = (key) => {
+  try {
+    const getParams = {
+      Bucket: 'videorecorderbucket',
+      Key: key,
+    };
+
+    return s3.getObject(getParams).createReadStream();
+  } catch (e) {
+    console.error(e);
+  }
+};
+
+const UploadVideoToS3 = async (file) => {
   try {
     const fileStream = createReadStream(file.path);
 
@@ -28,20 +41,7 @@ async function UploadVideoToS3(file) {
   } catch (e) {
     console.error(e);
   }
-}
-
-function GetVideoFromS3(key) {
-  try {
-    const getParams = {
-      Bucket: 'videorecorderbucket',
-      Key: key,
-    };
-
-    return s3.getObject(getParams).createReadStream();
-  } catch (e) {
-    console.error(e);
-  }
-}
+};
 
 module.exports = {
   GetVideoFromS3,

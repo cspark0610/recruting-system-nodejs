@@ -10,7 +10,7 @@ const GetUrls = async () => {
   }
 };
 
-const GetUniqueUrl = async (url) => {
+const GetUniqueUrl = (url) => {
   try {
     const uniqueUrl = await Url.findOne({ shortUrl: url });
 
