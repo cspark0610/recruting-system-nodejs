@@ -12,7 +12,8 @@ const routes = require('./routes/index.route');
 
 app.use(express.urlencoded({ extended: true, limit: '25mb' }));
 app.use(express.json({ limit: '25mb' }));
-app.use(express.static(path.join(__dirname, '../views')));
+app.use('/public', express.static(path.join(__dirname, '../public')));
+console.log(__dirname);
 
 app.set('view engine', 'ejs');
 

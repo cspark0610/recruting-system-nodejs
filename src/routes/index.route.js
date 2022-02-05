@@ -4,7 +4,7 @@ const videoRoutes = require('./video.route');
 const urlRoutes = require('./url.route');
 
 router.get('', (_req, res) => {
-  res.render('index');
+  res.render('pages/index');
 });
 
 router.use('/video', videoRoutes);
