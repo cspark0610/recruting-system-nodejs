@@ -4,5 +4,5 @@ require('./src/db/db');
 
 const PORT = process.env.PORT || 3001;
 
-console.log('server running');
+console.log('database connected');
 app.listen(PORT, () => console.log(`app running on PORT ${PORT}`));
