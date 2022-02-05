@@ -1,5 +1,4 @@
-const Url = require('../db/schemas/Url.schema');
-require('dotnev').config();
+require('dotenv').config();
 
 const {
   GetUrls,
@@ -7,7 +6,7 @@ const {
   GenerateUrl,
 } = require('../services/Url.service');
 
-const getUrls = async (req, res) => {
+const getUrls = async (_req, res) => {
   try {
     const urls = await GetUrls();
 
@@ -32,11 +31,11 @@ const getUrls = async (req, res) => {
 
 const getUniqueUrl = async (req, res) => {
   try {
-    const { shortUrl } = req.params;
+    const { id } = req.query;
 
-    const uniqueUrl = await GetUniqueUrl(shortUrl);
+    const uniqueUrlId = await GetUniqueUrl(id);
 
-    if (!uniqueUrl || Object.entries(uniqueUrl).length === 0) {
+    if (!uniqueUrlId || Object.entries(uniqueUrlId).length === 0) {
       return res.status(404).send({
         status: 'failure',
         code: 404,
@@ -44,7 +43,7 @@ const getUniqueUrl = async (req, res) => {
       });
     }
 
-    res.redirect(process.env.REDIRECT_URL);
+    res.redirect(uniqueUrlId.redirectUrl);
   } catch (e) {
     return res.send(e);
   }
@@ -52,7 +51,17 @@ const getUniqueUrl = async (req, res) => {
 
 const generateUrl = async (req, res) => {
   try {
-    await GenerateUrl(fullUrl);
+    const { redirect_url } = req.body;
+
+    if (!redirect_url) {
+      return res.status(400).send({
+        status: 'failure',
+        code: 400,
+        mesage: 'No base url was received',
+      });
+    }
+
+    await GenerateUrl(redirect_url);
 
     return res.status(201).send({
       status: 'success',
