@@ -1,12 +1,7 @@
 import express, { Application } from 'express';
-import morgan from 'morgan';
 import path from 'path';
 
 const app: Application = express();
-
-if (process.env.NODE_ENV === 'development') {
-  app.use(morgan('dev'));
-}
 
 import routes from './routes/index.routes';
 
