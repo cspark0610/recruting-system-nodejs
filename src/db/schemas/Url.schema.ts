@@ -2,12 +2,12 @@ import mongoose from 'mongoose';
 import shortId from 'shortid';
 
 const UrlSchema = new mongoose.Schema({
-  redirectUrl: {
+  redirect_url: {
     type: String,
     required: true,
   },
 
-  shortUrl: {
+  short_url: {
     type: String,
     required: true,
     default: shortId.generate,

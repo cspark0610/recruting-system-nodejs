@@ -41,7 +41,7 @@ export const getUniqueUrl = async (req: Request, res: Response) => {
       });
     }
 
-    res.redirect(uniqueUrlId.redirectUrl);
+    res.redirect(uniqueUrlId.redirect_url);
   } catch (e) {
     return res.send(e);
   }
@@ -66,7 +66,7 @@ export const generateUrl = async (req: Request, res: Response) => {
       status: 'success',
       code: 201,
       message: 'url created',
-      url: `${redirect_url}/url/validate?id=${newUrl.shortUrl}`,
+      url: `${redirect_url}/url/validate?id=${newUrl.short_url}`,
     });
   } catch (e) {
     return res.send(e);
