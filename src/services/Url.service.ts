@@ -12,10 +12,10 @@ export const GetUrls = async (): Promise<UrlType[] | undefined> => {
 };
 
 export const GetUniqueUrl = async (
-  url: string,
+  short_url: string,
 ): Promise<UrlType | null | undefined> => {
   try {
-    const uniqueUrl: UrlType | null = await Url.findOne({ shortUrl: url });
+    const uniqueUrl: UrlType | null = await Url.findOne({ short_url });
 
     return uniqueUrl;
   } catch (e) {
