@@ -25,7 +25,7 @@ export const GetUniqueUrl = async (
 
 export const GenerateUrl = async (redirect_url: string): Promise<any> => {
   try {
-    return await Url.create({ redirectUrl: redirect_url });
+    return await Url.create({ redirect_url });
   } catch (e) {
     console.error(e);
   }
