@@ -1,5 +1,5 @@
 import { Schema, model } from 'mongoose';
-import shortId from 'shortid';
+import { generate } from 'shortid';
 
 const UrlSchema = new Schema(
   {
@@ -11,7 +11,7 @@ const UrlSchema = new Schema(
     short_url: {
       type: String,
       required: true,
-      default: shortId.generate,
+      default: generate,
     },
 
     expiresAt: {
