@@ -25,7 +25,7 @@ video {
   justify-content: center;
   margin-bottom: 10px;
   font-weight: bold;
-  font-size: large;
+  font-size: larger;
 }
 
 .buttons-section {
@@ -42,6 +42,13 @@ video {
   padding: 5px;
 }
 
+.video-status {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
 h3 {
   display: flex;
   align-items: center;
@@ -51,7 +58,10 @@ h3 {
 
 @media screen and (max-width: 500px) {
   video {
-    width: 420px;
-    height: 868px;
+    width: 410px;
+  }
+
+  .container {
+    width: fit-content;
   }
 }
