@@ -9,6 +9,9 @@ window.onload = () => {
   const finishRecordingButton = document.getElementById('btn-finish');
   const reRecordButton = document.getElementById('re-record');
 
+  const uploadingText = document.getElementById('uploading');
+  const finishedText = document.getElementById('finished');
+
   const watchContainer = document.querySelector('.container');
   const watchMinutesElement = document.getElementById('minutes');
   const watchSecondsElement = document.getElementById('seconds');
@@ -89,6 +92,10 @@ window.onload = () => {
             type: 'video/mp4',
           });
 
+          uploadingText.innerHTML = 'Enviando video, por favor espera...';
+          reRecordButton.style.display = 'none';
+          finishRecordingButton.style.display = 'none';
+
           const formData = new FormData();
           formData.append('video', blob);
 
@@ -97,8 +104,10 @@ window.onload = () => {
             body: formData,
           });
 
+          uploadingText.style.display = 'none';
+          finishedText.innerHTML = 'Video enviado correctamente!';
+
           videoChunks.length = 0;
-          finishRecordingButton.style.display = 'none';
           watchContainer.style.display = 'none';
         } catch (e) {
           console.error(e);
@@ -120,6 +129,11 @@ window.onload = () => {
         mediaRecorder.ondataavailable = (e) => {
           videoChunks.push(e.data);
         };
+
+        videoPreviewHeader.style.display = 'none';
+        videoPreview.src = null;
+        videoPreview.srcObject = null;
+        videoPreview.controls = false;
 
         interval = setInterval(startTimer, 1000);
 
