@@ -1,16 +1,6 @@
 import Url from '../db/schemas/Url.schema';
 import UrlType from '../interfaces/Url.interface';
 
-export const GetUrls = async (): Promise<UrlType[] | undefined> => {
-  try {
-    const urls: UrlType[] | null = await Url.find();
-
-    return urls;
-  } catch (e) {
-    console.error(e);
-  }
-};
-
 export const GetUniqueUrl = async (
   short_url: string,
 ): Promise<UrlType | null | undefined> => {

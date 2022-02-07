@@ -2,30 +2,7 @@ import { Request, Response } from 'express';
 import dotenv from 'dotenv';
 dotenv.config();
 
-import { GetUrls, GetUniqueUrl, GenerateUrl } from '../services/Url.service';
-
-export const getUrls = async (_req: Request, res: Response) => {
-  try {
-    const urls = await GetUrls();
-
-    if (urls?.length === 0) {
-      return res.status(404).send({
-        status: 'failure',
-        code: 404,
-        message: 'No urls found',
-      });
-    }
-
-    return res.status(200).send({
-      status: 'success',
-      code: 200,
-      message: 'Urls found',
-      urls,
-    });
-  } catch (e) {
-    return res.send(e);
-  }
-};
+import { GetUniqueUrl, GenerateUrl } from '../services/Url.service';
 
 export const getUniqueUrl = async (req: Request, res: Response) => {
   try {

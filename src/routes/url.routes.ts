@@ -1,15 +1,12 @@
 import { Router } from 'express';
 
 import {
-  getUrls,
   getUniqueUrl,
   generateUrl,
   renderNotValidUrl,
 } from '../controllers/url.controller';
 
 const router = Router();
-
-router.get('/get', getUrls);
 
 router.get('/validate', getUniqueUrl);
 
