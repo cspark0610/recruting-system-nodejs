@@ -25,17 +25,21 @@ video {
   justify-content: center;
   margin-bottom: 10px;
   font-weight: bold;
+  font-size: large;
 }
 
 .buttons-section {
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 10px;
 }
 
 .buttons-section button {
+  background-color: white;
   border: 1px solid black;
   border-radius: 5px;
+  padding: 5px;
 }
 
 h3 {
