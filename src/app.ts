@@ -13,7 +13,7 @@ app.set('view engine', 'ejs');
 
 app.use('/', routes);
 app.use('*', (_req: Request, res: Response) => {
-  res.render('pages/pageNotFound');
+  res.redirect('/url/not-found');
 });
 
 export default app;
