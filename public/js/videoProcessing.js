@@ -79,6 +79,7 @@ window.onload = () => {
         videoPreview.srcObject = null;
         videoPreview.src = window.URL.createObjectURL(blob);
         videoPreview.controls = true;
+        videoPreview.download = false;
         videoPreviewHeader.style.display = 'block';
 
         stopRecordingButton.style.display = 'none';
