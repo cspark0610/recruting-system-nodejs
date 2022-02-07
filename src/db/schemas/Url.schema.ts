@@ -1,7 +1,7 @@
-import mongoose from 'mongoose';
+import { Schema, model } from 'mongoose';
 import shortId from 'shortid';
 
-const UrlSchema = new mongoose.Schema(
+const UrlSchema = new Schema(
   {
     redirect_url: {
       type: String,
@@ -25,4 +25,4 @@ const UrlSchema = new mongoose.Schema(
 
 UrlSchema.index({ expiresAt: 1 }, { expires: '24h' });
 
-export default mongoose.model('Url', UrlSchema);
+export default model('Url', UrlSchema);
