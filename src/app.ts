@@ -1,4 +1,4 @@
-import express, { Application } from 'express';
+import express, { Application, Request, Response } from 'express';
 import path from 'path';
 
 const app: Application = express();
@@ -12,5 +12,8 @@ app.use('/public', express.static(path.join(__dirname, '../public')));
 app.set('view engine', 'ejs');
 
 app.use('/', routes);
+app.use('*', (_req: Request, res: Response) => {
+  res.render('pages/pageNotFound');
+});
 
 export default app;
