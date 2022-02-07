@@ -34,11 +34,7 @@ export const getUniqueUrl = async (req: Request, res: Response) => {
     const uniqueUrlId = await GetUniqueUrl(id);
 
     if (!uniqueUrlId || Object.entries(uniqueUrlId).length === 0) {
-      return res.status(404).send({
-        status: 'failure',
-        code: 404,
-        message: 'Url not found. Probably not created yet or expired',
-      });
+      return res.status(404).redirect('validate/error/not-valid');
     }
 
     res.redirect(uniqueUrlId.redirect_url);
@@ -71,4 +67,8 @@ export const generateUrl = async (req: Request, res: Response) => {
   } catch (e) {
     return res.send(e);
   }
+};
+
+export const renderNotValidUrl = (_req: Request, res: Response) => {
+  return res.status(404).render('pages/urlNotValid');
 };
