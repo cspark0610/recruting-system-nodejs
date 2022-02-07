@@ -6,6 +6,10 @@ import { GetUniqueUrl, GenerateUrl } from '../services/Url.service';
 
 export const getUniqueUrl = async (req: Request, res: Response) => {
   try {
+    if (!req.query.id) {
+      return res.status(400).redirect('validate/error/not-valid');
+    }
+
     const id = req.query.id as string;
 
     const uniqueUrlId = await GetUniqueUrl(id);
