@@ -55,7 +55,7 @@ window.onload = () => {
     .then((stream) => {
       document.getElementById('video').srcObject = stream;
 
-      startReocordingButton.onclick = () => {
+      const startRecording = () => {
         mediaRecorder = new MediaRecorder(stream);
         mediaRecorder.start(10);
         mediaRecorder.ondataavailable = (e) => {
@@ -69,7 +69,7 @@ window.onload = () => {
         watchContainer.style.display = 'block';
       };
 
-      stopRecordingButton.onclick = () => {
+      const stopRecording = () => {
         mediaRecorder.stop();
         clearInterval(interval);
 
@@ -86,7 +86,7 @@ window.onload = () => {
         reRecordButton.style.display = 'block';
       };
 
-      finishRecordingButton.onclick = async () => {
+      const finishRecording = async () => {
         try {
           const blob = new Blob(videoChunks, {
             type: 'video/mp4',
@@ -95,6 +95,7 @@ window.onload = () => {
           uploadingText.innerHTML = 'Enviando video, por favor espera...';
           reRecordButton.style.display = 'none';
           finishRecordingButton.style.display = 'none';
+          watchContainer.style.display = 'none';
 
           const formData = new FormData();
           formData.append('video', blob);
@@ -108,13 +109,12 @@ window.onload = () => {
           finishedText.innerHTML = 'Video enviado correctamente!';
 
           videoChunks.length = 0;
-          watchContainer.style.display = 'none';
         } catch (e) {
           console.error(e);
         }
       };
 
-      reRecordButton.onclick = () => {
+      const reRecord = () => {
         alert('ATENCION!! Perderas el video anterior...');
 
         reRecordButton.style.display = 'none';
@@ -143,6 +143,14 @@ window.onload = () => {
         watchMinutesElement.innerHTML = watchMinutes;
         watchSecondsElement.innerHTML = watchSeconds;
       };
+
+      startReocordingButton.addEventListener('click', startRecording);
+
+      stopRecordingButton.addEventListener('click', stopRecording);
+
+      finishRecordingButton.addEventListener('click', finishRecording);
+
+      reRecordButton.addEventListener('click', reRecord);
     })
     .catch((e) => console.error(e));
 };
