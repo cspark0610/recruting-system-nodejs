@@ -1,28 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
-  <%- include('../header.ejs') %>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../../public/css/urlNotValid.css" />
+    <title>FulltimeForce video recorder</title>
+  </head>
   <body>
-    <h2>La url no es valida</h2>
-    <p>
-      La url con la que has intentado ingresar no es valida. Esto se debe a que
-      dicha URL ya ha expirado.
-    </p>
-    <p>
-      Para poder ingresar a la plataforma, por favor contacta con la persona de
-      reclutamiento que te contacto para que pueda proveerte de una nueva url
-      para poder ingresar.
-    </p>
-
+    <main class="url-not-valid">
+      <h2>La url no es valida</h2>
+      <p>
+        La url con la que has intentado ingresar no es valida. Esto se debe a
+        que dicha URL ya ha expirado.
+      </p>
+      <p>
+        Para poder ingresar a la plataforma, por favor contacta con la persona
+        de reclutamiento que te contacto para que pueda proveerte de una nueva
+        url para poder ingresar.
+      </p>
+    </main>
     <style>
-      body {
+      .url-not-valid {
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: center;
-      }
-
-      h2 {
-        margin-top: 20px;
       }
     </style>
   </body>
