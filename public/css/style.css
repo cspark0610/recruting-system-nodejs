@@ -1,4 +1,9 @@
 video {
+  height: 600px;
+  width: 800px;
+}
+
+#video {
   -o-transform: scaleX(-1);
   -moz-transform: scaleX(-1);
   -webkit-transform: scaleX(-1);

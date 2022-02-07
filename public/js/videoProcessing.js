@@ -13,11 +13,15 @@ window.onload = () => {
   const watchMinutesElement = document.getElementById('minutes');
   const watchSecondsElement = document.getElementById('seconds');
 
+  const videoPreviewHeader = document.getElementById('video-preview-header');
+  const videoPreview = document.getElementById('video-preview');
+
   stopRecordingButton.style.display = 'none';
   finishRecordingButton.style.display = 'none';
   reRecordButton.style.display = 'none';
 
   watchContainer.style.display = 'none';
+  videoPreviewHeader.style.display = 'none';
 
   const startTimer = () => {
     watchSeconds++;
@@ -65,6 +69,14 @@ window.onload = () => {
       stopRecordingButton.onclick = () => {
         mediaRecorder.stop();
         clearInterval(interval);
+
+        const blob = new Blob(videoChunks, { type: 'video/mp4' });
+
+        videoPreview.src = null;
+        videoPreview.srcObject = null;
+        videoPreview.src = window.URL.createObjectURL(blob);
+        videoPreview.controls = true;
+        videoPreviewHeader.style.display = 'block';
 
         stopRecordingButton.style.display = 'none';
         finishRecordingButton.style.display = 'block';
