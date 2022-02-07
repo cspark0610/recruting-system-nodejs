@@ -6,8 +6,8 @@
   "scripts": {
     "start": "cross-env NODE_ENV=production node dist/index.js",
     "build": "npm run build-ts && npm run copy-static-assets",
-    "copy-static-assets": "ts-node src/utils/copyStaticAssets.ts",
     "build-ts": "tsc",
+    "copy-static-assets": "ts-node src/utils/copyStaticAssets.ts",
     "dev": "cross-env NODE_ENV=development nodemon index.ts"
   },
   "keywords": [],
