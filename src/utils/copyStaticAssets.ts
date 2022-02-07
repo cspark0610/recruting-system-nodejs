@@ -1,6 +1,6 @@
-import * as shelljs from 'shelljs';
+import { cp } from 'shelljs';
 
-shelljs.cp('-R', 'public', 'dist');
-shelljs.cp('-R', 'views', 'dist');
-shelljs.cp('-R', 'uploads', 'dist');
-shelljs.cp('-R', 'downloads', 'dist');
+cp('-R', 'public', 'dist');
+cp('-R', 'views', 'dist');
+cp('-R', 'uploads', 'dist');
+cp('-R', 'downloads', 'dist');
