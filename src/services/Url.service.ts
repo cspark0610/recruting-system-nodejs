@@ -1,11 +1,11 @@
 import Url from '../db/schemas/Url.schema';
-import UrlType from '../interfaces/Url.interface';
+import IUrl from '../interfaces/IUrl.interface';
 
 export const GetUniqueUrl = async (
   short_url: string,
-): Promise<UrlType | null | undefined> => {
+): Promise<IUrl | null | undefined> => {
   try {
-    const uniqueUrl: UrlType | null = await Url.findOne({ short_url });
+    const uniqueUrl: IUrl | null = await Url.findOne({ short_url });
 
     return uniqueUrl;
   } catch (e) {
