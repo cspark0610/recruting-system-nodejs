@@ -5,11 +5,11 @@
   "main": "index.js",
   "scripts": {
     "start": "cross-env NODE_ENV=production node dist/index.js",
-    "clean": "rimraf dist",
+    "dev": "cross-env NODE_ENV=development nodemon index.ts",
     "build": "npm run clean && npm run build-ts && npm run copy-static-assets",
+    "clean": "rimraf dist",
     "build-ts": "tsc",
-    "copy-static-assets": "ts-node src/utils/copyStaticAssets.ts",
-    "dev": "cross-env NODE_ENV=development nodemon index.ts"
+    "copy-static-assets": "ts-node src/utils/copyStaticAssets.ts"
   },
   "keywords": [],
   "author": "",
