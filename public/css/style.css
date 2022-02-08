@@ -7,8 +7,14 @@ header {
 }
 
 video {
-  height: 600px;
-  width: 800px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 768px;
+  width: 1066px;
+  margin-left: 430px;
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
 
 #video {
@@ -23,6 +29,7 @@ video {
   display: flex;
   align-items: center;
   justify-content: center;
+  width: fit-content;
   margin-bottom: 10px;
   font-weight: bold;
   font-size: larger;
@@ -59,6 +66,7 @@ h3 {
 @media screen and (max-width: 500px) {
   video {
     width: 410px;
+    margin-left: 0;
   }
 
   .container {
