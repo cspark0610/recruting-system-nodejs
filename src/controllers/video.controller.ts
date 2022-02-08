@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { createWriteStream, unlink } from 'fs';
 import { promisify } from 'util';
-import { UploadVideoToS3, GetVideoFromS3 } from '../services/Video.service';
+import * as videoService from '../services/Video.service';
 
 const unlinkFile = promisify(unlink);
 
@@ -9,7 +9,7 @@ export const getVideoFromS3 = (req: Request, res: Response) => {
   try {
     const { key } = req.params;
 
-    const candidateVideo = GetVideoFromS3(key);
+    const candidateVideo = videoService.GetVideoFromS3(key);
 
     if (!candidateVideo) {
       return res.status(404).send({
@@ -41,7 +41,7 @@ export const uploadVideoToS3 = async (req: Request, res: Response) => {
       });
     }
 
-    const result = await UploadVideoToS3(newCandidateVideo);
+    const result = await videoService.UploadVideoToS3(newCandidateVideo);
 
     console.log(newCandidateVideo);
     await unlinkFile(newCandidateVideo.path);
