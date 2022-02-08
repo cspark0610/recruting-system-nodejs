@@ -1,7 +1,7 @@
 import Url from '../db/schemas/Url.schema';
 import IUrl from '../interfaces/IUrl.interface';
 
-export const GetUniqueUrl = async (
+export const ValidateUrl = async (
   short_url: string,
 ): Promise<IUrl | null | undefined> => {
   try {
