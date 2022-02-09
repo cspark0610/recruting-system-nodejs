@@ -25,6 +25,7 @@ window.onload = () => {
 
   watchContainer.style.display = 'none';
   videoPreviewHeader.style.display = 'none';
+  videoPreview.style.display = 'none';
 
   const startTimer = () => {
     watchSeconds++;
@@ -75,6 +76,7 @@ window.onload = () => {
 
         const blob = new Blob(videoChunks, { type: 'video/mp4' });
 
+        videoPreview.style.display = 'flex';
         videoPreview.src = null;
         videoPreview.srcObject = null;
         videoPreview.src = window.URL.createObjectURL(blob);
