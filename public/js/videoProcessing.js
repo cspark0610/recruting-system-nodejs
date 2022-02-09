@@ -86,6 +86,7 @@ window.onload = () => {
         const blob = new Blob(videoChunks, { type: 'video/mp4' });
 
         videoPreview.style.display = 'flex';
+        watchContainer.style.display = 'none';
 
         videoPreview.src = null;
         videoPreview.srcObject = null;
