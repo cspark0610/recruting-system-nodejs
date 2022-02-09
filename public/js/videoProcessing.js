@@ -106,6 +106,7 @@ window.onload = () => {
           watchContainer.style.display = 'none';
           videoPreviewHeader.style.display = 'none';
           videoPreview.style.display = 'none';
+          document.getElementById('video').style.display = 'none';
 
           const formData = new FormData();
           formData.append('video', blob);
@@ -118,7 +119,6 @@ window.onload = () => {
           uploadingText.style.display = 'none';
           finishedText.innerHTML = '¡Video enviado con exito!';
           info.style.display = 'flex';
-          document.getElementById('video').style.display = 'none';
 
           videoChunks.length = 0;
         } catch (e) {
@@ -143,6 +143,7 @@ window.onload = () => {
         };
 
         videoPreviewHeader.style.display = 'none';
+        videoPreview.style.display = 'none';
         videoPreview.src = null;
         videoPreview.srcObject = null;
         videoPreview.controls = false;
