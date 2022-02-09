@@ -6,9 +6,10 @@
   "scripts": {
     "start": "cross-env NODE_ENV=production node dist/index.js",
     "dev": "cross-env NODE_ENV=development nodemon index.ts",
-    "build": "npm run clean && npm run build-ts && npm run copy-static-assets",
+    "build": "npm run clean && npm run build-ts && npm run build-js && npm run copy-static-assets",
     "clean": "rimraf dist",
     "build-ts": "tsc",
+    "build-js": "browserify ./public/js/videoProcessing.js -o ./public/js/bundle.js",
     "copy-static-assets": "ts-node src/utils/copyStaticAssets.ts"
   },
   "keywords": [],
@@ -16,6 +17,7 @@
   "license": "ISC",
   "dependencies": {
     "aws-sdk": "^2.1067.0",
+    "browserify": "^17.0.0",
     "cors": "^2.8.5",
     "cross-env": "^7.0.3",
     "dotenv": "^16.0.0",
