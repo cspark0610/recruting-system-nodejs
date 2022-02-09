@@ -55,6 +55,15 @@ video {
   justify-content: center;
   font-weight: bold;
   font-size: large;
+  margin-top: 20px;
+}
+
+.info {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: large;
 }
 
 #video-preview-header {
