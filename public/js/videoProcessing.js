@@ -123,7 +123,7 @@ window.onload = () => {
           const formData = new FormData();
           formData.append('video', blob);
 
-          await fetch('/video/save', {
+          await fetch('/video/upload', {
             method: 'post',
             body: formData,
           });

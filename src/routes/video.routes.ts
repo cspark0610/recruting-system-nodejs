@@ -9,6 +9,6 @@ const router = Router();
 
 router.get('/get/:key', videoController.getVideoFromS3);
 
-router.post('/save', upload.single('video'), videoController.uploadVideoToS3);
+router.post('/upload', upload.single('video'), videoController.uploadVideoToS3);
 
 export default router;
