@@ -1,16 +1,27 @@
+:root {
+  --button-text-color: #00adef;
+}
+
+body {
+  box-sizing: border-box;
+}
+
 header {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px;
+  padding: 15px;
   background-color: #eee;
+  -webkit-box-shadow: 0 16px 4px -4px gray;
+  -moz-box-shadow: 0 6px 4px -4px gray;
+  box-shadow: 0 6px 4px -4px gray;
 }
 
 video {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 760px;
+  height: 740px;
   width: 1066px;
   margin-left: 430px;
   margin-top: 20px;
@@ -44,9 +55,18 @@ video {
 
 .buttons-section button {
   background-color: white;
-  border: 1px solid black;
-  border-radius: 5px;
-  padding: 5px;
+  color: var(--button-text-color);
+  border: 2px solid var(--button-text-color);
+  font-size: large;
+  font-weight: 500;
+  padding: 10px;
+  margin-top: 10px;
+}
+
+button:hover {
+  background-color: var(--button-text-color);
+  color: white;
+  transition: 0.3s;
 }
 
 .video-status {
@@ -83,6 +103,14 @@ video {
     height: 300px;
     width: 410px;
     margin-left: 50px;
+  }
+
+  .container {
+    font-size: medium;
+  }
+
+  .buttons-section button {
+    font-size: medium;
   }
 
   .container {
