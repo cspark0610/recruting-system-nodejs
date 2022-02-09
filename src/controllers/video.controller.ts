@@ -23,7 +23,11 @@ export const getVideoFromS3 = (req: Request, res: Response) => {
 
     candidateVideo.pipe(stream);
 
-    res.send('success');
+    res.send({
+      status: 'success',
+      code: 203,
+      message: 'Video downloaded successfully',
+    });
   } catch (e: any) {
     return new Error(e);
   }
