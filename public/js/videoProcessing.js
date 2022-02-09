@@ -12,6 +12,8 @@ window.onload = () => {
   const uploadingText = document.getElementById('uploading');
   const finishedText = document.getElementById('finished');
 
+  const info = document.getElementById('info-text');
+
   const watchContainer = document.querySelector('.container');
   const watchMinutesElement = document.getElementById('minutes');
   const watchSecondsElement = document.getElementById('seconds');
@@ -24,8 +26,11 @@ window.onload = () => {
   reRecordButton.style.display = 'none';
 
   watchContainer.style.display = 'none';
+
   videoPreviewHeader.style.display = 'none';
   videoPreview.style.display = 'none';
+
+  info.style.display = 'none';
 
   const startTimer = () => {
     watchSeconds++;
@@ -111,7 +116,9 @@ window.onload = () => {
           });
 
           uploadingText.style.display = 'none';
-          finishedText.innerHTML = 'Video enviado correctamente!';
+          finishedText.innerHTML = '¡Video enviado con exito!';
+          info.style.display = 'flex';
+          document.getElementById('video').style.display = 'none';
 
           videoChunks.length = 0;
         } catch (e) {
