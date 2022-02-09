@@ -86,12 +86,17 @@ window.onload = () => {
         const blob = new Blob(videoChunks, { type: 'video/mp4' });
 
         videoPreview.style.display = 'flex';
+
         videoPreview.src = null;
         videoPreview.srcObject = null;
+
         videoPreview.src = window.URL.createObjectURL(blob);
+
         videoPreview.controls = true;
         videoPreview.download = false;
+
         videoPreviewHeader.style.display = 'block';
+
         watchPreviewLink.click();
 
         stopRecordingButton.style.display = 'none';
@@ -106,6 +111,7 @@ window.onload = () => {
           });
 
           uploadingText.innerHTML = 'Enviando video, por favor espera...';
+
           reRecordButton.style.display = 'none';
           finishRecordingButton.style.display = 'none';
           watchContainer.style.display = 'none';
@@ -122,7 +128,9 @@ window.onload = () => {
           });
 
           uploadingText.style.display = 'none';
+
           finishedText.innerHTML = '¡Video enviado con exito!';
+
           info.style.display = 'flex';
 
           videoChunks.length = 0;
@@ -149,6 +157,7 @@ window.onload = () => {
 
         videoPreviewHeader.style.display = 'none';
         videoPreview.style.display = 'none';
+
         videoPreview.src = null;
         videoPreview.srcObject = null;
         videoPreview.controls = false;
