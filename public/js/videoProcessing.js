@@ -97,6 +97,8 @@ window.onload = () => {
           reRecordButton.style.display = 'none';
           finishRecordingButton.style.display = 'none';
           watchContainer.style.display = 'none';
+          videoPreviewHeader.style.display = 'none';
+          videoPreview.style.display = 'none';
 
           const formData = new FormData();
           formData.append('video', blob);
