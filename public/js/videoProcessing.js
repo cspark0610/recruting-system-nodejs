@@ -9,6 +9,8 @@ window.onload = () => {
   const finishRecordingButton = document.getElementById('btn-finish');
   const reRecordButton = document.getElementById('re-record');
 
+  const watchPreviewLink = document.getElementById('watch-preview');
+
   const uploadingText = document.getElementById('uploading');
   const finishedText = document.getElementById('finished');
 
@@ -24,6 +26,8 @@ window.onload = () => {
   stopRecordingButton.style.display = 'none';
   finishRecordingButton.style.display = 'none';
   reRecordButton.style.display = 'none';
+
+  watchPreviewLink.style.display = 'none';
 
   watchContainer.style.display = 'none';
 
@@ -88,6 +92,7 @@ window.onload = () => {
         videoPreview.controls = true;
         videoPreview.download = false;
         videoPreviewHeader.style.display = 'block';
+        watchPreviewLink.click();
 
         stopRecordingButton.style.display = 'none';
         finishRecordingButton.style.display = 'block';
