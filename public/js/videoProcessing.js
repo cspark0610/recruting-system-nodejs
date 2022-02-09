@@ -14,7 +14,7 @@ window.onload = () => {
   const uploadingText = document.getElementById('uploading');
   const finishedText = document.getElementById('finished');
 
-  const info = document.getElementById('info-text');
+  const info = document.querySelector('.info');
 
   const watchContainer = document.querySelector('.container');
   const watchMinutesElement = document.getElementById('minutes');
