@@ -202,7 +202,7 @@ window.onload = () => {
         if (e.message.includes('found')) {
           swal({
             title: 'Error',
-            text: 'Dispositivo de audio y/o video no encontrados',
+            text: 'Dispositivos de audio y/o video no encontrados',
             buttons: [false, true],
             icon: 'error',
           });
@@ -210,7 +210,7 @@ window.onload = () => {
         } else {
           swal({
             title: 'Error',
-            text: 'Acceso al microfono y/o camara denegados',
+            text: 'Acceso al microfono y/o camara denegado',
             buttons: [false, true],
             icon: 'error',
           });
