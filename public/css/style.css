@@ -11,10 +11,9 @@ header {
   align-items: center;
   justify-content: center;
   padding: 10px;
-  background-color: #eee;
-  -webkit-box-shadow: 0 16px 4px -4px gray;
-  -moz-box-shadow: 0 6px 4px -4px gray;
-  box-shadow: 0 6px 4px -4px gray;
+  background-color: white;
+  filter: drop-shadow(0 0 10px gray);
+  -webkit-filter: drop-shadow(0 0 10px gray);
 }
 
 #loading-image {
@@ -27,10 +26,10 @@ video {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 740px;
+  height: 730px;
   width: 1066px;
   margin-left: 430px;
-  margin-top: 20px;
+  margin-top: 30px;
   margin-bottom: 20px;
 }
 
