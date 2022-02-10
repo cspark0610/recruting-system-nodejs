@@ -45,7 +45,6 @@ video {
   display: none;
   align-items: center;
   justify-content: center;
-  width: fit-content;
   margin-bottom: 10px;
   font-weight: bold;
   font-size: larger;
@@ -139,6 +138,7 @@ button:hover {
 
   .container {
     font-size: medium;
+    width: fit-content;
   }
 
   .buttons-section button {
