@@ -12,8 +12,8 @@ header {
   justify-content: center;
   padding: 10px;
   background-color: white;
-  filter: drop-shadow(0 0 10px gray);
-  -webkit-filter: drop-shadow(0 0 10px gray);
+  filter: drop-shadow(0 0 7px gray);
+  -webkit-filter: drop-shadow(0 0 7px gray);
 }
 
 #loading-image {
