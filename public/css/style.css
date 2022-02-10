@@ -17,6 +17,12 @@ header {
   box-shadow: 0 6px 4px -4px gray;
 }
 
+#loading-image {
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+
 video {
   display: flex;
   align-items: center;
@@ -63,7 +69,8 @@ video {
   margin-top: 10px;
 }
 
-.buttons-section #btn-stop,
+.buttons-section #btn-start,
+#btn-stop,
 #btn-finish,
 #re-record {
   display: none;

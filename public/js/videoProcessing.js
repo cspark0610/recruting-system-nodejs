@@ -4,6 +4,8 @@ window.onload = () => {
   let watchMinutes = 00;
   let watchSeconds = 00;
 
+  const loadingText = document.getElementById('loading-image');
+
   const startReocordingButton = document.getElementById('btn-start');
   const stopRecordingButton = document.getElementById('btn-stop');
   const finishRecordingButton = document.getElementById('btn-finish');
@@ -47,10 +49,17 @@ window.onload = () => {
     }
   };
 
+  alert(
+    'Debes permitir el acceso a tu camara y microfono para poder utilizar la plataforma',
+  );
+
+  loadingText.style.display = 'flex';
   navigator.mediaDevices
     .getUserMedia({ audio: true, video: true })
     .then((stream) => {
       document.getElementById('video').srcObject = stream;
+      loadingText.style.display = 'none';
+      startReocordingButton.style.display = 'block';
 
       const startRecording = () => {
         mediaRecorder = new MediaRecorder(stream);
