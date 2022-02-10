@@ -468,7 +468,25 @@ window.onload = () => {
 
         reRecordButton.addEventListener('click', reRecord);
       })
-      .catch((e) => console.error(e));
+      .catch((e) => {
+        if (e.message.includes('found')) {
+          swal({
+            title: 'Error',
+            text: 'Dispositivo de audio y/o video no encontrados',
+            buttons: [false, true],
+            icon: 'error',
+          });
+          loadingText.style.display = 'none';
+        } else {
+          swal({
+            title: 'Error',
+            text: 'Acceso al microfono y/o camara denegados',
+            buttons: [false, true],
+            icon: 'error',
+          });
+          loadingText.style.display = 'none';
+        }
+      });
   });
 };
 
