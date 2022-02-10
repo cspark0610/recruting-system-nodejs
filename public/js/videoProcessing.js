@@ -23,19 +23,6 @@ window.onload = () => {
   const videoPreviewHeader = document.getElementById('video-preview-header');
   const videoPreview = document.getElementById('video-preview');
 
-  stopRecordingButton.style.display = 'none';
-  finishRecordingButton.style.display = 'none';
-  reRecordButton.style.display = 'none';
-
-  watchPreviewLink.style.display = 'none';
-
-  watchContainer.style.display = 'none';
-
-  videoPreviewHeader.style.display = 'none';
-  videoPreview.style.display = 'none';
-
-  info.style.display = 'none';
-
   const startTimer = () => {
     watchSeconds++;
 
@@ -76,7 +63,7 @@ window.onload = () => {
 
         startReocordingButton.style.display = 'none';
         stopRecordingButton.style.display = 'block';
-        watchContainer.style.display = 'block';
+        watchContainer.style.display = 'flex';
       };
 
       const stopRecording = () => {

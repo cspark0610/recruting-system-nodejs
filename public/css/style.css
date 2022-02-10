@@ -37,7 +37,7 @@ video {
 }
 
 .container {
-  display: flex;
+  display: none;
   align-items: center;
   justify-content: center;
   width: fit-content;
@@ -63,10 +63,20 @@ video {
   margin-top: 10px;
 }
 
+.buttons-section #btn-stop,
+#btn-finish,
+#re-record {
+  display: none;
+}
+
 button:hover {
   background-color: var(--button-text-color);
   color: white;
   transition: 0.3s;
+}
+
+#watch-preview {
+  display: none;
 }
 
 .video-status {
@@ -79,7 +89,7 @@ button:hover {
 }
 
 .info {
-  display: flex;
+  display: none;
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -88,7 +98,12 @@ button:hover {
 }
 
 #video-preview-header {
+  display: none;
   text-align: center;
+}
+
+#video-preview {
+  display: none;
 }
 
 .footer-section {
