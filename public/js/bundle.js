@@ -285,9 +285,6 @@ window.onload = () => {
 
   const watchPreviewLink = document.getElementById('watch-preview');
 
-  const uploadingText = document.getElementById('uploading');
-  const finishedText = document.getElementById('finished');
-
   const info = document.querySelector('.info');
 
   const watchContainer = document.querySelector('.container');
@@ -414,8 +411,6 @@ window.onload = () => {
                 buttons: [false, 'OK'],
               });
 
-              uploadingText.style.display = 'none';
-
               info.style.display = 'flex';
 
               videoChunks.length = 0;
@@ -438,7 +433,7 @@ window.onload = () => {
             reRecordButton.style.display = 'none';
             finishRecordingButton.style.display = 'none';
             stopRecordingButton.style.display = 'block';
-            watchContainer.style.display = 'block';
+            watchContainer.style.display = 'flex';
 
             videoChunks.length = 0;
 

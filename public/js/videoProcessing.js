@@ -163,7 +163,7 @@ window.onload = () => {
             reRecordButton.style.display = 'none';
             finishRecordingButton.style.display = 'none';
             stopRecordingButton.style.display = 'block';
-            watchContainer.style.display = 'block';
+            watchContainer.style.display = 'flex';
 
             videoChunks.length = 0;
 
