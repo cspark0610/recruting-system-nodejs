@@ -1,3 +1,5 @@
+const swal = require('sweetalert');
+
 window.onload = () => {
   const videoChunks = [];
   let mediaRecorder = undefined;
@@ -12,9 +14,6 @@ window.onload = () => {
   const reRecordButton = document.getElementById('re-record');
 
   const watchPreviewLink = document.getElementById('watch-preview');
-
-  const uploadingText = document.getElementById('uploading');
-  const finishedText = document.getElementById('finished');
 
   const info = document.querySelector('.info');
 
@@ -49,132 +48,156 @@ window.onload = () => {
     }
   };
 
-  alert(
-    'Debes permitir el acceso a tu camara y microfono para poder utilizar la plataforma',
-  );
+  swal({
+    text: 'Debes permitir el acceso a tu camara y microfono para poder continuar',
+    icon: 'warning',
+  }).then(() => {
+    loadingText.style.display = 'flex';
+    navigator.mediaDevices
+      .getUserMedia({ audio: true, video: true })
+      .then((stream) => {
+        document.getElementById('video').srcObject = stream;
+        loadingText.style.display = 'none';
+        startReocordingButton.style.display = 'block';
 
-  loadingText.style.display = 'flex';
-  navigator.mediaDevices
-    .getUserMedia({ audio: true, video: true })
-    .then((stream) => {
-      document.getElementById('video').srcObject = stream;
-      loadingText.style.display = 'none';
-      startReocordingButton.style.display = 'block';
+        const startRecording = () => {
+          mediaRecorder = new MediaRecorder(stream);
+          mediaRecorder.start(10);
+          mediaRecorder.ondataavailable = (e) => {
+            videoChunks.push(e.data);
+          };
 
-      const startRecording = () => {
-        mediaRecorder = new MediaRecorder(stream);
-        mediaRecorder.start(10);
-        mediaRecorder.ondataavailable = (e) => {
-          videoChunks.push(e.data);
+          interval = setInterval(startTimer, 1000);
+
+          startReocordingButton.style.display = 'none';
+          stopRecordingButton.style.display = 'block';
+          watchContainer.style.display = 'flex';
         };
 
-        interval = setInterval(startTimer, 1000);
+        const stopRecording = () => {
+          mediaRecorder.stop();
+          clearInterval(interval);
 
-        startReocordingButton.style.display = 'none';
-        stopRecordingButton.style.display = 'block';
-        watchContainer.style.display = 'flex';
-      };
+          const blob = new Blob(videoChunks, { type: 'video/mp4' });
 
-      const stopRecording = () => {
-        mediaRecorder.stop();
-        clearInterval(interval);
-
-        const blob = new Blob(videoChunks, { type: 'video/mp4' });
-
-        videoPreview.style.display = 'flex';
-        watchContainer.style.display = 'none';
-
-        videoPreview.src = null;
-        videoPreview.srcObject = null;
-
-        videoPreview.src = window.URL.createObjectURL(blob);
-
-        videoPreview.controls = true;
-        videoPreview.download = false;
-
-        videoPreviewHeader.style.display = 'block';
-
-        watchPreviewLink.click();
-
-        stopRecordingButton.style.display = 'none';
-        finishRecordingButton.style.display = 'block';
-        reRecordButton.style.display = 'block';
-      };
-
-      const finishRecording = async () => {
-        try {
-          const blob = new Blob(videoChunks, {
-            type: 'video/mp4',
-          });
-
-          uploadingText.innerHTML = 'Enviando video, por favor espera...';
-
-          reRecordButton.style.display = 'none';
-          finishRecordingButton.style.display = 'none';
+          videoPreview.style.display = 'flex';
           watchContainer.style.display = 'none';
-          videoPreviewHeader.style.display = 'none';
-          videoPreview.style.display = 'none';
-          document.getElementById('video').style.display = 'none';
 
-          const formData = new FormData();
-          formData.append('video', blob);
+          videoPreview.src = null;
+          videoPreview.srcObject = null;
 
-          await fetch('/video/upload', {
-            method: 'post',
-            body: formData,
-          });
+          videoPreview.src = window.URL.createObjectURL(blob);
 
-          uploadingText.style.display = 'none';
+          videoPreview.controls = true;
+          videoPreview.download = false;
 
-          finishedText.innerHTML = '¡Video enviado con exito!';
+          videoPreviewHeader.style.display = 'block';
 
-          info.style.display = 'flex';
+          watchPreviewLink.click();
 
-          videoChunks.length = 0;
-        } catch (e) {
-          console.error(e);
-        }
-      };
-
-      const reRecord = () => {
-        alert('ATENCION!! Perderas el video anterior...');
-
-        reRecordButton.style.display = 'none';
-        finishRecordingButton.style.display = 'none';
-        stopRecordingButton.style.display = 'block';
-        watchContainer.style.display = 'block';
-
-        videoChunks.length = 0;
-
-        mediaRecorder = new MediaRecorder(stream);
-        mediaRecorder.start(10);
-        mediaRecorder.ondataavailable = (e) => {
-          videoChunks.push(e.data);
+          stopRecordingButton.style.display = 'none';
+          finishRecordingButton.style.display = 'block';
+          reRecordButton.style.display = 'block';
         };
 
-        videoPreviewHeader.style.display = 'none';
-        videoPreview.style.display = 'none';
+        const finishRecording = async () => {
+          try {
+            const willSave = await swal({
+              title: '¡Atención!',
+              text: 'Estas a punto de enviar tu video. ¿Deseas continuar?',
+              buttons: ['Cancelar', 'Continuar'],
+              icon: 'warning',
+            });
 
-        videoPreview.src = null;
-        videoPreview.srcObject = null;
-        videoPreview.controls = false;
+            if (willSave) {
+              const blob = new Blob(videoChunks, {
+                type: 'video/mp4',
+              });
 
-        interval = setInterval(startTimer, 1000);
+              swal({
+                text: 'Enviando video, por favor, espera...',
+                icon: 'warning',
+                buttons: false,
+              });
 
-        watchMinutes = '00';
-        watchSeconds = '00';
+              reRecordButton.style.display = 'none';
+              finishRecordingButton.style.display = 'none';
+              watchContainer.style.display = 'none';
+              videoPreviewHeader.style.display = 'none';
+              videoPreview.style.display = 'none';
+              document.getElementById('video').style.display = 'none';
 
-        watchMinutesElement.innerHTML = watchMinutes;
-        watchSecondsElement.innerHTML = watchSeconds;
-      };
+              const formData = new FormData();
+              formData.append('video', blob);
 
-      startReocordingButton.addEventListener('click', startRecording);
+              await fetch('/video/upload', {
+                method: 'post',
+                body: formData,
+              });
 
-      stopRecordingButton.addEventListener('click', stopRecording);
+              await swal({
+                text: '!Video enviado con éxito!',
+                icon: 'success',
+                buttons: [false, 'OK'],
+              });
 
-      finishRecordingButton.addEventListener('click', finishRecording);
+              info.style.display = 'flex';
 
-      reRecordButton.addEventListener('click', reRecord);
-    })
-    .catch((e) => console.error(e));
+              videoChunks.length = 0;
+            }
+          } catch (e) {
+            console.error(e);
+          }
+        };
+
+        const reRecord = async () => {
+          const willReRecord = await swal({
+            title: '¡Atención!',
+            text: 'Perderas el video anterior. ¿Deseas continuar?',
+            buttons: ['Cancelar', 'Continuar'],
+            dangerMode: true,
+            icon: 'warning',
+          });
+
+          if (willReRecord) {
+            reRecordButton.style.display = 'none';
+            finishRecordingButton.style.display = 'none';
+            stopRecordingButton.style.display = 'block';
+            watchContainer.style.display = 'block';
+
+            videoChunks.length = 0;
+
+            mediaRecorder = new MediaRecorder(stream);
+            mediaRecorder.start(10);
+            mediaRecorder.ondataavailable = (e) => {
+              videoChunks.push(e.data);
+            };
+
+            videoPreviewHeader.style.display = 'none';
+            videoPreview.style.display = 'none';
+
+            videoPreview.src = null;
+            videoPreview.srcObject = null;
+            videoPreview.controls = false;
+
+            interval = setInterval(startTimer, 1000);
+
+            watchMinutes = '00';
+            watchSeconds = '00';
+
+            watchMinutesElement.innerHTML = watchMinutes;
+            watchSecondsElement.innerHTML = watchSeconds;
+          }
+        };
+
+        startReocordingButton.addEventListener('click', startRecording);
+
+        stopRecordingButton.addEventListener('click', stopRecording);
+
+        finishRecordingButton.addEventListener('click', finishRecording);
+
+        reRecordButton.addEventListener('click', reRecord);
+      })
+      .catch((e) => console.error(e));
+  });
 };
