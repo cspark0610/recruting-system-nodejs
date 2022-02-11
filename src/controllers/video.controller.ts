@@ -47,7 +47,6 @@ export const uploadVideoToS3 = async (req: Request, res: Response) => {
 
     const result = await videoService.UploadVideoToS3(newCandidateVideo);
 
-    console.log(newCandidateVideo);
     await unlinkFile(newCandidateVideo.path);
 
     console.log(result);
