@@ -3451,10 +3451,12 @@ window.onload = async () => {
   if (permissions.isConfirmed) {
     try {
       loadingText.style.display = 'flex';
+
       const stream = await navigator.mediaDevices.getUserMedia({
         audio: true,
         video: true,
       });
+
       document.getElementById('video').srcObject = stream;
       loadingText.style.display = 'none';
       startReocordingButton.style.display = 'block';
@@ -3620,7 +3622,7 @@ window.onload = async () => {
       } else {
         swal.fire({
           title: 'Error',
-          text: 'Acceso al microfono y/o camara denegado',
+          text: 'Acceso al micrófono y/o cámara denegado',
           showConfirmButton: true,
           icon: 'error',
         });

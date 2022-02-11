@@ -227,7 +227,7 @@ window.onload = async () => {
       } else {
         swal.fire({
           title: 'Error',
-          text: 'Acceso al microfono y/o camara denegado',
+          text: 'Acceso al micrófono y/o cámara denegado',
           showConfirmButton: true,
           icon: 'error',
         });
