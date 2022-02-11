@@ -32,7 +32,7 @@ export const generateUrl = async (req: Request, res: Response) => {
       return res.status(400).send({
         status: 'failure',
         code: 400,
-        mesage: 'No base url was received',
+        mesage: 'No redirect_url was received',
       });
     }
 

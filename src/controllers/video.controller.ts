@@ -41,7 +41,7 @@ export const uploadVideoToS3 = async (req: Request, res: Response) => {
       return res.status(400).send({
         status: 'failure',
         code: 400,
-        message: 'No file was received',
+        message: 'No video file was received',
       });
     }
 
