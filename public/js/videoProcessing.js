@@ -56,10 +56,12 @@ window.onload = async () => {
   if (permissions.isConfirmed) {
     try {
       loadingText.style.display = 'flex';
+
       const stream = await navigator.mediaDevices.getUserMedia({
         audio: true,
         video: true,
       });
+
       document.getElementById('video').srcObject = stream;
       loadingText.style.display = 'none';
       startReocordingButton.style.display = 'block';
