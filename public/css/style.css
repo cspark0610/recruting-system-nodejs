@@ -74,6 +74,10 @@ video {
   display: none;
 }
 
+.buttons-section #btn-stop {
+  margin-left: 7px;
+}
+
 button:hover {
   background-color: var(--button-text-color);
   color: white;
