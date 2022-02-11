@@ -89,15 +89,6 @@ button:hover {
   display: none;
 }
 
-.video-status {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 500;
-  font-size: large;
-  margin-top: 20px;
-}
-
 .info {
   display: none;
   flex-direction: column;
