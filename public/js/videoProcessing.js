@@ -1,6 +1,6 @@
 const swal = require('sweetalert2').default;
 
-window.onload = () => {
+window.onload = async () => {
   const videoChunks = [];
   let mediaRecorder = undefined;
   let watchMinutes = 00;
@@ -48,188 +48,189 @@ window.onload = () => {
     }
   };
 
-  swal
-    .fire({
-      text: 'Debes permitir el acceso a tu camara y microfono para poder continuar',
-      icon: 'warning',
-    })
-    .then(() => {
+  const permissions = await swal.fire({
+    text: 'Debes permitir el acceso a tu camara y microfono para poder continuar',
+    icon: 'warning',
+  });
+
+  if (permissions.isConfirmed) {
+    try {
       loadingText.style.display = 'flex';
-      navigator.mediaDevices
-        .getUserMedia({ audio: true, video: true })
-        .then((stream) => {
-          document.getElementById('video').srcObject = stream;
-          loadingText.style.display = 'none';
-          startReocordingButton.style.display = 'block';
+      const stream = await navigator.mediaDevices.getUserMedia({
+        audio: true,
+        video: true,
+      });
+      document.getElementById('video').srcObject = stream;
+      loadingText.style.display = 'none';
+      startReocordingButton.style.display = 'block';
 
-          const startRecording = () => {
-            mediaRecorder = new MediaRecorder(stream);
-            mediaRecorder.start(10);
-            mediaRecorder.ondataavailable = (e) => {
-              videoChunks.push(e.data);
-            };
+      const startRecording = () => {
+        mediaRecorder = new MediaRecorder(stream);
+        mediaRecorder.start(10);
+        mediaRecorder.ondataavailable = (e) => {
+          videoChunks.push(e.data);
+        };
 
-            interval = setInterval(startTimer, 1000);
+        interval = setInterval(startTimer, 1000);
 
-            startReocordingButton.style.display = 'none';
-            stopRecordingButton.style.display = 'block';
-            watchContainer.style.display = 'flex';
-          };
+        startReocordingButton.style.display = 'none';
+        stopRecordingButton.style.display = 'block';
+        watchContainer.style.display = 'flex';
+      };
 
-          const stopRecording = () => {
-            mediaRecorder.stop();
-            clearInterval(interval);
+      const stopRecording = () => {
+        mediaRecorder.stop();
+        clearInterval(interval);
 
-            const blob = new Blob(videoChunks, { type: 'video/mp4' });
+        const blob = new Blob(videoChunks, { type: 'video/mp4' });
 
-            videoPreview.style.display = 'flex';
-            watchContainer.style.display = 'none';
+        videoPreview.style.display = 'flex';
+        watchContainer.style.display = 'none';
 
-            videoPreview.src = null;
-            videoPreview.srcObject = null;
+        videoPreview.src = null;
+        videoPreview.srcObject = null;
 
-            videoPreview.src = window.URL.createObjectURL(blob);
+        videoPreview.src = window.URL.createObjectURL(blob);
 
-            videoPreview.controls = true;
-            videoPreview.download = false;
+        videoPreview.controls = true;
+        videoPreview.download = false;
 
-            videoPreviewHeader.style.display = 'block';
+        videoPreviewHeader.style.display = 'block';
 
-            watchPreviewLink.click();
+        watchPreviewLink.click();
 
-            stopRecordingButton.style.display = 'none';
-            finishRecordingButton.style.display = 'block';
-            reRecordButton.style.display = 'block';
-          };
+        stopRecordingButton.style.display = 'none';
+        finishRecordingButton.style.display = 'block';
+        reRecordButton.style.display = 'block';
+      };
 
-          const finishRecording = async () => {
-            try {
-              const willSave = await swal.fire({
-                title: '¡Atención!',
-                text: 'Estas a punto de enviar tu video. ¿Deseas continuar?',
-                showCancelButton: true,
-                showConfirmButton: true,
-                confirmButtonText: 'Continuar',
-                cancelButtonText: 'Cancelar',
-                confirmButtonColor: 'green',
-                icon: 'warning',
-              });
+      const finishRecording = async () => {
+        try {
+          const willSave = await swal.fire({
+            title: '¡Atención!',
+            text: 'Estas a punto de enviar tu video. ¿Deseas continuar?',
+            showCancelButton: true,
+            showConfirmButton: true,
+            confirmButtonText: 'Continuar',
+            cancelButtonText: 'Cancelar',
+            confirmButtonColor: 'green',
+            icon: 'warning',
+          });
 
-              if (willSave.isConfirmed) {
-                const blob = new Blob(videoChunks, {
-                  type: 'video/mp4',
-                });
+          if (willSave.isConfirmed) {
+            const blob = new Blob(videoChunks, {
+              type: 'video/mp4',
+            });
 
-                swal.fire({
-                  text: 'Enviando video, por favor, espera...',
-                  icon: 'warning',
-                  showConfirmButton: false,
-                  allowOutsideClick: false,
-                  allowEscapeKey: false,
-                  willOpen: () => {
-                    swal.showLoading();
-                  },
-                });
-
-                reRecordButton.style.display = 'none';
-                finishRecordingButton.style.display = 'none';
-                watchContainer.style.display = 'none';
-                videoPreviewHeader.style.display = 'none';
-                videoPreview.style.display = 'none';
-                document.getElementById('video').style.display = 'none';
-
-                const formData = new FormData();
-                formData.append('video', blob);
-
-                await fetch('/video/upload', {
-                  method: 'post',
-                  body: formData,
-                });
-
-                await swal.fire({
-                  text: '!Video enviado con éxito!',
-                  icon: 'success',
-                  showConfirmButton: true,
-                });
-
-                info.style.display = 'flex';
-
-                videoChunks.length = 0;
-              }
-            } catch (e) {
-              console.error(e);
-            }
-          };
-
-          const reRecord = async () => {
-            const willReRecord = await swal.fire({
-              title: '¡Atención!',
-              text: 'Perderas el video anterior. ¿Deseas continuar?',
-              showConfirmButton: true,
-              showCancelButton: true,
-              confirmButtonText: 'Continuar',
-              cancelButtonText: 'Cancelar',
-              confirmButtonColor: 'red',
+            swal.fire({
+              text: 'Enviando video, por favor, espera...',
               icon: 'warning',
+              showConfirmButton: false,
+              allowOutsideClick: false,
+              allowEscapeKey: false,
+              willOpen: () => {
+                swal.showLoading();
+              },
             });
 
-            if (willReRecord.isConfirmed) {
-              reRecordButton.style.display = 'none';
-              finishRecordingButton.style.display = 'none';
-              stopRecordingButton.style.display = 'block';
-              watchContainer.style.display = 'flex';
+            reRecordButton.style.display = 'none';
+            finishRecordingButton.style.display = 'none';
+            watchContainer.style.display = 'none';
+            videoPreviewHeader.style.display = 'none';
+            videoPreview.style.display = 'none';
+            document.getElementById('video').style.display = 'none';
 
-              videoChunks.length = 0;
+            const formData = new FormData();
+            formData.append('video', blob);
 
-              mediaRecorder = new MediaRecorder(stream);
-              mediaRecorder.start(10);
-              mediaRecorder.ondataavailable = (e) => {
-                videoChunks.push(e.data);
-              };
+            await fetch('/video/upload', {
+              method: 'post',
+              body: formData,
+            });
 
-              videoPreviewHeader.style.display = 'none';
-              videoPreview.style.display = 'none';
+            await swal.fire({
+              text: '!Video enviado con éxito!',
+              icon: 'success',
+              showConfirmButton: true,
+            });
 
-              videoPreview.src = null;
-              videoPreview.srcObject = null;
-              videoPreview.controls = false;
+            info.style.display = 'flex';
 
-              interval = setInterval(startTimer, 1000);
+            videoChunks.length = 0;
+          }
+        } catch (e) {
+          console.error(e);
+        }
+      };
 
-              watchMinutes = '00';
-              watchSeconds = '00';
+      const reRecord = async () => {
+        const willReRecord = await swal.fire({
+          title: '¡Atención!',
+          text: 'Perderas el video anterior. ¿Deseas continuar?',
+          showConfirmButton: true,
+          showCancelButton: true,
+          confirmButtonText: 'Continuar',
+          cancelButtonText: 'Cancelar',
+          confirmButtonColor: 'red',
+          icon: 'warning',
+        });
 
-              watchMinutesElement.innerHTML = watchMinutes;
-              watchSecondsElement.innerHTML = watchSeconds;
-            }
+        if (willReRecord.isConfirmed) {
+          reRecordButton.style.display = 'none';
+          finishRecordingButton.style.display = 'none';
+          stopRecordingButton.style.display = 'block';
+          watchContainer.style.display = 'flex';
+
+          videoChunks.length = 0;
+
+          mediaRecorder = new MediaRecorder(stream);
+          mediaRecorder.start(10);
+          mediaRecorder.ondataavailable = (e) => {
+            videoChunks.push(e.data);
           };
 
-          startReocordingButton.addEventListener('click', startRecording);
+          videoPreviewHeader.style.display = 'none';
+          videoPreview.style.display = 'none';
 
-          stopRecordingButton.addEventListener('click', stopRecording);
+          videoPreview.src = null;
+          videoPreview.srcObject = null;
+          videoPreview.controls = false;
 
-          finishRecordingButton.addEventListener('click', finishRecording);
+          interval = setInterval(startTimer, 1000);
 
-          reRecordButton.addEventListener('click', reRecord);
-        })
-        .catch((e) => {
-          if (e.message.includes('found')) {
-            swal.fire({
-              title: 'Error',
-              text: 'Dispositivos de audio y/o video no encontrados',
-              showConfirmButton: true,
-              icon: 'error',
-            });
-            loadingText.style.display = 'none';
-          } else {
-            swal.fire({
-              title: 'Error',
-              text: 'Acceso al microfono y/o camara denegado',
-              showConfirmButton: true,
-              icon: 'error',
-            });
-            loadingText.style.display = 'none';
-          }
+          watchMinutes = '00';
+          watchSeconds = '00';
+
+          watchMinutesElement.innerHTML = watchMinutes;
+          watchSecondsElement.innerHTML = watchSeconds;
+        }
+      };
+
+      startReocordingButton.addEventListener('click', startRecording);
+
+      stopRecordingButton.addEventListener('click', stopRecording);
+
+      finishRecordingButton.addEventListener('click', finishRecording);
+
+      reRecordButton.addEventListener('click', reRecord);
+    } catch (e) {
+      if (e.message.includes('found')) {
+        swal.fire({
+          title: 'Error',
+          text: 'Dispositivos de audio y/o video no encontrados',
+          showConfirmButton: true,
+          icon: 'error',
         });
-    });
+        loadingText.style.display = 'none';
+      } else {
+        swal.fire({
+          title: 'Error',
+          text: 'Acceso al microfono y/o camara denegado',
+          showConfirmButton: true,
+          icon: 'error',
+        });
+        loadingText.style.display = 'none';
+      }
+    }
+  }
 };
