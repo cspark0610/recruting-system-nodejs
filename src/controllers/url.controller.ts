@@ -19,7 +19,7 @@ export const validateUrl = async (req: Request, res: Response) => {
       return res.status(404).redirect('validate/error/not-valid');
     }
 
-    res.render('pages/index')
+    return res.render('pages/index')
   } catch (e) {
     return res.send(e);
   }
