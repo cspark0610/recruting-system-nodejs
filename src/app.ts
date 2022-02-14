@@ -1,9 +1,8 @@
 import express, { Application, Request, Response } from 'express';
 import path from 'path';
+import routes from './routes/index.routes';
 
 const app: Application = express();
-
-import routes from './routes/index.routes';
 
 app.use(express.urlencoded({ extended: true, limit: '25mb' }));
 app.use(express.json({ limit: '25mb' }));
