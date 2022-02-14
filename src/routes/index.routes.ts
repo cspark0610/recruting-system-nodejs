@@ -6,7 +6,7 @@ import urlRoutes from './url.routes';
 const router = Router();
 
 router.get('', (_req, res) => {
-  res.render('pages/pageNotFound');
+  res.status(404).render('pages/pageNotFound');
 });
 
 router.get('/url/not-found', (_req, res) => {
