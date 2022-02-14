@@ -2,7 +2,7 @@ const swal = require('sweetalert2').default;
 
 window.onload = async () => {
   const videoChunks = [];
-  let mediaRecorder = undefined;
+  let mediaRecorder;
   let watchMinutes = 00;
   let watchSeconds = 00;
 

@@ -1,8 +1,9 @@
 import { Request, Response } from 'express';
 import dotenv from 'dotenv';
-dotenv.config();
 
 import * as urlService from '../services/Url.service';
+
+dotenv.config();
 
 export const validateUrl = async (req: Request, res: Response) => {
   try {
@@ -50,6 +51,4 @@ export const generateUrl = async (req: Request, res: Response) => {
   }
 };
 
-export const renderNotValidUrl = (_req: Request, res: Response) => {
-  return res.status(404).render('pages/urlNotValid');
-};
+export const renderNotValidUrl = (_req: Request, res: Response) => res.status(404).render('pages/urlNotValid');

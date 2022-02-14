@@ -3,7 +3,7 @@ import multer from 'multer';
 import storage from '../lib/multerConfig';
 import * as videoController from '../controllers/video.controller';
 
-const upload = multer({ storage: storage });
+const upload = multer({ storage });
 
 const router = Router();
 
