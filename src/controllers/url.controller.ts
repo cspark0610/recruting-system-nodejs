@@ -7,10 +7,6 @@ dotenv.config();
 
 export const validateUrl = async (req: Request, res: Response) => {
   try {
-    if (!req.query.id) {
-      return res.status(400).redirect('validate/error/not-valid');
-    }
-
     const id = req.query.id as string;
 
     const uniqueUrlId = await urlService.ValidateUrl(id);
@@ -19,7 +15,7 @@ export const validateUrl = async (req: Request, res: Response) => {
       return res.status(404).redirect('validate/error/not-valid');
     }
 
-    return res.render('pages/index')
+    res.render('pages/index')
   } catch (e) {
     return res.send(e);
   }
