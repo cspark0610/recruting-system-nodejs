@@ -35,12 +35,12 @@ window.onload = async () => {
       watchSecondsElement.innerHTML = watchSeconds;
     }
 
-    if (watchSeconds > 60) {
+    if (watchSeconds > 59) {
       watchMinutes++;
       watchMinutesElement.innerHTML = `0${watchMinutes}`;
 
       watchSeconds = 0;
-      watchSecondsElement.innerHTML = '0' + 0;
+      watchSecondsElement.innerHTML = `0${0}`;
     }
 
     if (watchMinutes > 9) {
