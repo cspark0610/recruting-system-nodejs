@@ -46,6 +46,32 @@ window.onload = async () => {
     if (watchMinutes > 9) {
       watchMinutesElement.innerHTML = watchMinutes;
     }
+
+    if (watchMinutes == 01 || watchMinutes == '01') {
+      mediaRecorder.stop();
+      clearInterval(interval);
+
+      const blob = new Blob(videoChunks, { type: 'video/mp4' });
+
+      videoPreview.style.display = 'flex';
+      watchContainer.style.display = 'none';
+
+      videoPreview.src = null;
+      videoPreview.srcObject = null;
+
+      videoPreview.src = window.URL.createObjectURL(blob);
+
+      videoPreview.controls = true;
+      videoPreview.download = false;
+
+      videoPreviewHeader.style.display = 'block';
+
+      watchPreviewLink.click();
+
+      stopRecordingButton.style.display = 'none';
+      finishRecordingButton.style.display = 'block';
+      reRecordButton.style.display = 'block';
+    }
   };
 
   const permissions = await swal.fire({
@@ -180,16 +206,9 @@ window.onload = async () => {
         if (willReRecord.isConfirmed) {
           reRecordButton.style.display = 'none';
           finishRecordingButton.style.display = 'none';
-          stopRecordingButton.style.display = 'block';
-          watchContainer.style.display = 'flex';
+          startReocordingButton.style.display = 'flex';
 
           videoChunks.length = 0;
-
-          mediaRecorder = new MediaRecorder(stream);
-          mediaRecorder.start(10);
-          mediaRecorder.ondataavailable = (e) => {
-            videoChunks.push(e.data);
-          };
 
           videoPreviewHeader.style.display = 'none';
           videoPreview.style.display = 'none';
@@ -197,8 +216,6 @@ window.onload = async () => {
           videoPreview.src = null;
           videoPreview.srcObject = null;
           videoPreview.controls = false;
-
-          interval = setInterval(startTimer, 1000);
 
           watchMinutes = '00';
           watchSeconds = '00';
