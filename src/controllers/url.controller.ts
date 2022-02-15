@@ -1,24 +1,12 @@
 import { Request, Response } from 'express';
 import dotenv from 'dotenv';
 
-import * as urlService from '../services/Url.service';
+import GenerateUrl from '../services/Url.service';
 
 dotenv.config();
 
-export const validateUrl = async (req: Request, res: Response) => {
-  try {
-    const id = req.query.id as string;
-
-    const uniqueUrlId = await urlService.ValidateUrl(id);
-
-    if (!uniqueUrlId || Object.entries(uniqueUrlId).length === 0) {
-      return res.status(404).redirect('validate/error/not-valid');
-    }
-
-    res.render('pages/index')
-  } catch (e) {
-    return res.send(e);
-  }
+export const validateUrl = (_req: Request, res: Response) => {
+  res.render('pages/index')
 };
 
 export const generateUrl = async (req: Request, res: Response) => {
@@ -33,7 +21,7 @@ export const generateUrl = async (req: Request, res: Response) => {
       });
     }
 
-    const newUrl = await urlService.GenerateUrl(redirect_url);
+    const newUrl = await GenerateUrl(redirect_url);
     console.log(newUrl);
 
     return res.status(201).send({
