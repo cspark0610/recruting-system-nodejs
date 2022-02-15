@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { createWriteStream, unlink } from 'fs';
+import { unlink } from 'fs';
 import { promisify } from 'util';
 import * as videoService from '../services/Video.service';
 
@@ -19,15 +19,7 @@ export const getVideoFromS3 = (req: Request, res: Response) => {
       });
     }
 
-    const stream = createWriteStream(`./downloads/${key}`);
-
-    candidateVideo.pipe(stream);
-
-    res.send({
-      status: 'success',
-      code: 203,
-      message: 'Video downloaded successfully',
-    });
+    candidateVideo.pipe(res);
   } catch (e: any) {
     return new Error(e);
   }
