@@ -8,4 +8,4 @@ const GenerateUrl = async (redirect_url: string): Promise<any> => {
   }
 };
 
-export default GenerateUrl
+export default GenerateUrl;

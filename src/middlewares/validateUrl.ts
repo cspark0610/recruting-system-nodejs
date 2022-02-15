@@ -14,6 +14,7 @@ export default async function validateUrl(
     if (!uniqueUrl || Object.entries(uniqueUrl).length === 0) {
       return res.status(404).render('pages/urlNotValid');
     }
+
     next();
   } catch (e: any) {
     return new Error(e);
