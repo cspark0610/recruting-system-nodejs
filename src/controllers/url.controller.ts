@@ -6,12 +6,12 @@ import GenerateUrl from '../services/Url.service';
 dotenv.config();
 
 export const validateUrl = (_req: Request, res: Response) => {
-  res.render('pages/index')
+  res.render('pages/index');
 };
 
 export const generateUrl = async (req: Request, res: Response) => {
   try {
-    const { redirect_url } = req.body;
+    const { redirect_url } = req.params;
 
     if (!redirect_url) {
       return res.status(400).send({
@@ -28,7 +28,7 @@ export const generateUrl = async (req: Request, res: Response) => {
       status: 'success',
       code: 201,
       message: 'url created',
-      url: `${redirect_url}/url/validate?id=${newUrl.short_url}`,
+      url: `${process.env.REDIRECT_URL}/url/validate?id=${newUrl.short_url}`,
     });
   } catch (e) {
     return res.send(e);

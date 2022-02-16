@@ -25,7 +25,8 @@ export const GetVideoFromS3 = (key: string) => {
       Key: key,
     };
 
-    return s3.getObject(getParams).createReadStream();
+    const video = s3.getObject(getParams).createReadStream();
+    return video;
   } catch (e) {
     console.error(e);
   }
