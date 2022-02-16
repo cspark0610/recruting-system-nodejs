@@ -9,6 +9,6 @@ router.get('/validate', validateUrl, urlController.validateUrl);
 
 router.get('/validate/error/not-valid', urlController.renderNotValidUrl);
 
-router.post('/create', urlController.generateUrl);
+router.get('/create/:redirect_url', urlController.generateUrl);
 
 export default router;
