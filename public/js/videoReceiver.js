@@ -1,13 +1,20 @@
 async function init() {
-  const video = await fetch('/video/get/video-1645019716920.mp4', {
-    method: 'get',
-  });
+  try {
+    const video = await fetch('/video/get/video-1645019716920.mp4', {
+      method: 'get',
+    });
 
-  const blob = await video.blob();
+    const videoElement = document.getElementById('video-container');
 
-  const videoUrl = window.URL.createObjectURL(blob);
+    const blob = await video.blob();
 
-  document.getElementById('video-container').src = videoUrl;
+    const videoUrl = window.URL.createObjectURL(blob);
+
+    videoElement.src = videoUrl;
+    videoElement.controls = true;
+  } catch (e) {
+    console.error(e.message);
+  }
 }
 
 init();
