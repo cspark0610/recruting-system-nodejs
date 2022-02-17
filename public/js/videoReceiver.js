@@ -1,6 +1,9 @@
 async function init() {
   try {
-    const video = await fetch('/video/get/video-1645019716920.mp4', {
+    const videoKeys = await fetch('/video-key');
+    const videoKeysParsed = await videoKeys.json();
+
+    const video = await fetch(`/video/get/${videoKeysParsed.video_key}`, {
       method: 'get',
     });
 

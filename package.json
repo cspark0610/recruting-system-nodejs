@@ -9,7 +9,7 @@
     "build": "npm run clean && npm run build-ts && npm run build-js && npm run copy-static-assets",
     "clean": "rimraf dist",
     "build-ts": "tsc",
-    "build-js": "browserify ./public/js/videoProcessing.js -o ./public/js/bundles/videoProcessingBundle.js && browserify ./public/js/videoReceiver.js -o ./public/js/bundles/videoReceiverBundle.js",
+    "build-js": "browserify ./public/js/videoProcessing.js -o ./public/js/bundle.js",
     "copy-static-assets": "ts-node src/utils/copyStaticAssets.ts"
   },
   "keywords": [],

@@ -3,6 +3,8 @@ import dotenv from 'dotenv';
 
 import GenerateUrl from '../services/Url.service';
 
+import temp from '../lib/tempVariables';
+
 dotenv.config();
 
 export const validateUrl = (_req: Request, res: Response) => {
@@ -12,6 +14,7 @@ export const validateUrl = (_req: Request, res: Response) => {
 export const generateUrl = async (req: Request, res: Response) => {
   try {
     const { redirect_url } = req.params;
+    const userId = req.query.userId as string;
 
     if (!redirect_url) {
       return res.status(400).send({
@@ -21,8 +24,12 @@ export const generateUrl = async (req: Request, res: Response) => {
       });
     }
 
-    const newUrl = await GenerateUrl(redirect_url);
+    const newUrl = await GenerateUrl(redirect_url, userId);
     console.log(newUrl);
+
+    console.log(temp);
+    temp.userId = userId;
+    console.log(temp);
 
     return res.status(201).send({
       status: 'success',
