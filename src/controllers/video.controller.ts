@@ -8,6 +8,10 @@ import temp from '../lib/tempVariables';
 
 const unlinkFile = promisify(unlink);
 
+export const getVideo = (_req: Request, res: Response) => {
+  res.render('pages/viewVideo');
+};
+
 export const getVideoFromS3 = (req: Request, res: Response) => {
   try {
     const { key } = req.params;
