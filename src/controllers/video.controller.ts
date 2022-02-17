@@ -50,20 +50,16 @@ export const uploadVideoToS3 = async (req: Request, res: Response) => {
 
     console.log(result);
 
-    console.log(temp);
     temp.video_key = result?.Key;
-    console.log(temp);
 
     const user = await User.findOneAndUpdate(
       { id: temp.userId },
       { video_key: temp.video_key },
     );
     await user.save();
-    console.log(user);
 
     res.send({
-      status: 'uploaded successfully',
-      video_key: result?.Key,
+      status: 'video uploaded successfully',
     });
   } catch (e: any) {
     return new Error(e);

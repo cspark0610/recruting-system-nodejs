@@ -27,9 +27,7 @@ export const generateUrl = async (req: Request, res: Response) => {
     const newUrl = await GenerateUrl(redirect_url, userId);
     console.log(newUrl);
 
-    console.log(temp);
     temp.userId = userId;
-    console.log(temp);
 
     return res.status(201).send({
       status: 'success',
