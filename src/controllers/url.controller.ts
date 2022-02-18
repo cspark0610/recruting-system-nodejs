@@ -3,8 +3,6 @@ import dotenv from 'dotenv';
 
 import GenerateUrl from '../services/Url.service';
 
-import temp from '../lib/tempVariables';
-
 dotenv.config();
 
 export const validateUrl = (_req: Request, res: Response) => {
@@ -24,16 +22,13 @@ export const generateUrl = async (req: Request, res: Response) => {
       });
     }
 
-    const newUrl = await GenerateUrl(redirect_url, userId);
-    console.log(newUrl);
-
-    temp.userId = userId;
+    const data = await GenerateUrl(redirect_url, userId);
 
     return res.status(201).send({
       status: 'success',
       code: 201,
       message: 'url created',
-      url: `${process.env.REDIRECT_URL}/url/validate?id=${newUrl.short_url}`,
+      url: `${process.env.REDIRECT_URL}/url/validate?id=${data.newUrl.short_url}&index=${data.newUser.index}`,
     });
   } catch (e) {
     return res.send(e);

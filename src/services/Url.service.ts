@@ -7,8 +7,8 @@ const GenerateUrl = async (
 ): Promise<any> => {
   try {
     const newUrl = await Url.create({ redirect_url });
-    await User.create({ id: userId });
-    return newUrl;
+    const newUser = await User.create({ id: userId });
+    return { newUrl, newUser };
   } catch (e) {
     console.error(e);
   }

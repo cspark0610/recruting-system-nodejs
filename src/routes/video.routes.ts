@@ -12,6 +12,10 @@ router.get('/get/:key', videoController.getVideoFromS3);
 
 router.get('/view/:userId', validateUser, videoController.getVideo);
 
-router.post('/upload', upload.single('video'), videoController.uploadVideoToS3);
+router.post(
+  '/upload/:index',
+  upload.single('video'),
+  videoController.uploadVideoToS3,
+);
 
 export default router;

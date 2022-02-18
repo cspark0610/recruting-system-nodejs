@@ -35,6 +35,7 @@ export const getVideoFromS3 = (req: Request, res: Response) => {
 export const uploadVideoToS3 = async (req: Request, res: Response) => {
   try {
     const newCandidateVideo = req.file;
+    const { index } = req.params;
 
     if (!newCandidateVideo) {
       return res.status(400).send({
@@ -53,10 +54,12 @@ export const uploadVideoToS3 = async (req: Request, res: Response) => {
     temp.video_key = result?.Key;
 
     const user = await User.findOneAndUpdate(
-      { id: temp.userId },
+      { index },
       { video_key: temp.video_key },
     );
     await user.save();
+
+    console.log(user);
 
     res.send({
       status: 'video uploaded successfully',

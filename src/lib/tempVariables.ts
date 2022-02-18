@@ -1,8 +1,8 @@
 import ITemp from '../interfaces/ITemp.interface';
 
 const temp: ITemp = {
-  userId: '',
   video_key: '',
+  index: '',
 };
 
 export default temp;
