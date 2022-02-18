@@ -1,5 +1,5 @@
 import { Schema, model } from 'mongoose';
-import { v4 as uuidv4 } from 'uuid';
+import { generate } from 'shortid';
 
 const UserSchema = new Schema(
   {
@@ -16,7 +16,7 @@ const UserSchema = new Schema(
     index: {
       type: String,
       required: true,
-      default: uuidv4(),
+      default: generate,
     },
   },
   { versionKey: false },
