@@ -1,4 +1,5 @@
 import { Schema, model } from 'mongoose';
+import { v4 as uuidv4 } from 'uuid';
 
 const UserSchema = new Schema(
   {
@@ -10,6 +11,12 @@ const UserSchema = new Schema(
     video_key: {
       type: String,
       required: false,
+    },
+
+    index: {
+      type: String,
+      required: true,
+      default: uuidv4(),
     },
   },
   { versionKey: false },
