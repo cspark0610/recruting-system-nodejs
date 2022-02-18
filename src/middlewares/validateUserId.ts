@@ -3,11 +3,11 @@ import User from '../db/schemas/User.schema';
 import IUser from '../interfaces/IUser.interface';
 import temp from '../lib/tempVariables';
 
-const validateUser = async (
+export default async function validateUser(
   req: Request,
   res: Response,
   next: NextFunction,
-) => {
+) {
   try {
     const { userId } = req.params;
 
@@ -35,6 +35,4 @@ const validateUser = async (
   } catch (e: any) {
     console.error(e);
   }
-};
-
-export default validateUser;
+}
