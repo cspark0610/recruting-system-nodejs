@@ -3403,6 +3403,9 @@ window.onload = async () => {
 
   const loadingText = document.getElementById('loading-image');
 
+  const index = await fetch('/video-key');
+  const indexParsed = await index.json();
+
   const startReocordingButton = document.getElementById('btn-start');
   const stopRecordingButton = document.getElementById('btn-stop');
   const finishRecordingButton = document.getElementById('btn-finish');
@@ -3566,7 +3569,7 @@ window.onload = async () => {
             const formData = new FormData();
             formData.append('video', blob);
 
-            await fetch('/video/upload', {
+            await fetch(`/video/upload/${indexParsed.index}`, {
               method: 'post',
               body: formData,
             });

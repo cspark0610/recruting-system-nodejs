@@ -29,7 +29,8 @@
     "rimraf": "^3.0.2",
     "shelljs": "^0.8.5",
     "shortid": "^2.2.16",
-    "sweetalert2": "^11.4.0"
+    "sweetalert2": "^11.4.0",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@types/cors": "^2.8.12",
@@ -39,6 +40,7 @@
     "@types/node": "^17.0.14",
     "@types/shelljs": "^0.8.11",
     "@types/shortid": "^0.0.29",
+    "@types/uuid": "^8.3.4",
     "@typescript-eslint/eslint-plugin": "^5.11.0",
     "@typescript-eslint/parser": "^5.11.0",
     "eslint": "^8.9.0",
