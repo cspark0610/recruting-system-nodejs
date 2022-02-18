@@ -10,8 +10,6 @@ router.get('', (_req, res) => {
   res.status(404).render('pages/pageNotFound');
 });
 
-router.get('/view', (_req, res) => res.render('pages/viewVideo'));
-
 router.get('/video-key', getKeys);
 
 router.get('/url/not-found', (_req, res) => {
