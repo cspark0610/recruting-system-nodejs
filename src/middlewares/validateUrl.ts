@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import Url from '../db/schemas/Url.schema';
+import IUrl from '../interfaces/IUrl.interface';
 import temp from '../lib/tempVariables';
 
 export default async function validateUrl(
@@ -11,7 +12,7 @@ export default async function validateUrl(
     const id = req.query.id as string;
     const index = req.query.index as string;
 
-    const uniqueUrl = await Url.findOne({ short_url: id });
+    const uniqueUrl: IUrl | null = await Url.findOne({ short_url: id });
 
     if (!uniqueUrl || Object.entries(uniqueUrl).length === 0) {
       return res.status(404).render('pages/urlNotValid');
