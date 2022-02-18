@@ -5,7 +5,7 @@ import validateUrl from '../middlewares/validateUrl';
 
 const router = Router();
 
-router.get('/validate', validateUrl, urlController.validateUrl);
+router.get('/validate', validateUrl, urlController.renderApp);
 
 router.get('/validate/error/not-valid', urlController.renderNotValidUrl);
 

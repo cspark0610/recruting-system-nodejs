@@ -5,7 +5,7 @@ import GenerateUrl from '../services/Url.service';
 
 dotenv.config();
 
-export const validateUrl = (_req: Request, res: Response) => {
+export const renderApp = (_req: Request, res: Response) => {
   res.render('pages/index');
 };
 
