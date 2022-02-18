@@ -17,7 +17,7 @@ export default async function validateUser(
       return res.status(404).send({
         status: 'failure',
         code: 404,
-        message: `user not found with id ${userId}`,
+        message: `User not found with id ${userId}`,
       });
     }
 
@@ -25,7 +25,7 @@ export default async function validateUser(
       return res.status(400).send({
         status: 'failure',
         code: 400,
-        message: 'User is found, but has yet to record their video',
+        message: 'User has been found, but has yet to record their video',
       });
     }
 
