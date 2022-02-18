@@ -1,23 +1,29 @@
-async function init() {
-  try {
-    const videoKeys = await fetch('/video-key');
-    const videoKeysParsed = await videoKeys.json();
+window.onload = async () => {
+  async function init() {
+    const loadingText = document.getElementById('loading');
+    try {
+      const videoKeys = await fetch('/video-key');
+      const videoKeysParsed = await videoKeys.json();
 
-    const video = await fetch(`/video/get/${videoKeysParsed.video_key}`, {
-      method: 'get',
-    });
+      loadingText.style.display = 'flex';
 
-    const videoElement = document.getElementById('video-container');
+      const video = await fetch(`/video/get/${videoKeysParsed.video_key}`, {
+        method: 'get',
+      });
 
-    const blob = await video.blob();
+      const videoElement = document.getElementById('video-container');
 
-    const videoUrl = window.URL.createObjectURL(blob);
+      const blob = await video.blob();
 
-    videoElement.src = videoUrl;
-    videoElement.controls = true;
-  } catch (e) {
-    console.error(e.message);
+      const videoUrl = window.URL.createObjectURL(blob);
+
+      videoElement.src = videoUrl;
+      videoElement.controls = true;
+      loadingText.style.display = 'none';
+    } catch (e) {
+      console.error(e.message);
+    }
   }
-}
 
-init();
+  init();
+};
