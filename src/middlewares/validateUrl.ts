@@ -17,12 +17,7 @@ export default async function validateUrl(
     const uniqueUrl: IUrl | null = await Url.findOne({ short_url: id });
     const uniqueUser: IUser | null = await User.findOne({ index });
 
-    if (
-      !uniqueUrl
-      || Object.entries(uniqueUrl).length === 0
-      || !uniqueUser
-      || Object.entries(uniqueUser).length === 0
-    ) {
+    if (!uniqueUrl || !uniqueUser) {
       return res.status(404).render('pages/urlNotValid');
     }
 
