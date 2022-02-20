@@ -3,11 +3,6 @@ import { generate } from 'shortid';
 
 const UrlSchema = new Schema(
   {
-    redirect_url: {
-      type: String,
-      required: true,
-    },
-
     short_url: {
       type: String,
       required: true,

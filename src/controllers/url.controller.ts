@@ -11,18 +11,9 @@ export const renderApp = (_req: Request, res: Response) => {
 
 export const generateUrl = async (req: Request, res: Response) => {
   try {
-    const { redirect_url } = req.params;
     const userId = req.query.user_id as string;
 
-    if (!redirect_url) {
-      return res.status(400).send({
-        status: 'failure',
-        code: 400,
-        mesage: 'No redirect_url was received',
-      });
-    }
-
-    const data = await GenerateUrl(redirect_url, userId);
+    const data = await GenerateUrl(userId);
 
     return res.status(201).send({
       status: 'success',

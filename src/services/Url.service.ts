@@ -1,12 +1,9 @@
 import Url from '../db/schemas/Url.schema';
 import User from '../db/schemas/User.schema';
 
-const GenerateUrl = async (
-  redirect_url: string,
-  userId: string,
-): Promise<any> => {
+const GenerateUrl = async (userId: string): Promise<any> => {
   try {
-    const newUrl = await Url.create({ redirect_url });
+    const newUrl = await Url.create({});
     const newUser = await User.create({ id: userId });
     return { newUrl, newUser };
   } catch (e) {
