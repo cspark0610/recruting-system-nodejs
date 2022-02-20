@@ -11,7 +11,7 @@ export const renderApp = (_req: Request, res: Response) => {
 
 export const generateUrl = async (req: Request, res: Response) => {
   try {
-    const userId = req.query.userId as string;
+    const userId = req.query.user_id as string;
 
     const data = await GenerateUrl(userId);
 
