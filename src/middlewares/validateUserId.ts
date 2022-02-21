@@ -13,7 +13,7 @@ export default async function validateUser(
 
     const user: IUser | null = await User.findOne({ id: userId });
 
-    if (!user || Object.entries(user).length === 0) {
+    if (!user) {
       return res.status(404).send({
         status: 'failure',
         code: 404,
