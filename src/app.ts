@@ -7,6 +7,8 @@ const app: Application = express();
 app.use(express.urlencoded({ extended: true, limit: '25mb' }));
 app.use(express.json({ limit: '25mb' }));
 app.use('/public', express.static(path.join(__dirname, '../public')));
+app.use('/build', express.static(path.join(__dirname, '../build')));
+app.use('/static', express.static(path.join(__dirname, '../build/static')));
 
 app.set('view engine', 'ejs');
 

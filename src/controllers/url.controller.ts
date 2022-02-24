@@ -1,12 +1,13 @@
 import { Request, Response } from 'express';
 import dotenv from 'dotenv';
+import path from 'path';
 
 import GenerateUrl from '../services/Url.service';
 
 dotenv.config();
 
 export const renderApp = (_req: Request, res: Response) => {
-  res.render('pages/index');
+  res.sendFile(path.join(__dirname, '../../build', 'index.html'));
 };
 
 export const generateUrl = async (req: Request, res: Response) => {
@@ -26,4 +27,5 @@ export const generateUrl = async (req: Request, res: Response) => {
   }
 };
 
-export const renderNotValidUrl = (_req: Request, res: Response) => res.status(404).render('pages/urlNotValid');
+export const renderNotValidUrl = (_req: Request, res: Response) =>
+  res.status(404).render('pages/urlNotValid');
