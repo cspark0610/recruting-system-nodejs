@@ -36,7 +36,7 @@ export const uploadVideoToS3 = async (req: Request, res: Response) => {
   try {
     const newCandidateVideo = req.file;
     const { index } = req.params;
-
+    const { question_id, question_title } = req.body;
     if (!newCandidateVideo) {
       return res.status(400).send({
         status: 'failure',
@@ -48,14 +48,16 @@ export const uploadVideoToS3 = async (req: Request, res: Response) => {
     const result = await videoService.UploadVideoToS3(newCandidateVideo);
 
     await unlinkFile(newCandidateVideo.path);
-
+    console.log(req.body);
     console.log(result);
 
     temp.video_key = result?.Key;
 
     const user = await User.findOneAndUpdate(
       { index },
-      { video_key: temp.video_key },
+      // eslint-disable-next-line max-len
+      { $push: { videos_question_list: { question_id, question_title, video_key: temp.video_key } } },
+      { upsert: true },
     );
     await user.save();
 

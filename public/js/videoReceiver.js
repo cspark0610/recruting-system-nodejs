@@ -4,7 +4,7 @@ window.onload = async () => {
     const videoKeys = await fetch('/video-key');
     const videoKeysParsed = await videoKeys.json();
 
-    const video = await fetch(`/video/get/${videoKeysParsed.video_key}`, {
+    const video = await fetch(`/video/get/${videoKeysParsed.index}`, {
       method: 'get',
     });
 

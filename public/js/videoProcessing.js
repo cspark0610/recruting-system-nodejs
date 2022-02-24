@@ -87,7 +87,7 @@ window.onload = async () => {
       loadingText.style.display = 'flex';
 
       const stream = await navigator.mediaDevices.getUserMedia({
-        audio: true,
+        audio: false,
         video: true,
       });
 
@@ -173,6 +173,8 @@ window.onload = async () => {
 
             const formData = new FormData();
             formData.append('video', blob);
+            formData.append('question_id', '1');
+            formData.append('question_title', 'test');
 
             await fetch(`/video/upload/${indexParsed.index}`, {
               method: 'post',

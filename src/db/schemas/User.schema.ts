@@ -9,11 +9,15 @@ const UserSchema = new Schema(
       unique: true,
     },
 
-    video_key: {
-      type: String,
-      required: false,
-      unique: true,
-    },
+    videos_question_list: [{
+      question_id: String,
+      question_title: String,
+      video_key: {
+        type: String,
+        required: false,
+        unique: true,
+      },
+    }],
 
     index: {
       type: String,
