@@ -3,6 +3,8 @@ import S3 from 'aws-sdk/clients/s3';
 import dotenv from 'dotenv';
 import File from '../interfaces/File.interface';
 import UploadParams from '../interfaces/UploadParams.interface';
+import temp from '../lib/tempVariables';
+import User from '../db/schemas/User.schema';
 
 dotenv.config();
 
@@ -44,6 +46,35 @@ export const UploadVideoToS3 = async (file: File) => {
 
     return await s3.upload(uploadParams).promise();
   } catch (e) {
+    console.error(e);
+  }
+};
+
+export const SaveQuestionAndVideoKeyToUser = async (
+  question_id: string,
+  question_title: string,
+  index: string,
+  video_key?: string,
+) => {
+  try {
+    const user = await User.findOneAndUpdate(
+      { index },
+      // eslint-disable-next-line max-len
+      {
+        $push: {
+          videos_question_list: {
+            question_id,
+            question_title,
+            video_key,
+          },
+        },
+      },
+      { upsert: true },
+    );
+    await user.save();
+
+    console.log(user);
+  } catch (e: any) {
     console.error(e);
   }
 };

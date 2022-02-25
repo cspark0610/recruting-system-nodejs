@@ -53,15 +53,12 @@ export const uploadVideoToS3 = async (req: Request, res: Response) => {
 
     temp.video_key = result?.Key;
 
-    const user = await User.findOneAndUpdate(
-      { index },
-      // eslint-disable-next-line max-len
-      { $push: { videos_question_list: { question_id, question_title, video_key: temp.video_key } } },
-      { upsert: true },
+    await videoService.SaveQuestionAndVideoKeyToUser(
+      question_id,
+      question_title,
+      index,
+      temp.video_key,
     );
-    await user.save();
-
-    console.log(user);
 
     res.send({
       status: 'video uploaded successfully',

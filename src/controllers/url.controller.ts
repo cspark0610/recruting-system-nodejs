@@ -6,7 +6,7 @@ import GenerateUrl from '../services/Url.service';
 dotenv.config();
 
 export const renderApp = (_req: Request, res: Response) => {
-  res.render('pages/index');
+  res.sendFile('index.html');
 };
 
 export const generateUrl = async (req: Request, res: Response) => {
