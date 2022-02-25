@@ -22,7 +22,7 @@ export const generateUrl = async (req: Request, res: Response) => {
       message: 'url created',
       url:
         process.env.NODE_ENV === 'development'
-          ? `localhost:3001/url/validate?id=${newUrl.short_url}&index=${newUser.index}`
+          ? `http://localhost:3001/url/validate?id=${newUrl.short_url}&index=${newUser.index}`
           : `${process.env.REDIRECT_URL}/url/validate?id=${newUrl.short_url}&index=${newUser.index}`,
     });
   } catch (e) {
