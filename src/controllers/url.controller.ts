@@ -1,12 +1,13 @@
 import { Request, Response } from 'express';
 import dotenv from 'dotenv';
 
+import path from 'path';
 import GenerateUrl from '../services/Url.service';
 
 dotenv.config();
 
 export const renderApp = (_req: Request, res: Response) => {
-  res.render('pages/index');
+  res.sendFile(path.join(__dirname, '../../build', 'index.html'));
 };
 
 export const generateUrl = async (req: Request, res: Response) => {
@@ -19,7 +20,10 @@ export const generateUrl = async (req: Request, res: Response) => {
       status: 'success',
       code: 201,
       message: 'url created',
-      url: `${process.env.REDIRECT_URL}/url/validate?id=${newUrl.short_url}&index=${newUser.index}`,
+      url:
+        process.env.NODE_ENV === 'development'
+          ? `localhost:3001/url/validate?id=${newUrl.short_url}&index=${newUser.index}`
+          : `${process.env.REDIRECT_URL}/url/validate?id=${newUrl.short_url}&index=${newUser.index}`,
     });
   } catch (e) {
     return res.send(e);
