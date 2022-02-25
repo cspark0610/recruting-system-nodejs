@@ -50,7 +50,7 @@ export const UploadVideoToS3 = async (file: File) => {
 };
 
 export const SaveQuestionAndVideoKeyToUser = async (
-  question_id: string,
+  question_id: number,
   question_title: string,
   index: string,
   video_key?: string,

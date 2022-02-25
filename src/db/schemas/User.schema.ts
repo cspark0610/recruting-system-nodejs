@@ -11,7 +11,7 @@ const UserSchema = new Schema(
 
     videos_question_list: [
       {
-        question_id: String,
+        question_id: Number,
         question_title: String,
         video_key: {
           type: String,
