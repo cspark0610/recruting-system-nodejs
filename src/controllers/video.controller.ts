@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
 import { unlink } from 'fs';
 import { promisify } from 'util';
-import User from '../db/schemas/User.schema';
 import * as videoService from '../services/Video.service';
 
 import temp from '../lib/tempVariables';
