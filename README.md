@@ -19,4 +19,4 @@ MONGODB_DEVELOPMENT_URI=mongodb://localhost:27017/urls
 REDIRECT_URL=https://fulltimeforce-video-interview.herokuapp.com
 NODE_ENV=production
 ```
-- Once that is done, execute the following command: `npm run dev` to run the app in development mode. **DO NOT** use `npm start` because that command is for **production** use.
+- Once that is done, execute the following command: `npm run dev` to run the app in development mode. **DO NOT** use `npm start` because that command is for **production** use **only**.
