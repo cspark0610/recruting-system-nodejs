@@ -58,7 +58,6 @@ export const SaveQuestionAndVideoKeyToUser = async (
   try {
     const user = await User.findOneAndUpdate(
       { index },
-      // eslint-disable-next-line max-len
       {
         $push: {
           videos_question_list: {
@@ -71,8 +70,6 @@ export const SaveQuestionAndVideoKeyToUser = async (
       { upsert: true },
     );
     await user.save();
-
-    console.log(user);
   } catch (e: any) {
     console.error(e);
   }
