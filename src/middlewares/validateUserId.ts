@@ -21,7 +21,7 @@ export default async function validateUser(
       });
     }
 
-    if (!user.video_key) {
+    if (!user.videos_question_list[0].video_key) {
       return res.status(400).send({
         status: 'failure',
         code: 400,
@@ -29,7 +29,7 @@ export default async function validateUser(
       });
     }
 
-    temp.video_key = user.video_key;
+    temp.video_key = user.videos_question_list[0].video_key;
 
     next();
   } catch (e: any) {

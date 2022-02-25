@@ -22,6 +22,7 @@ export default async function validateUrl(
     }
 
     temp.index = index;
+    temp.url_id = uniqueUrl.short_url;
 
     next();
   } catch (e: any) {

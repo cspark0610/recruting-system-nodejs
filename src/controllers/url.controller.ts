@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import dotenv from 'dotenv';
 
 import path from 'path';
-import GenerateUrl from '../services/Url.service';
+import * as urlService from '../services/Url.service';
 
 dotenv.config();
 
@@ -14,7 +14,7 @@ export const generateUrl = async (req: Request, res: Response) => {
   try {
     const userId = req.query.user_id as string;
 
-    const { newUrl, newUser } = await GenerateUrl(userId);
+    const { newUrl, newUser } = await urlService.GenerateUrl(userId);
 
     return res.status(201).send({
       status: 'success',
@@ -32,3 +32,15 @@ export const generateUrl = async (req: Request, res: Response) => {
 
 export const renderNotValidUrl = (_req: Request, res: Response) =>
   res.status(404).render('pages/urlNotValid');
+
+export const deleteUrl = async (req: Request, res: Response) => {
+  const { url_id } = req.params;
+
+  await urlService.DeleteUrl(url_id);
+
+  return res.send({
+    status: 'success',
+    code: 200,
+    message: 'Url deleted successfully',
+  });
+};
