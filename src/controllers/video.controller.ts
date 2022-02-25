@@ -3,8 +3,6 @@ import { unlink } from 'fs';
 import { promisify } from 'util';
 import * as videoService from '../services/Video.service';
 
-import temp from '../lib/tempVariables';
-
 const unlinkFile = promisify(unlink);
 
 export const getVideo = (_req: Request, res: Response) => {
