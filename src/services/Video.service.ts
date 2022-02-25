@@ -3,7 +3,6 @@ import S3 from 'aws-sdk/clients/s3';
 import dotenv from 'dotenv';
 import File from '../interfaces/File.interface';
 import UploadParams from '../interfaces/UploadParams.interface';
-import temp from '../lib/tempVariables';
 import User from '../db/schemas/User.schema';
 
 dotenv.config();
