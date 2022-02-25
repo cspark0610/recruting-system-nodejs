@@ -34,8 +34,10 @@ export const getVideoFromS3 = (req: Request, res: Response) => {
 export const uploadVideoToS3 = async (req: Request, res: Response) => {
   try {
     const newCandidateVideo = req.file;
+
     const { index } = req.params;
     const { question_id, question_title } = req.body;
+
     if (!newCandidateVideo) {
       return res.status(400).send({
         status: 'failure',
@@ -47,6 +49,7 @@ export const uploadVideoToS3 = async (req: Request, res: Response) => {
     const result = await videoService.UploadVideoToS3(newCandidateVideo);
 
     await unlinkFile(newCandidateVideo.path);
+
     console.log(req.body);
     console.log(result);
 
