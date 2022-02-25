@@ -53,13 +53,11 @@ export const uploadVideoToS3 = async (req: Request, res: Response) => {
     console.log(req.body);
     console.log(result);
 
-    temp.video_key = result?.Key;
-
     await videoService.SaveQuestionAndVideoKeyToUser(
       question_id,
       question_title,
       index,
-      temp.video_key,
+      result?.Key,
     );
 
     res.send({
