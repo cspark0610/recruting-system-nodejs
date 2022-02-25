@@ -2,7 +2,11 @@
 
 ## How to use
 
-- Download the repo and install the dependencies
+First, make sure you have MongoDB installed on your system. If you do not have it, [click here](https://www.mongodb.com/try/download/community) to download it.
+
+Then, follow the below steps:
+
+- Download the repo and run the command `npm install` to install all the dependencies needed.
 - Create a `.env` file with the following variables:
 
 ```bash
@@ -15,3 +19,4 @@ MONGODB_DEVELOPMENT_URI=mongodb://localhost:27017/urls
 REDIRECT_URL=https://fulltimeforce-video-interview.herokuapp.com
 NODE_ENV=production
 ```
+- Once that is done, execute the following command: `npm run dev` to run the app in development mode. **DO NOT** use `npm start` because that command is for **production** use.
