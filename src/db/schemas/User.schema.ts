@@ -13,11 +13,7 @@ const UserSchema = new Schema(
       {
         question_id: Number,
         question_title: String,
-        video_key: {
-          type: String,
-          required: false,
-          unique: false,
-        },
+        video_key: String,
       },
     ],
 
