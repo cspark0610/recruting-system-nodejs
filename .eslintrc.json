@@ -23,7 +23,8 @@
     "camelcase": "off",
     "semi": "off",
     "import/extensions": "off",
+    "no-confusing-arrow": "off",
     "implicit-arrow-linebreak": "off",
-    "no-confusing-arrow": "off"
+    "function-paren-newline": "off"
   }
 }
