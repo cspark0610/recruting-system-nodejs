@@ -5,6 +5,7 @@ export default interface IUser {
     question_id: number;
     question_title: string;
     video_key: string;
+    _id: string;
   }>;
   index: string;
 }
