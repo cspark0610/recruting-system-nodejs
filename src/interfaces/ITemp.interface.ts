@@ -1,5 +1,5 @@
 export default interface ITemp {
-  video_key:
+  video_data:
     | Array<{
         question_id: number;
         question_title: string;

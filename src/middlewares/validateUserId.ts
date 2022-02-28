@@ -31,7 +31,7 @@ export default async function validateUser(
       });
     }
 
-    temp.video_key = user.videos_question_list;
+    temp.video_data = user.videos_question_list;
 
     next();
   } catch (e: any) {
