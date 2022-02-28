@@ -21,15 +21,17 @@ export default async function validateUser(
       });
     }
 
-    if (!user.videos_question_list[0].video_key) {
+    if (user.videos_question_list.length !== 3) {
+      const recordedVideos = user.videos_question_list.length;
+
       return res.status(400).send({
         status: 'failure',
         code: 400,
-        message: 'User has been found, but has yet to record their video',
+        message: `User has been found, but has not recorded all their videos. Currently they have recorded ${recordedVideos} out of 3`,
       });
     }
 
-    temp.video_key = user.videos_question_list[0].video_key;
+    temp.video_key = user.videos_question_list;
 
     next();
   } catch (e: any) {
