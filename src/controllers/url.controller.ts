@@ -20,10 +20,14 @@ export const generateUrl = async (req: Request, res: Response) => {
       status: 'success',
       code: 201,
       message: 'url created',
-      url:
+      client_url:
         process.env.NODE_ENV === 'development'
           ? `http://localhost:3001/url/validate?id=${newUrl.short_url}&index=${newUser.index}`
           : `${process.env.REDIRECT_URL}/url/validate?id=${newUrl.short_url}&index=${newUser.index}`,
+      watch_videos_url:
+        process.env.NODE_ENV === 'development'
+          ? `http://localhost:3001/video/view/${newUser.id}`
+          : `${process.env.REDIRECT_URL}/video/view/${newUser.id}`,
     });
   } catch (e) {
     return res.send(e);
