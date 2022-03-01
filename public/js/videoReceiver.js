@@ -10,6 +10,7 @@ window.onload = async () => {
     mainWrapper.appendChild(loading);
 
     const keys = await fetch('/video-key');
+
     let videoKeysParsed = await keys.json();
     videoKeysParsed = videoKeysParsed.video_data;
 
