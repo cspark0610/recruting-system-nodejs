@@ -1,0 +1,56 @@
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  background-color: white;
+  filter: drop-shadow(0 0 7px gray);
+  -webkit-filter: drop-shadow(0 0 7px gray);
+}
+
+#loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 50px;
+}
+
+video {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 730px;
+  width: 1066px;
+  margin-left: 430px;
+  margin-top: 30px;
+  margin-bottom: 20px;
+}
+
+.footer-section {
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+
+.footer-section #company-name {
+  font-weight: 600;
+}
+
+#question {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.video-viewer {
+  gap: 20px;
+}
+
+#video-element {
+  margin-bottom: 50px;
+}
