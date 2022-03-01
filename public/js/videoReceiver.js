@@ -3,6 +3,7 @@ window.onload = async () => {
     const mainWrapper = document.querySelector('.video-viewer');
     const loading = document.createElement('h4');
     const footer = document.querySelector('.footer-section');
+
     loading.innerHTML = 'Cargando videos...';
     loading.id = 'loading';
 
