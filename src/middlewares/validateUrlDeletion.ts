@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import Url from '../db/schemas/Url.schema';
+import IUrl from '../interfaces/IUrl.interface';
 
 export default async function validateUrlDeletion(
   req: Request,
@@ -9,7 +10,7 @@ export default async function validateUrlDeletion(
   try {
     const { url_id } = req.params;
 
-    const url = await Url.findOne({ short_url: url_id });
+    const url: IUrl | null = await Url.findOne({ short_url: url_id });
 
     if (!url) {
       return res.status(400).send({
