@@ -2,13 +2,7 @@ window.onload = async () => {
   try {
     const mainWrapper = document.querySelector('.video-viewer');
     const loading = document.querySelector('.loader');
-    // const loadingText = document.createElement('h4');
     const footer = document.querySelector('.footer-section');
-
-    // loadingText.innerHTML = 'Cargando videos...';
-    // loadingText.id = 'loading';
-
-    // mainWrapper.appendChild(loadingText);
 
     const keys = await fetch('/video-key');
 
