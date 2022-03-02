@@ -23,7 +23,13 @@ const UserSchema = new Schema(
       default: generate,
       unique: true,
     },
+
+    cv: {
+      type: String,
+      required: true,
+    },
   },
+
   { versionKey: false },
 );
 
