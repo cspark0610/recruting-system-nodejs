@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { unlink } from 'fs';
 import { promisify } from 'util';
-import UploadCV, { GetCV } from '../services/CV.service';
+import UploadCV, { GetCV, SaveCVKeysIntoUser } from '../services/CV.service';
 
 const unlinkFile = promisify(unlink);
 
@@ -23,6 +23,7 @@ export const getCV = async (req: Request, res: Response) => {
 
 export const uploadCV = async (req: Request, res: Response) => {
   const cv = req.file;
+  const userIndex = req.query.index as string;
 
   if (!cv) {
     return res.status(400).send({
@@ -38,7 +39,10 @@ export const uploadCV = async (req: Request, res: Response) => {
   }
 
   try {
-    await UploadCV(cv);
+    const result = await UploadCV(cv);
+
+    await unlinkFile(cv.path);
+    await SaveCVKeysIntoUser(userIndex, result?.Key);
   } catch (e) {
     console.error(e);
   }

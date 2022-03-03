@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import { createReadStream } from 'fs';
 import UploadParams from '../interfaces/UploadParams.interface';
 import File from '../interfaces/File.interface';
+import User from '../db/schemas/User.schema';
 
 dotenv.config();
 
@@ -44,6 +45,14 @@ const UploadCV = async (cv: File) => {
     return s3.upload(uploadParams).promise();
   } catch (e: any) {
     console.error(e.message);
+  }
+};
+
+export const SaveCVKeysIntoUser = async (index: string, key?: string) => {
+  try {
+    await User.findOneAndUpdate({ index }, { cv: key });
+  } catch (e) {
+    console.error(e);
   }
 };
 
