@@ -2,6 +2,7 @@ import { Router } from 'express';
 
 import videoRoutes from './video.routes';
 import urlRoutes from './url.routes';
+import cvRoutes from './cv.routes';
 import getKeys from '../controllers/keys.controller';
 
 const router = Router();
@@ -18,5 +19,6 @@ router.get('/url/not-found', (_req, res) => {
 
 router.use('/video', videoRoutes);
 router.use('/url', urlRoutes);
+router.use('/cv', cvRoutes);
 
 export default router;
