@@ -32,6 +32,7 @@ export default async function validateUser(
     }
 
     temp.video_data = user.videos_question_list;
+    temp.cv = user.cv;
 
     next();
   } catch (e: any) {

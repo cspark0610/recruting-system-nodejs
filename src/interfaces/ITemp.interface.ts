@@ -9,4 +9,5 @@ export default interface ITemp {
     | undefined;
   index: string;
   url_id: string;
+  cv: string;
 }

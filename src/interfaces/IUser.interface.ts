@@ -8,4 +8,5 @@ export default interface IUser {
     _id: string;
   }>;
   index: string;
+  cv: string;
 }
