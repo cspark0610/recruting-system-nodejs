@@ -4,6 +4,7 @@ const temp: ITemp = {
   video_data: [],
   index: '',
   url_id: '',
+  cv: '',
 };
 
 export default temp;
