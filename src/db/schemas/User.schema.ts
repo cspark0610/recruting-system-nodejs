@@ -26,7 +26,7 @@ const UserSchema = new Schema(
 
     cv: {
       type: String,
-      required: true,
+      required: false,
     },
   },
 
