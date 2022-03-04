@@ -6,7 +6,7 @@ import * as urlService from '../services/Url.service';
 dotenv.config();
 
 export const renderApp = (_req: Request, res: Response) => {
-  res.redirect('/', 200);
+  res.redirect('/');
 };
 
 export const generateUrl = async (req: Request, res: Response) => {

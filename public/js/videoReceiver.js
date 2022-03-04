@@ -4,9 +4,17 @@ window.onload = async () => {
     const loading = document.querySelector('.loader');
     const footer = document.querySelector('.footer-section');
 
-    const keys = await fetch('/video-key');
+    const pdfElement = document.createElement('iframe');
 
+    const keys = await fetch('/video-key');
     let videoKeysParsed = await keys.json();
+    console.log(videoKeysParsed);
+
+    const pdf = await fetch(`/cv/get/${videoKeysParsed.cv}`);
+    console.log(pdf);
+
+    mainWrapper.appendChild(pdfElement);
+
     videoKeysParsed = videoKeysParsed.video_data;
 
     let videosFile = videoKeysParsed.map((video) =>
