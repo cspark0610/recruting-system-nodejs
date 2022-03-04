@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import Url from '../db/schemas/Url.schema';
-import IUrl from '../interfaces/IUrl.interface';
 import User from '../db/schemas/User.schema';
+import IUrl from '../interfaces/IUrl.interface';
 import IUser from '../interfaces/IUser.interface';
 import temp from '../lib/tempVariables';
 
