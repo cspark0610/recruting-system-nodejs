@@ -1,5 +1,4 @@
 import { Schema, model } from 'mongoose';
-import { generate } from 'shortid';
 
 const UserSchema = new Schema(
   {
@@ -16,13 +15,6 @@ const UserSchema = new Schema(
         video_key: String,
       },
     ],
-
-    index: {
-      type: String,
-      required: true,
-      default: generate,
-      unique: true,
-    },
 
     cv: {
       type: String,
