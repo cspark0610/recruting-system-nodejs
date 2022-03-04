@@ -12,7 +12,7 @@ export const getCV = async (req: Request, res: Response) => {
     const candidateCV = await GetCV(key);
 
     if (!candidateCV) {
-      return res.status(404).send('No cv found');
+      return res.status(404).send({ message: 'No cv found' });
     }
 
     candidateCV.pipe(res);
@@ -26,16 +26,12 @@ export const uploadCV = async (req: Request, res: Response) => {
   const userIndex = req.query.index as string;
 
   if (!cv) {
-    return res.status(400).send({
-      status: 'failure',
-      code: 400,
-      message: 'No cv was received',
-    });
+    return res.status(400).send({ message: 'No cv was received' });
   }
 
   if (cv.mimetype !== 'application/pdf') {
     await unlinkFile(cv.path);
-    return res.status(400).send('Only PDF files are supported');
+    return res.status(400).send({ message: 'Only PDF files are supported' });
   }
 
   try {
@@ -47,5 +43,5 @@ export const uploadCV = async (req: Request, res: Response) => {
     console.error(e);
   }
 
-  return res.status(201).send('File uploaded successfully');
+  return res.status(201).send({ message: 'File uploaded successfully' });
 };

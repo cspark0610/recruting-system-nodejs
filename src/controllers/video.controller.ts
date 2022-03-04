@@ -17,8 +17,6 @@ export const getVideoFromS3 = (req: Request, res: Response) => {
 
     if (!candidateVideo) {
       return res.status(404).send({
-        status: 'failure',
-        code: 404,
         message: 'Video not found',
       });
     }
@@ -38,8 +36,6 @@ export const uploadVideoToS3 = async (req: Request, res: Response) => {
 
     if (!newCandidateVideo) {
       return res.status(400).send({
-        status: 'failure',
-        code: 400,
         message: 'No video file was received',
       });
     }
@@ -51,7 +47,7 @@ export const uploadVideoToS3 = async (req: Request, res: Response) => {
     await videoService.SaveVideoKeyToUser(question_id, index, result?.Key);
 
     res.send({
-      status: 'video uploaded successfully',
+      message: 'video uploaded successfully',
     });
   } catch (e: any) {
     return new Error(e);

@@ -18,12 +18,12 @@ export const generateUrl = async (req: Request, res: Response) => {
     const data = await urlService.GenerateUrl(userId, questions);
 
     if (!data?.newUrl || !data?.newUser) {
-      return res.status(500).send('There was an error. Please try again.');
+      return res
+        .status(500)
+        .send({ message: 'There was an error. Please try again.' });
     }
 
     return res.status(201).send({
-      status: 'success',
-      code: 201,
       message: 'url created',
       client_url:
         process.env.NODE_ENV === 'development'
@@ -47,9 +47,7 @@ export const deleteUrl = async (req: Request, res: Response) => {
 
   await urlService.DeleteUrl(url_id);
 
-  return res.send({
-    status: 'success',
-    code: 200,
+  return res.status(200).send({
     message: 'Url deleted successfully',
   });
 };
