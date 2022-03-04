@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import path from 'path';
 
 import videoRoutes from './video.routes';
 import urlRoutes from './url.routes';
@@ -8,7 +9,7 @@ import getKeys from '../controllers/keys.controller';
 const router = Router();
 
 router.get('', (_req, res) => {
-  res.status(404).render('pages/pageNotFound');
+  res.sendFile(path.join(__dirname, '../../build', 'index.html'));
 });
 
 router.get('/video-key', getKeys);

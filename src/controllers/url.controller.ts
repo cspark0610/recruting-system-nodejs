@@ -1,13 +1,12 @@
 import { Request, Response } from 'express';
 import dotenv from 'dotenv';
 
-import path from 'path';
 import * as urlService from '../services/Url.service';
 
 dotenv.config();
 
 export const renderApp = (_req: Request, res: Response) => {
-  res.sendFile(path.join(__dirname, '../../build', 'index.html'));
+  res.redirect('/', 200);
 };
 
 export const generateUrl = async (req: Request, res: Response) => {

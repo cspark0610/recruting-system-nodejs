@@ -23,6 +23,7 @@ export default async function validateUrl(
 
     temp.index = index;
     temp.url_id = uniqueUrl.short_url;
+    temp.video_data = uniqueUser.videos_question_list;
 
     next();
   } catch (e: any) {
