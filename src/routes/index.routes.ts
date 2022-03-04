@@ -5,10 +5,11 @@ import videoRoutes from './video.routes';
 import urlRoutes from './url.routes';
 import cvRoutes from './cv.routes';
 import getKeys from '../controllers/keys.controller';
+import validateBaseUrl from '../middlewares/validateBaseUrl';
 
 const router = Router();
 
-router.get('', (_req, res) => {
+router.get('', validateBaseUrl, (_req, res) => {
   res.sendFile(path.join(__dirname, '../../build', 'index.html'));
 });
 

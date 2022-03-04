@@ -7,4 +7,8 @@ const temp: ITemp = {
   cv: '',
 };
 
+export const validateBaseRoute = {
+  value: '',
+};
+
 export default temp;

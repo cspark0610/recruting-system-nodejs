@@ -14,6 +14,10 @@ export default async function validateUrl(
     const id = req.query.id as string;
     const index = req.query.index as string;
 
+    if (!id || !index) {
+      return res.status(400).render('pages/urlNotValid');
+    }
+
     const uniqueUrl: IUrl | null = await Url.findOne({ short_url: id });
     const uniqueUser: IUser | null = await User.findOne({ index });
 
