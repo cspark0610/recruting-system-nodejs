@@ -25,7 +25,7 @@ export default async function validateUrl(
       return res.status(404).render('pages/urlNotValid');
     }
 
-    temp.index = index;
+    temp.user_id = uniqueUser.id;
     temp.url_id = uniqueUrl.short_url;
     temp.video_data = uniqueUser.videos_question_list;
 

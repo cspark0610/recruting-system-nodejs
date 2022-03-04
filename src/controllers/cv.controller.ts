@@ -23,7 +23,7 @@ export const getCV = async (req: Request, res: Response) => {
 
 export const uploadCV = async (req: Request, res: Response) => {
   const cv = req.file;
-  const userIndex = req.query.index as string;
+  const userId = req.query.user_id as string;
 
   if (!cv) {
     return res.status(400).send({ message: 'No cv was received' });
@@ -38,7 +38,7 @@ export const uploadCV = async (req: Request, res: Response) => {
     const result = await UploadCV(cv);
 
     await unlinkFile(cv.path);
-    await SaveCVKeysIntoUser(userIndex, result?.Key);
+    await SaveCVKeysIntoUser(userId, result?.Key);
 
     return res.status(201).send({ message: 'CV uploaded successfully' });
   } catch (e) {

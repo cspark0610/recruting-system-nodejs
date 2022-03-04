@@ -48,9 +48,9 @@ const UploadCV = async (cv: File) => {
   }
 };
 
-export const SaveCVKeysIntoUser = async (index: string, key?: string) => {
+export const SaveCVKeysIntoUser = async (userId: string, key?: string) => {
   try {
-    await User.findOneAndUpdate({ index }, { cv: key });
+    await User.findOneAndUpdate({ id: userId }, { cv: key });
   } catch (e) {
     console.error(e);
   }

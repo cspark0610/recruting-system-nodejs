@@ -14,7 +14,7 @@ router.get('/get/:key', videoController.getVideoFromS3);
 router.get('/view/:userId', validateUser, videoController.getVideo);
 
 router.post(
-  '/upload/:index',
+  '/upload/:user_id',
   upload.single('video'),
   videoController.uploadVideoToS3,
 );
