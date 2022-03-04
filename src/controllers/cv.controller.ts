@@ -39,6 +39,8 @@ export const uploadCV = async (req: Request, res: Response) => {
 
     await unlinkFile(cv.path);
     await SaveCVKeysIntoUser(userIndex, result?.Key);
+
+    return res.status(201).send({ message: 'CV uploaded successfully' });
   } catch (e) {
     console.error(e);
   }
