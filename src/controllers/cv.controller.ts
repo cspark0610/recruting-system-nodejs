@@ -44,6 +44,4 @@ export const uploadCV = async (req: Request, res: Response) => {
   } catch (e) {
     console.error(e);
   }
-
-  return res.status(201).send({ message: 'File uploaded successfully' });
 };
