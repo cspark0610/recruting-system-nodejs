@@ -48,11 +48,7 @@ export const uploadVideoToS3 = async (req: Request, res: Response) => {
 
     await unlinkFile(newCandidateVideo.path);
 
-    await videoService.SaveQuestionAndVideoKeyToUser(
-      question_id,
-      index,
-      result?.Key,
-    );
+    await videoService.SaveVideoKeyToUser(question_id, index, result?.Key);
 
     res.send({
       status: 'video uploaded successfully',

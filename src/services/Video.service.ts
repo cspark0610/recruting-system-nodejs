@@ -48,7 +48,7 @@ export const UploadVideoToS3 = async (file: File) => {
   }
 };
 
-export const SaveQuestionAndVideoKeyToUser = async (
+export const SaveVideoKeyToUser = async (
   question_id: number,
   index: string,
   video_key?: string,
