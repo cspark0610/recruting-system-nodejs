@@ -7,7 +7,7 @@ export default interface ITemp {
         _id: string;
       }>
     | undefined;
-  user_id: string;
+  candidate_id: string;
   url_id: string;
   cv: string;
 }

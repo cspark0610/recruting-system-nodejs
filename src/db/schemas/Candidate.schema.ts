@@ -1,6 +1,6 @@
 import { Schema, model } from 'mongoose';
 
-const UserSchema = new Schema(
+const CandidateSchema = new Schema(
   {
     id: {
       type: String,
@@ -25,4 +25,4 @@ const UserSchema = new Schema(
   { versionKey: false },
 );
 
-export default model('user', UserSchema);
+export default model('candidate', CandidateSchema);

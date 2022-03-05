@@ -11,12 +11,12 @@ export const renderApp = (_req: Request, res: Response) => {
 
 export const generateUrl = async (req: Request, res: Response) => {
   try {
-    const userId = req.query.user_id as string;
+    const candidateId = req.query.candidate_id as string;
     const { questions } = req.body;
 
-    const data = await urlService.GenerateUrl(userId, questions);
+    const data = await urlService.GenerateUrl(candidateId, questions);
 
-    if (!data?.newUrl || !data?.newUser) {
+    if (!data?.newUrl || !data?.newCandidate) {
       return res
         .status(500)
         .send({ message: 'There was an error. Please try again.' });
@@ -26,12 +26,12 @@ export const generateUrl = async (req: Request, res: Response) => {
       message: 'url created',
       client_url:
         process.env.NODE_ENV === 'development'
-          ? `http://localhost:3001/url/validate?id=${data.newUrl.short_url}&index=${data.newUser.index}`
-          : `${process.env.REDIRECT_URL}/url/validate?id=${data.newUrl.short_url}&index=${data.newUser.index}`,
+          ? `http://localhost:3001/url/validate?id=${data.newUrl.short_url}&index=${data.newCandidate.id}`
+          : `${process.env.REDIRECT_URL}/url/validate?id=${data.newUrl.short_url}&index=${data.newCandidate.id}`,
       watch_videos_url:
         process.env.NODE_ENV === 'development'
-          ? `http://localhost:3001/video/view/${data.newUser.id}`
-          : `${process.env.REDIRECT_URL}/video/view/${data.newUser.id}`,
+          ? `http://localhost:3001/video/view/${data.newCandidate.id}`
+          : `${process.env.REDIRECT_URL}/video/view/${data.newCandidate.id}`,
     });
   } catch (e) {
     return res.send(e);

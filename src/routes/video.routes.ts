@@ -11,10 +11,10 @@ const upload = multer({ storage });
 const router = Router();
 
 router.get('/get/:key', videoController.getVideoFromS3);
-router.get('/view/:userId', validateUser, videoController.getVideo);
+router.get('/view/:candidateId', validateUser, videoController.getVideo);
 
 router.post(
-  '/upload/:user_id',
+  '/upload/:candidate_id',
   upload.single('video'),
   videoController.uploadVideoToS3,
 );

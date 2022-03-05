@@ -3,7 +3,7 @@ import S3 from 'aws-sdk/clients/s3';
 import dotenv from 'dotenv';
 import File from '../interfaces/File.interface';
 import UploadParams from '../interfaces/UploadParams.interface';
-import User from '../db/schemas/User.schema';
+import Candidate from '../db/schemas/Candidate.schema';
 
 dotenv.config();
 
@@ -50,13 +50,13 @@ export const UploadVideoToS3 = async (file: File) => {
 
 export const SaveVideoKeyToUser = async (
   question_id: number,
-  user_id: string,
+  candidate_id: string,
   video_key?: string,
 ) => {
   try {
-    const user = await User.findOneAndUpdate(
+    const candidate = await Candidate.findOneAndUpdate(
       {
-        id: user_id,
+        id: candidate_id,
         $and: [{ 'videos_question_list.question_id': question_id }],
       },
       {
@@ -66,7 +66,7 @@ export const SaveVideoKeyToUser = async (
       },
       { upsert: true },
     );
-    await user.save();
+    await candidate.save();
   } catch (e: any) {
     console.error(e);
   }

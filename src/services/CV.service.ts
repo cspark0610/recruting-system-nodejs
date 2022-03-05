@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 import { createReadStream } from 'fs';
 import UploadParams from '../interfaces/UploadParams.interface';
 import File from '../interfaces/File.interface';
-import User from '../db/schemas/User.schema';
+import Candidate from '../db/schemas/Candidate.schema';
 
 dotenv.config();
 
@@ -48,9 +48,9 @@ const UploadCV = async (cv: File) => {
   }
 };
 
-export const SaveCVKeysIntoUser = async (userId: string, key?: string) => {
+export const SaveCVKeysIntoUser = async (candidateId: string, key?: string) => {
   try {
-    await User.findOneAndUpdate({ id: userId }, { cv: key });
+    await Candidate.findOneAndUpdate({ id: candidateId }, { cv: key });
   } catch (e) {
     console.error(e);
   }

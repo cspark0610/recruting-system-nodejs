@@ -1,4 +1,4 @@
-export default interface IUser {
+export default interface ICandidate {
   _id: string;
   id: string;
   videos_question_list: Array<{
@@ -7,6 +7,5 @@ export default interface IUser {
     video_key: string;
     _id: string;
   }>;
-  index: string;
   cv: string;
 }

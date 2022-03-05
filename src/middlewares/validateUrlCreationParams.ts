@@ -5,14 +5,14 @@ export default function validateUrlCreationParams(
   res: Response,
   next: NextFunction,
 ) {
-  const userId = req.query.user_id as string;
+  const candidateId = req.query.candidate_id as string;
   const { questions } = req.body;
 
-  if (!userId && !questions) {
+  if (!candidateId && !questions) {
     return res.status(400).send('No candidate information was received.');
   }
 
-  if (!userId) {
+  if (!candidateId) {
     return res.status(400).send('No candidate id was received');
   }
 
