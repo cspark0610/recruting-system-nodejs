@@ -26,12 +26,12 @@ export const generateUrl = async (req: Request, res: Response) => {
       message: 'url created',
       client_url:
         process.env.NODE_ENV === 'development'
-          ? `http://localhost:3001/url/validate?id=${data.newUrl.short_url}&index=${data.newCandidate.id}`
-          : `${process.env.REDIRECT_URL}/url/validate?id=${data.newUrl.short_url}&index=${data.newCandidate.id}`,
+          ? `${process.env.REDIRECT_URL_DEVELOPMENT}/url/validate?id=${data.newUrl.short_url}&index=${data.newCandidate.id}`
+          : `${process.env.REDIRECT_URL_PRODUCTION}/url/validate?id=${data.newUrl.short_url}&index=${data.newCandidate.id}`,
       watch_videos_url:
         process.env.NODE_ENV === 'development'
-          ? `http://localhost:3001/video/view/${data.newCandidate.id}`
-          : `${process.env.REDIRECT_URL}/video/view/${data.newCandidate.id}`,
+          ? `${process.env.REDIRECT_URL_DEVELOPMENT}/video/view/${data.newCandidate.id}`
+          : `${process.env.REDIRECT_URL_PRODUCTION}/video/view/${data.newCandidate.id}`,
     });
   } catch (e) {
     return res.send(e);
