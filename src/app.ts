@@ -14,7 +14,7 @@ app.set('view engine', 'ejs');
 
 app.use('/', routes);
 app.use('*', (_req: Request, res: Response) => {
-  res.redirect('/url/not-found');
+  res.status(404).render('pages/pageNotFound');
 });
 
 export default app;

@@ -50,7 +50,7 @@ export const uploadVideoToS3 = async (req: Request, res: Response) => {
       result?.Key,
     );
 
-    res.send({
+    return res.send({
       message: 'video uploaded successfully',
     });
   } catch (e: any) {

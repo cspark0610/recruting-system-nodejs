@@ -4,6 +4,7 @@ import path from 'path';
 import videoRoutes from './video.routes';
 import urlRoutes from './url.routes';
 import cvRoutes from './cv.routes';
+
 import getKeys from '../controllers/keys.controller';
 
 import validateBaseUrl from '../middlewares/validators/validateBaseUrl';
@@ -15,10 +16,6 @@ router.get('', validateBaseUrl, (_req, res) => {
 });
 
 router.get('/video-key', getKeys);
-
-router.get('/url/not-found', (_req, res) => {
-  res.status(404).render('pages/pageNotFound');
-});
 
 router.use('/video', videoRoutes);
 router.use('/url', urlRoutes);
