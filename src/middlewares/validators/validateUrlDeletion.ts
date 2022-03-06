@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
-import Url from '../db/schemas/Url.schema';
-import IUrl from '../interfaces/IUrl.interface';
+import Url from '../../db/schemas/Url.schema';
+import IUrl from '../../interfaces/IUrl.interface';
 
 export default async function validateUrlDeletion(
   req: Request,
@@ -9,6 +9,10 @@ export default async function validateUrlDeletion(
 ) {
   try {
     const { url_id } = req.params;
+
+    if (!url_id) {
+      return res.status(400).send('No url id was received');
+    }
 
     const url: IUrl | null = await Url.findOne({ short_url: url_id });
 

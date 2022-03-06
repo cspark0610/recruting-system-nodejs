@@ -5,7 +5,8 @@ import videoRoutes from './video.routes';
 import urlRoutes from './url.routes';
 import cvRoutes from './cv.routes';
 import getKeys from '../controllers/keys.controller';
-import validateBaseUrl from '../middlewares/validateBaseUrl';
+
+import validateBaseUrl from '../middlewares/validators/validateBaseUrl';
 
 const router = Router();
 

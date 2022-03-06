@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
-import Candidate from '../db/schemas/Candidate.schema';
-import ICandidate from '../interfaces/ICandidate.interface';
-import temp from '../lib/tempVariables';
+import Candidate from '../../db/schemas/Candidate.schema';
+import ICandidate from '../../interfaces/ICandidate.interface';
+import temp from '../../lib/tempVariables';
 
 export default async function validateUser(
   req: Request,
@@ -10,6 +10,10 @@ export default async function validateUser(
 ) {
   try {
     const { candidateId } = req.params;
+
+    if (!candidateId) {
+      return res.status(400).send('No candidate id was received');
+    }
 
     const candidate: ICandidate | null = await Candidate.findOne({
       id: candidateId,

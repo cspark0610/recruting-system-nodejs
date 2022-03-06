@@ -4,7 +4,7 @@ import storage from '../lib/multerConfig';
 
 import * as videoController from '../controllers/video.controller';
 
-import validateUser from '../middlewares/validateUserId';
+import validateUser from '../middlewares/validators/validateUserId';
 
 const upload = multer({ storage });
 
