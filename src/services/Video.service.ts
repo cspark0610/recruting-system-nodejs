@@ -67,7 +67,7 @@ export const SaveVideoKeyToUser = async (
       },
       { upsert: true },
     );
-    await candidate.save();
+    await candidate?.save();
   } catch (e: any) {
     console.error(e);
   }
