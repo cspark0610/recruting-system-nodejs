@@ -11,6 +11,7 @@ const {
   AWS_BUCKET_REGION,
   AWS_BUCKET_ACCESS_KEY,
   AWS_BUCKET_SECRET_ACCESS_KEY,
+  AWS_CV_BUCKET_NAME,
 } = process.env;
 
 const s3 = new S3({
@@ -22,7 +23,7 @@ const s3 = new S3({
 export const GetCV = async (key: string) => {
   try {
     const getParams = {
-      Bucket: 'candidatescvbucket',
+      Bucket: AWS_CV_BUCKET_NAME as string,
       Key: key,
     };
 
@@ -37,7 +38,7 @@ const UploadCV = async (cv: File) => {
     const fileStream = createReadStream(cv.path);
 
     const uploadParams: UploadParams = {
-      Bucket: 'candidatescvbucket',
+      Bucket: AWS_CV_BUCKET_NAME as string,
       Body: fileStream,
       Key: cv.filename,
     };
