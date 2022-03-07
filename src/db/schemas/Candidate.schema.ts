@@ -1,6 +1,7 @@
 import { Schema, model } from 'mongoose';
+import ICandidate from '../../interfaces/ICandidate.interface';
 
-const CandidateSchema = new Schema(
+const CandidateSchema = new Schema<ICandidate>(
   {
     id: {
       type: String,
@@ -25,4 +26,4 @@ const CandidateSchema = new Schema(
   { versionKey: false },
 );
 
-export default model('candidate', CandidateSchema);
+export default model<ICandidate>('candidate', CandidateSchema);
