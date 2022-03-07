@@ -11,6 +11,7 @@ const {
   AWS_BUCKET_REGION,
   AWS_BUCKET_ACCESS_KEY,
   AWS_BUCKET_SECRET_ACCESS_KEY,
+  AWS_VIDEO_BUCKET_NAME,
 } = process.env;
 
 const s3 = new S3({
@@ -22,7 +23,7 @@ const s3 = new S3({
 export const GetVideoFromS3 = (key: string) => {
   try {
     const getParams = {
-      Bucket: 'videorecorderbucket',
+      Bucket: AWS_VIDEO_BUCKET_NAME as string,
       Key: key,
     };
 
@@ -37,7 +38,7 @@ export const UploadVideoToS3 = async (file: File) => {
     const fileStream = createReadStream(file.path);
 
     const uploadParams: UploadParams = {
-      Bucket: 'videorecorderbucket',
+      Bucket: AWS_VIDEO_BUCKET_NAME as string,
       Body: fileStream,
       Key: file.filename,
     };
