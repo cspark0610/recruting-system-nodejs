@@ -50,13 +50,13 @@ export const UploadVideoToS3 = async (file: File) => {
 
 export const SaveVideoKeyToUser = async (
   question_id: number,
-  candidate_id: string,
+  id: string,
   video_key?: string,
 ) => {
   try {
     const candidate = await Candidate.findOneAndUpdate(
       {
-        id: candidate_id,
+        id,
         $and: [{ 'videos_question_list.question_id': question_id }],
       },
       {

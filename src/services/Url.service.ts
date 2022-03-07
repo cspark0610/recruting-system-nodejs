@@ -5,13 +5,13 @@ import ICandidate from '../interfaces/ICandidate.interface';
 import IQuestion from '../interfaces/IQuestion.interface';
 
 export const GenerateUrl = async (
-  candidateId: string,
+  id: string,
   questions: Array<IQuestion>,
 ): Promise<{ newUrl: IUrl; newCandidate: ICandidate } | undefined> => {
   try {
     const newUrl: IUrl = await Url.create({});
     const newCandidate: ICandidate = await Candidate.create({
-      id: candidateId,
+      id,
       videos_question_list: questions,
     });
     return { newUrl, newCandidate };
@@ -20,9 +20,9 @@ export const GenerateUrl = async (
   }
 };
 
-export const DeleteUrl = async (url_id: string): Promise<void> => {
+export const DeleteUrl = async (short_url: string): Promise<void> => {
   try {
-    await Url.deleteOne({ short_url: url_id });
+    await Url.deleteOne({ short_url });
   } catch (e) {
     console.error(e);
   }
