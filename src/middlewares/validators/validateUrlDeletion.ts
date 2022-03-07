@@ -8,13 +8,13 @@ export default async function validateUrlDeletion(
   next: NextFunction,
 ) {
   try {
-    const { url_id } = req.params;
+    const short_url = req.params.url_id;
 
-    if (!url_id) {
+    if (!short_url) {
       return res.status(400).send('No url id was received');
     }
 
-    const url: IUrl | null = await Url.findOne({ short_url: url_id });
+    const url: IUrl | null = await Url.findOne({ short_url });
 
     if (!url) {
       return res.status(400).send({
