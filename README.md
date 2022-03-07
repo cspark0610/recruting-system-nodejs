@@ -16,7 +16,8 @@ AWS_BUCKET_NAME=videorecorderbucket
 AWS_BUCKET_REGION=us-east-2
 MONGODB_PRODUCTION_URI=mongodb+srv://nachohotz2:sempron3amd18@cluster0.ywin2.mongodb.net/urls
 MONGODB_DEVELOPMENT_URI=mongodb://localhost:27017/urls
-REDIRECT_URL=https://fulltimeforce-video-interview.herokuapp.com
+REDIRECT_URL_DEVELOPMENT=http://localhost:3001
+REDIRECT_URL_PRODUCTION=https://fulltimeforce-video-interview.herokuapp.com
 NODE_ENV=production
 ```
 - Once that is done, execute the following command: `npm run dev` to run the app in development mode. **DO NOT** use `npm start` because that command is for **production** use **only**.
