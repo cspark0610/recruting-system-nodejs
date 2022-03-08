@@ -9,4 +9,4 @@ const JobSchema = new Schema<IJob>(
   { versionKey: false },
 );
 
-export default model<IJob>('job', JobSchema);
+export default model<IJob>('Job', JobSchema);

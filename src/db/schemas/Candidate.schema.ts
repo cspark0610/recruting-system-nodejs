@@ -9,6 +9,14 @@ const CandidateSchema = new Schema<ICandidate>(
       unique: true,
     },
 
+    name: { type: String, required: true },
+
+    email: { type: String, required: true },
+
+    phone: { type: Number, required: true },
+
+    country: { type: String, required: true },
+
     videos_question_list: [
       {
         question_id: Number,
@@ -19,11 +27,11 @@ const CandidateSchema = new Schema<ICandidate>(
 
     cv: {
       type: String,
-      required: false,
+      required: true,
     },
   },
 
   { versionKey: false },
 );
 
-export default model<ICandidate>('candidate', CandidateSchema);
+export default model<ICandidate>('Candidate', CandidateSchema);
