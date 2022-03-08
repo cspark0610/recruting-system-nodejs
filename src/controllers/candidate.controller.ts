@@ -4,7 +4,7 @@ import { unlink } from 'fs';
 import { promisify } from 'util';
 import ICandidate from '../interfaces/schemas/ICandidate.interface';
 import CreateCandidate from '../services/Candidate.Service';
-import UploadCV from '../services/CV.service';
+import { UploadCV } from '../services/CV.service';
 
 const unlinkFile = promisify(unlink);
 
