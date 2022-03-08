@@ -33,7 +33,7 @@ export const GetCV = async (key: string) => {
   }
 };
 
-const UploadCV = async (cv: File) => {
+export const UploadCV = async (cv: File) => {
   try {
     const fileStream = createReadStream(cv.path);
 
@@ -56,5 +56,3 @@ export const SaveCVKeysIntoUser = async (id: string, key?: string) => {
     console.error(e);
   }
 };
-
-export default UploadCV;
