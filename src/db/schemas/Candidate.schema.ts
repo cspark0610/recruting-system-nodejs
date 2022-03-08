@@ -15,6 +15,8 @@ const CandidateSchema = new Schema<ICandidate>(
 
     phone: { type: Number, required: true },
 
+    country: { type: String, required: true },
+
     videos_question_list: [],
 
     cv: {
