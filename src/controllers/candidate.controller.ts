@@ -16,11 +16,6 @@ const createCandidate = async (req: Request, res: Response) => {
     return res.status(400).send('no cv received');
   }
 
-  if (cv.mimetype !== 'application/pdf') {
-    await unlinkFile(cv.path);
-    return res.status(400).send({ message: 'Only PDF files are supported' });
-  }
-
   try {
     const result = await UploadCV(cv);
     await unlinkFile(cv.path);
