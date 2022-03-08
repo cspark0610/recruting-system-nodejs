@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import Candidate from '../../db/schemas/Candidate.schema';
-import ICandidate from '../../interfaces/ICandidate.interface';
+import ICandidate from '../../interfaces/schemas/ICandidate.interface';
 import temp from '../../lib/tempVariables';
 
 export default async function validateUser(
@@ -27,8 +27,8 @@ export default async function validateUser(
       });
     }
 
-    if (candidate.videos_question_list.length !== 3) {
-      const recordedVideos = candidate.videos_question_list.length;
+    if (candidate?.videos_question_list?.length !== 3) {
+      const recordedVideos = candidate?.videos_question_list?.length;
 
       return res.status(400).send({
         status: 'failure',
