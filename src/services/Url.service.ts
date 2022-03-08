@@ -1,7 +1,7 @@
 import Url from '../db/schemas/Url.schema';
 import Candidate from '../db/schemas/Candidate.schema';
-import IUrl from '../interfaces/IUrl.interface';
-import ICandidate from '../interfaces/ICandidate.interface';
+import IUrl from '../interfaces/schemas/IUrl.interface';
+import ICandidate from '../interfaces/schemas/ICandidate.interface';
 import IQuestion from '../interfaces/IQuestion.interface';
 
 export const GenerateUrl = async (

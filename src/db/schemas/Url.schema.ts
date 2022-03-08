@@ -1,6 +1,6 @@
 import { Schema, model } from 'mongoose';
 import { generate } from 'shortid';
-import IUrl from '../../interfaces/IUrl.interface';
+import IUrl from '../../interfaces/schemas/IUrl.interface';
 
 const UrlSchema = new Schema<IUrl>(
   {
