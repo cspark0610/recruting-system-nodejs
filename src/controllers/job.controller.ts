@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
 import IJob from '../interfaces/schemas/IJob.interface';
-import CreateJob from '../services/Job.service';
+import { CreateJob, SetCandidate } from '../services/Job.service';
 
-const createJob = async (req: Request, res: Response) => {
+export const createJob = async (req: Request, res: Response) => {
   const { title, designated }: IJob = req.body;
 
   try {
@@ -18,4 +18,19 @@ const createJob = async (req: Request, res: Response) => {
   }
 };
 
-export default createJob;
+export const setCandidate = async (req: Request, res: Response) => {
+  const { _id } = req.params;
+  const { candidateId } = req.body;
+
+  try {
+    const data = await SetCandidate(_id, candidateId);
+
+    if (!data) {
+      return res.status(500).send('There was an error. Please try again');
+    }
+
+    return res.status(200).send(data);
+  } catch (e) {
+    console.error(e);
+  }
+};
