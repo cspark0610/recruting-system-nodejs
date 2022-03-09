@@ -5,6 +5,7 @@ const JobSchema = new Schema<IJob>(
   {
     title: String,
     designated: [String],
+    candidates: [{ type: Schema.Types.ObjectId, ref: 'Candidate' }],
   },
   { versionKey: false },
 );
