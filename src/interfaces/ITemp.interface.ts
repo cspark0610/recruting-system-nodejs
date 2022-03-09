@@ -1,12 +1,12 @@
 export default interface ITemp {
-  video_data:
+  video_data?:
     | Array<{
         question_id: number;
         question_title: string;
         video_key: string;
       }>
     | undefined;
-  candidate_id: string;
+  candidate_id?: string;
   url_id: string;
-  cv: string;
+  cv?: string;
 }

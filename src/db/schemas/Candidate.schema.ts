@@ -1,5 +1,5 @@
 import { Schema, model } from 'mongoose';
-import ICandidate from '../../interfaces/ICandidate.interface';
+import ICandidate from '../../interfaces/schemas/ICandidate.interface';
 
 const CandidateSchema = new Schema<ICandidate>(
   {
@@ -9,21 +9,23 @@ const CandidateSchema = new Schema<ICandidate>(
       unique: true,
     },
 
-    videos_question_list: [
-      {
-        question_id: Number,
-        question_title: String,
-        video_key: String,
-      },
-    ],
+    name: { type: String, required: true },
+
+    email: { type: String, required: true },
+
+    phone: { type: Number, required: true },
+
+    country: { type: String, required: true },
+
+    videos_question_list: [],
 
     cv: {
       type: String,
-      required: false,
+      required: true,
     },
   },
 
   { versionKey: false },
 );
 
-export default model<ICandidate>('candidate', CandidateSchema);
+export default model<ICandidate>('Candidate', CandidateSchema);

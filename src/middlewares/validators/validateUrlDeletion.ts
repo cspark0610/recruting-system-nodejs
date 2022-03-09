@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import Url from '../../db/schemas/Url.schema';
-import IUrl from '../../interfaces/IUrl.interface';
+import IUrl from '../../interfaces/schemas/IUrl.interface';
 
 export default async function validateUrlDeletion(
   req: Request,

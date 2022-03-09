@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
 import Url from '../../db/schemas/Url.schema';
 import Candidate from '../../db/schemas/Candidate.schema';
-import IUrl from '../../interfaces/IUrl.interface';
-import ICandidate from '../../interfaces/ICandidate.interface';
+import IUrl from '../../interfaces/schemas/IUrl.interface';
+import ICandidate from '../../interfaces/schemas/ICandidate.interface';
 import temp from '../../lib/tempVariables';
 
 export default async function validateUrl(

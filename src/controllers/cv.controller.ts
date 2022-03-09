@@ -1,11 +1,7 @@
 import { Request, Response } from 'express';
-import { unlink } from 'fs';
-import { promisify } from 'util';
-import UploadCV, { GetCV, SaveCVKeysIntoUser } from '../services/CV.service';
+import { GetCV } from '../services/CV.service';
 
-const unlinkFile = promisify(unlink);
-
-export const getCV = async (req: Request, res: Response) => {
+const getCV = async (req: Request, res: Response) => {
   const { key } = req.params;
 
   try {
@@ -20,28 +16,4 @@ export const getCV = async (req: Request, res: Response) => {
     console.error(e);
   }
 };
-
-export const uploadCV = async (req: Request, res: Response) => {
-  const cv = req.file;
-  const candidateId = req.query.candidate_id as string;
-
-  if (!cv) {
-    return res.status(400).send({ message: 'No cv was received' });
-  }
-
-  if (cv.mimetype !== 'application/pdf') {
-    await unlinkFile(cv.path);
-    return res.status(400).send({ message: 'Only PDF files are supported' });
-  }
-
-  try {
-    const result = await UploadCV(cv);
-
-    await unlinkFile(cv.path);
-    await SaveCVKeysIntoUser(candidateId, result?.Key);
-
-    return res.status(201).send({ message: 'CV uploaded successfully' });
-  } catch (e) {
-    console.error(e);
-  }
-};
+export default getCV;
