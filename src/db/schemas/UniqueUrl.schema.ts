@@ -1,8 +1,8 @@
 import { Schema, model } from 'mongoose';
 import { generate } from 'shortid';
-import IUrl from '../../interfaces/schemas/IUrl.interface';
+import IUrl from '../../interfaces/schemas/IUniqueUrl.interface';
 
-const UrlSchema = new Schema<IUrl>(
+const UniqueUrlSchema = new Schema<IUrl>(
   {
     short_url: {
       type: String,
@@ -20,6 +20,6 @@ const UrlSchema = new Schema<IUrl>(
   { versionKey: false },
 );
 
-UrlSchema.index({ expiresAt: 1 }, { expires: '24h' });
+UniqueUrlSchema.index({ expiresAt: 1 }, { expires: '24h' });
 
-export default model<IUrl>('Url', UrlSchema);
+export default model<IUrl>('uniqueUrl', UniqueUrlSchema);
