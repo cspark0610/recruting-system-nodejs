@@ -1,20 +1,10 @@
-import Url from '../db/schemas/Url.schema';
-import Candidate from '../db/schemas/Candidate.schema';
-import IUrl from '../interfaces/schemas/IUrl.interface';
-import ICandidate from '../interfaces/schemas/ICandidate.interface';
-import IQuestion from '../interfaces/IQuestion.interface';
+import Url from '../db/schemas/UniqueUrl.schema';
+import IUrl from '../interfaces/schemas/IUniqueUrl.interface';
 
-export const GenerateUrl = async (
-  id: string,
-  questions: Array<IQuestion>,
-): Promise<{ newUrl: IUrl; newCandidate: ICandidate } | undefined> => {
+export const GenerateUrl = async (): Promise<IUrl | undefined> => {
   try {
     const newUrl: IUrl = await Url.create({});
-    const newCandidate: ICandidate = await Candidate.create({
-      id,
-      videos_question_list: questions,
-    });
-    return { newUrl, newCandidate };
+    return newUrl;
   } catch (e) {
     console.error(e);
   }

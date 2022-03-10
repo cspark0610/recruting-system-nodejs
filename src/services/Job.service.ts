@@ -1,3 +1,4 @@
+import { Types } from 'mongoose';
 import Job from '../db/schemas/Job.schema';
 import Candidate from '../db/schemas/Candidate.schema';
 import IJob from '../interfaces/schemas/IJob.interface';
@@ -30,6 +31,16 @@ export const SetCandidate = async (_id: string, candidateId: string) => {
     const allData = await Promise.all([allJobs, allCandidates]);
 
     return allData;
+  } catch (e) {
+    console.error(e);
+  }
+};
+
+export const SetUrl = async (_id: Types.ObjectId, url: string) => {
+  try {
+    const jobUpdated = await Job.findByIdAndUpdate(_id, { url });
+
+    return jobUpdated;
   } catch (e) {
     console.error(e);
   }
