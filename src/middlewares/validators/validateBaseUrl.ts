@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import temp from '../../lib/tempVariables';
-import Url from '../../db/schemas/Url.schema';
-import IUrl from '../../interfaces/schemas/IUrl.interface';
+import Url from '../../db/schemas/UniqueUrl.schema';
+import IUrl from '../../interfaces/schemas/IUniqueUrl.interface';
 
 export default async function validateBaseUrl(
   _req: Request,

@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
-import Url from '../../db/schemas/Url.schema';
+import UniqueUrl from '../../db/schemas/UniqueUrl.schema';
 import Candidate from '../../db/schemas/Candidate.schema';
-import IUrl from '../../interfaces/schemas/IUrl.interface';
+import IUrl from '../../interfaces/schemas/IUniqueUrl.interface';
 import ICandidate from '../../interfaces/schemas/ICandidate.interface';
 import temp from '../../lib/tempVariables';
 
@@ -12,24 +12,18 @@ export default async function validateUrl(
 ) {
   try {
     const short_url = req.query.id as string;
-    const index = req.query.index as string;
 
-    if (!short_url || !index) {
+    if (!short_url) {
       return res.status(400).render('pages/urlNotValid');
     }
 
-    const uniqueUrl: IUrl | null = await Url.findOne({ short_url });
-    const uniqueCandidate: ICandidate | null = await Candidate.findOne({
-      index,
-    });
+    const uniqueUrl: IUrl | null = await UniqueUrl.findOne({ short_url });
 
-    if (!uniqueUrl || !uniqueCandidate) {
+    if (!uniqueUrl) {
       return res.status(404).render('pages/urlNotValid');
     }
 
-    temp.candidate_id = uniqueCandidate.id;
     temp.url_id = uniqueUrl.short_url;
-    temp.video_data = uniqueCandidate.videos_question_list;
 
     next();
   } catch (e: any) {
