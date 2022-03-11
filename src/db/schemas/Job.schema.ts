@@ -5,9 +5,13 @@ import IJob from '../interfaces/IJob.interface';
 
 const JobSchema = new Schema<IJob>(
   {
-    title: String,
+    title: { type: String, required: true },
     designated: [
-      { type: Schema.Types.ObjectId, ref: 'User', autopopulate: true },
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+        autopopulate: true,
+      },
     ],
     url: {
       type: String,
