@@ -1,5 +1,5 @@
 import { Types } from 'mongoose';
-import IQuestion from '../IQuestion.interface';
+import IQuestion from '../../interfaces/IQuestion.interface';
 
 export default interface ICandidate {
   id?: string;

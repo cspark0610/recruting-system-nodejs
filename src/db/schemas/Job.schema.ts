@@ -11,7 +11,6 @@ const JobSchema = new Schema<IJob>(
     ],
     url: {
       type: String,
-      unique: true,
     },
   },
   { versionKey: false },

@@ -7,7 +7,6 @@ const UniqueUrlSchema = new Schema<IUrl>(
     short_url: {
       type: String,
       required: true,
-      unique: true,
       default: generate,
     },
 

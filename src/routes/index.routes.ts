@@ -5,6 +5,7 @@ import videoRoutes from './video.routes';
 import urlRoutes from './url.routes';
 import candidateRoutes from './candidate.routes';
 import jobRoutes from './job.routes';
+import userRoutes from './user.routes';
 
 import getKeys from '../controllers/keys.controller';
 
@@ -22,5 +23,6 @@ router.use('/video', videoRoutes);
 router.use('/url', urlRoutes);
 router.use('/candidate', candidateRoutes);
 router.use('/job', jobRoutes);
+router.use('/users', userRoutes);
 
 export default router;
