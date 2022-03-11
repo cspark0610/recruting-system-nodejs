@@ -3,7 +3,6 @@ import path from 'path';
 
 import videoRoutes from './video.routes';
 import urlRoutes from './url.routes';
-import cvRoutes from './cv.routes';
 import candidateRoutes from './candidate.routes';
 import jobRoutes from './job.routes';
 
@@ -21,7 +20,6 @@ router.get('/video-key', getKeys);
 
 router.use('/video', videoRoutes);
 router.use('/url', urlRoutes);
-router.use('/cv', cvRoutes);
 router.use('/candidate', candidateRoutes);
 router.use('/job', jobRoutes);
 
