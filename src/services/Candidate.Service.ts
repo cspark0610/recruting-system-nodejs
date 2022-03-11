@@ -1,5 +1,5 @@
 import Candidate from '../db/schemas/Candidate.schema';
-import ICandidate from '../interfaces/schemas/ICandidate.interface';
+import ICandidate from '../db/interfaces/ICandidate.interface';
 
 const CreateCandidate = async (candidateInfo: ICandidate) => {
   try {

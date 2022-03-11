@@ -1,13 +1,22 @@
+/* eslint-disable no-underscore-dangle */
+/* eslint-disable indent */
 import { Schema, model } from 'mongoose';
-import IJob from '../../interfaces/schemas/IJob.interface';
+import IJob from '../interfaces/IJob.interface';
 
 const JobSchema = new Schema<IJob>(
   {
     title: String,
-    designated: [String],
-    candidates: [{ type: Schema.Types.ObjectId, ref: 'Candidate' }],
+    designated: [
+      { type: Schema.Types.ObjectId, ref: 'User', autopopulate: true },
+    ],
+    url: {
+      type: String,
+      unique: true,
+    },
   },
   { versionKey: false },
 );
+
+JobSchema.plugin(require('mongoose-autopopulate'));
 
 export default model<IJob>('Job', JobSchema);
