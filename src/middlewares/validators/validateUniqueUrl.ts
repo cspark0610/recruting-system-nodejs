@@ -1,3 +1,4 @@
+/* eslint-disable operator-linebreak */
 import { Request, Response, NextFunction } from 'express';
 import VideoRecordingUrl from '../../db/schemas/VideoRecordingUrl.schema';
 import Candidate from '../../db/schemas/Candidate.schema';
