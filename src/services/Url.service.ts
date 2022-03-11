@@ -1,5 +1,5 @@
 import Url from '../db/schemas/UniqueUrl.schema';
-import IUrl from '../interfaces/schemas/IUniqueUrl.interface';
+import IUrl from '../interfaces/schemas/IUrl.interface';
 
 export const GenerateUrl = async (): Promise<IUrl | undefined> => {
   try {
