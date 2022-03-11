@@ -11,7 +11,7 @@ const CandidateSchema = new Schema<ICandidate>(
 
     country: { type: String, required: true },
 
-    job: { type: Schema.Types.ObjectId, ref: 'Job' },
+    job: { type: Schema.Types.ObjectId, ref: 'Job', autopopulate: true },
 
     videos_question_list: [],
 
@@ -23,5 +23,7 @@ const CandidateSchema = new Schema<ICandidate>(
 
   { versionKey: false },
 );
+
+CandidateSchema.plugin(require('mongoose-autopopulate'));
 
 export default model<ICandidate>('Candidate', CandidateSchema);
