@@ -5,6 +5,10 @@ import * as urlService from '../services/Url.service';
 
 dotenv.config();
 
+// eslint-disable-next-line operator-linebreak
+const { NODE_ENV, REDIRECT_URL_DEVELOPMENT, REDIRECT_URL_PRODUCTION } =
+  process.env;
+
 export const renderApp = (_req: Request, res: Response) => {
   res.redirect('/');
 };
@@ -22,9 +26,9 @@ export const generateUniqueUrl = async (_req: Request, res: Response) => {
     return res.status(201).send({
       message: 'url created',
       client_url:
-        process.env.NODE_ENV === 'development'
-          ? `${process.env.REDIRECT_URL_DEVELOPMENT}/url/validate?id=${data.short_url}`
-          : `${process.env.REDIRECT_URL_PRODUCTION}/url/validate?id=${data.short_url}`,
+        NODE_ENV === 'development'
+          ? `${REDIRECT_URL_DEVELOPMENT}/url/validate?id=${data.short_url}`
+          : `${REDIRECT_URL_PRODUCTION}/url/validate?id=${data.short_url}`,
     });
   } catch (e) {
     return res.send(e);

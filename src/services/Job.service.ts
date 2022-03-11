@@ -6,7 +6,9 @@ import IJob from '../db/interfaces/IJob.interface';
 
 dotenv.config();
 
-const { NODE_ENV } = process.env;
+// eslint-disable-next-line operator-linebreak
+const { NODE_ENV, REDIRECT_URL_DEVELOPMENT, REDIRECT_URL_PRODUCTION } =
+  process.env;
 
 export const CreateJob = async (jobInfo: IJob) => {
   try {
@@ -14,8 +16,8 @@ export const CreateJob = async (jobInfo: IJob) => {
     const newJobWithUrl = await Job.findByIdAndUpdate(newJob._id, {
       url:
         NODE_ENV === 'development'
-          ? `${process.env.REDIRECT_URL_DEVELOPMENT}/info-upload?job_id=${newJob._id}`
-          : `${process.env.REDIRECT_URL_PRODUCTION}/info-upload?job_id=${newJob._id}`,
+          ? `${REDIRECT_URL_DEVELOPMENT}/info-upload?job_id=${newJob._id}`
+          : `${REDIRECT_URL_PRODUCTION}/info-upload?job_id=${newJob._id}`,
     });
 
     return newJobWithUrl;
