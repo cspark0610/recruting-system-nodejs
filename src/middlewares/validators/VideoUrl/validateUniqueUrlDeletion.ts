@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
-import VideoRecordingUrl from '../../db/schemas/VideoRecordingUrl.schema';
-import IVideoRecordingUrl from '../../db/interfaces/IVideoRecordingUrl.interface';
+import VideoRecordingUrl from '../../../db/schemas/VideoRecordingUrl.schema';
+import IVideoRecordingUrl from '../../../db/interfaces/IVideoRecordingUrl.interface';
 
 export default async function validateUrlDeletion(
   req: Request,
