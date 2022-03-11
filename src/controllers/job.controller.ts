@@ -1,7 +1,7 @@
 /* eslint-disable no-underscore-dangle */
 import { Request, Response } from 'express';
-import IJob from '../interfaces/schemas/IJob.interface';
 import { CreateJob, SetCandidate } from '../services/Job.service';
+import IJob from '../db/interfaces/IJob.interface';
 
 export const createJob = async (req: Request, res: Response) => {
   const { title, designated }: IJob = req.body;

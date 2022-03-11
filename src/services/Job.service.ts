@@ -1,6 +1,6 @@
 import Job from '../db/schemas/Job.schema';
 import Candidate from '../db/schemas/Candidate.schema';
-import IJob from '../interfaces/schemas/IJob.interface';
+import IJob from '../db/interfaces/IJob.interface';
 
 export const CreateJob = async (jobInfo: IJob) => {
   try {

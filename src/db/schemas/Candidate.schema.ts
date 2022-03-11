@@ -1,5 +1,5 @@
 import { Schema, model } from 'mongoose';
-import ICandidate from '../../interfaces/schemas/ICandidate.interface';
+import ICandidate from '../interfaces/ICandidate.interface';
 
 const CandidateSchema = new Schema<ICandidate>(
   {

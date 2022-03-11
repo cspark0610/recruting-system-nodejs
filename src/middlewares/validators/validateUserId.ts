@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import Candidate from '../../db/schemas/Candidate.schema';
-import ICandidate from '../../interfaces/schemas/ICandidate.interface';
+import ICandidate from '../../db/interfaces/ICandidate.interface';
 import temp from '../../lib/tempVariables';
 
 export default async function validateUser(

@@ -2,7 +2,7 @@
 import { Request, Response } from 'express';
 import { unlink } from 'fs';
 import { promisify } from 'util';
-import ICandidate from '../interfaces/schemas/ICandidate.interface';
+import ICandidate from '../db/interfaces/ICandidate.interface';
 import CreateCandidate from '../services/Candidate.Service';
 import { UploadCV } from '../services/CV.service';
 
