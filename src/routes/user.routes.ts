@@ -1,8 +1,8 @@
 import { Router } from 'express';
-import getCV from '../controllers/cv.controller';
+import signUp from '../controllers/user.controller';
 
 const router = Router();
 
-router.get('/get/:key', getCV);
+router.post('/signUp', signUp);
 
 export default router;
