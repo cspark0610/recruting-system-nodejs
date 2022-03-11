@@ -1,8 +1,8 @@
 import { Schema, model } from 'mongoose';
 import { generate } from 'shortid';
-import IUrl from '../interfaces/IUrl.interface';
+import IVideoRecordingUrl from '../interfaces/IVideoRecordingUrl.interface';
 
-const UniqueUrlSchema = new Schema<IUrl>(
+const VideoRecoringUrlSchema = new Schema<IVideoRecordingUrl>(
   {
     short_url: {
       type: String,
@@ -19,6 +19,9 @@ const UniqueUrlSchema = new Schema<IUrl>(
   { versionKey: false },
 );
 
-UniqueUrlSchema.index({ expiresAt: 1 }, { expires: '24h' });
+VideoRecoringUrlSchema.index({ expiresAt: 1 }, { expires: '24h' });
 
-export default model<IUrl>('uniqueUrl', UniqueUrlSchema);
+export default model<IVideoRecordingUrl>(
+  'video_recording_url',
+  VideoRecoringUrlSchema,
+);

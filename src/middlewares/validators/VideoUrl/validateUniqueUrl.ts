@@ -1,9 +1,10 @@
+/* eslint-disable operator-linebreak */
 import { Request, Response, NextFunction } from 'express';
-import UniqueUrl from '../../db/schemas/UniqueUrl.schema';
-import Candidate from '../../db/schemas/Candidate.schema';
-import IUrl from '../../db/interfaces/IUrl.interface';
-import ICandidate from '../../db/interfaces/ICandidate.interface';
-import temp from '../../lib/tempVariables';
+import VideoRecordingUrl from '../../../db/schemas/VideoRecordingUrl.schema';
+import Candidate from '../../../db/schemas/Candidate.schema';
+import IVideoRecordingUrl from '../../../db/interfaces/IVideoRecordingUrl.interface';
+import ICandidate from '../../../db/interfaces/ICandidate.interface';
+import temp from '../../../lib/tempVariables';
 
 export default async function validateUrl(
   req: Request,
@@ -17,7 +18,8 @@ export default async function validateUrl(
       return res.status(400).render('pages/urlNotValid');
     }
 
-    const uniqueUrl: IUrl | null = await UniqueUrl.findOne({ short_url });
+    const uniqueUrl: IVideoRecordingUrl | null =
+      await VideoRecordingUrl.findOne({ short_url });
 
     if (!uniqueUrl) {
       return res.status(404).render('pages/urlNotValid');

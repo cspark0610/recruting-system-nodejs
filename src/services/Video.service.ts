@@ -4,6 +4,8 @@ import dotenv from 'dotenv';
 import File from '../interfaces/File.interface';
 import UploadParams from '../interfaces/UploadParams.interface';
 import Candidate from '../db/schemas/Candidate.schema';
+import VideoRecordingUrl from '../db/schemas/VideoRecordingUrl.schema';
+import IVideoRecordingUrl from '../db/interfaces/IVideoRecordingUrl.interface';
 
 dotenv.config();
 
@@ -19,6 +21,17 @@ const s3 = new S3({
   secretAccessKey: AWS_BUCKET_SECRET_ACCESS_KEY,
   region: AWS_BUCKET_REGION,
 });
+
+export const GenerateUrl = async (): Promise<
+  IVideoRecordingUrl | undefined
+> => {
+  try {
+    const newUrl: IVideoRecordingUrl = await VideoRecordingUrl.create({});
+    return newUrl;
+  } catch (e) {
+    console.error(e);
+  }
+};
 
 export const GetVideoFromS3 = (key: string) => {
   try {
@@ -69,6 +82,14 @@ export const SaveVideoKeyToUser = async (
     );
     await candidate?.save();
   } catch (e: any) {
+    console.error(e);
+  }
+};
+
+export const DeleteUrl = async (short_url: string): Promise<void> => {
+  try {
+    await VideoRecordingUrl.deleteOne({ short_url });
+  } catch (e) {
     console.error(e);
   }
 };
