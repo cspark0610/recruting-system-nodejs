@@ -39,7 +39,7 @@ export const createCandidate = async (req: Request, res: Response) => {
 
     return res.status(201).send(data);
   } catch (e: any) {
-    console.error(e);
+    return res.status(500).send({ message: e.message });
   }
 };
 
@@ -54,7 +54,7 @@ export const getCV = async (req: Request, res: Response) => {
     }
 
     candidateCV.pipe(res);
-  } catch (e) {
-    console.error(e);
+  } catch (e: any) {
+    return res.status(500).send({ message: e.message });
   }
 };

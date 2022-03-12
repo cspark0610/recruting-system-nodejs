@@ -29,7 +29,7 @@ export const GetCV = async (key: string) => {
 
     return s3.getObject(getParams).createReadStream();
   } catch (e: any) {
-    console.error(e.message);
+    console.error(e);
   }
 };
 
@@ -45,14 +45,14 @@ export const UploadCV = async (cv: File) => {
 
     return s3.upload(uploadParams).promise();
   } catch (e: any) {
-    console.error(e.message);
+    console.error(e);
   }
 };
 
 export const SaveCVKeysIntoUser = async (id: string, key?: string) => {
   try {
     await Candidate.findOneAndUpdate({ id }, { cv: key });
-  } catch (e) {
+  } catch (e: any) {
     console.error(e);
   }
 };
