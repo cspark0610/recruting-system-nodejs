@@ -1,7 +1,7 @@
 import User from '../db/schemas/User.schema';
 import IUser from '../db/interfaces/User/IUser.interface';
 
-const SignUp = async (userInfo: IUser) => {
+export const SignUp = async (userInfo: IUser) => {
   try {
     const hashedPassword = await User.hashPassword(userInfo.password, 12);
 
@@ -16,4 +16,12 @@ const SignUp = async (userInfo: IUser) => {
   }
 };
 
-export default SignUp;
+export const SignIn = async (userInfo: IUser) => {
+  try {
+    const userFound = await User.findOne({ email: userInfo.email });
+
+    return userFound;
+  } catch (e: any) {
+    console.error(e);
+  }
+};

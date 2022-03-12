@@ -1,8 +1,8 @@
-import { Roles } from '../../../lib/enums';
+import { Types } from 'mongoose';
 
 export default interface IUser {
   name: string;
   email: string;
   password: string;
-  role?: Roles;
+  role: Array<Types.ObjectId>;
 }

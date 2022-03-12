@@ -1,7 +1,6 @@
 /* eslint-disable prefer-arrow-callback */
 import { Schema, model } from 'mongoose';
 import bcrypt from 'bcrypt';
-import { Roles } from '../../lib/enums';
 import IUser from '../interfaces/User/IUser.interface';
 import UserModel from '../interfaces/User/UserModel.interface';
 
@@ -22,9 +21,19 @@ const UserSchema = new Schema<IUser, UserModel>(
       type: String,
       required: true,
     },
+
+    role: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'Role',
+        autopopulate: true,
+      },
+    ],
   },
   { versionKey: false },
 );
+
+UserSchema.plugin(require('mongoose-autopopulate'));
 
 UserSchema.static(
   'hashPassword',

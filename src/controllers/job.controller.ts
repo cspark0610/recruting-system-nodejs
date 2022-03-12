@@ -15,7 +15,7 @@ export const createJob = async (req: Request, res: Response) => {
 
     return res.status(201).send(newJob);
   } catch (e: any) {
-    return res.status(500).send(e.message);
+    return res.status(500).send({ message: e.message });
   }
 };
 
@@ -31,7 +31,7 @@ export const setCandidate = async (req: Request, res: Response) => {
     }
 
     return res.status(200).send(data);
-  } catch (e) {
-    console.error(e);
+  } catch (e: any) {
+    return res.status(500).send({ message: e.message });
   }
 };
