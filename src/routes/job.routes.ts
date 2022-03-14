@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { createJob, setCandidate } from '../controllers/job.controller';
-import validateJobExists from '../middlewares/validators/Job/validateJobExists';
+import validateJobExists from '../middlewares/validators/validateJobExists.middleware';
 
 const router = Router();
 
