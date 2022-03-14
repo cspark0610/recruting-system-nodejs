@@ -5,6 +5,7 @@ import Job from '../db/schemas/Job.schema';
 import Candidate from '../db/schemas/Candidate.schema';
 import IJob from '../db/interfaces/IJob.interface';
 import InternalServerException from '../exceptions/InternalServerError';
+import RequestWithUser from '../interfaces/RequestWithUser.interface';
 
 dotenv.config();
 
@@ -12,9 +13,17 @@ dotenv.config();
 const { NODE_ENV, REDIRECT_URL_DEVELOPMENT, REDIRECT_URL_PRODUCTION } =
   process.env;
 
-export const CreateJob = async (jobInfo: IJob, next: NextFunction) => {
+export const CreateJob = async (
+  jobInfo: IJob,
+  next: NextFunction,
+  req: RequestWithUser,
+) => {
   try {
-    const newJob = await Job.create(jobInfo);
+    const newJob = await Job.create({
+      ...jobInfo,
+      designated: req?.designated?.map((user) => user._id),
+    });
+
     const newJobWithUrl = await Job.findByIdAndUpdate(
       newJob._id,
       {

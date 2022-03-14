@@ -3,16 +3,17 @@ import { NextFunction, Request, Response } from 'express';
 import { CreateJob, SetCandidate } from '../services/Job.service';
 import IJob from '../db/interfaces/IJob.interface';
 import InternalServerException from '../exceptions/InternalServerError';
+import RequestWithUser from '../interfaces/RequestWithUser.interface';
 
 export const createJob = async (
-  req: Request,
+  req: RequestWithUser,
   res: Response,
   next: NextFunction,
 ) => {
   const { title, designated }: IJob = req.body;
 
   try {
-    const newJob = await CreateJob({ title, designated }, next);
+    const newJob = await CreateJob({ title, designated }, next, req);
 
     if (!newJob) {
       return next(

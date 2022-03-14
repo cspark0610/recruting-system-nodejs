@@ -10,12 +10,12 @@ const router = Router();
 
 router.post(
   '/signIn',
-  [requestBodyValidation(UserSignInParamsDto), authJwt.verifyJwt],
+  [authJwt.verifyJwt, requestBodyValidation(UserSignInParamsDto)],
   userController.signIn,
 );
 router.post(
   '/signUp',
-  [requestBodyValidation(CreateUserDto), validateUserExists],
+  [validateUserExists, requestBodyValidation(CreateUserDto)],
   userController.signUp,
 );
 

@@ -1,7 +1,5 @@
-import { Types } from 'mongoose';
-
 export default interface IJob {
   title: string;
-  designated?: Array<Types.ObjectId>;
+  designated?: Array<string>;
   url?: string;
 }
