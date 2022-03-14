@@ -22,9 +22,9 @@ export const SignUp = async (userInfo: IUser, next: NextFunction) => {
   }
 };
 
-export const SignIn = async (userInfo: IUser, next: NextFunction) => {
+export const SignIn = async (email: string, next: NextFunction) => {
   try {
-    const userFound = await User.findOne({ email: userInfo.email });
+    const userFound = await User.findOne({ email });
 
     return userFound;
   } catch (e: any) {

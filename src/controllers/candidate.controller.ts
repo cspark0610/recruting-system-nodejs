@@ -23,7 +23,7 @@ export const createCandidate = async (
   next: NextFunction,
 ) => {
   const cv = req.file;
-  const { id, name, email, phone, country }: ICandidate = req.body;
+  const { name, email, phone, country }: ICandidate = req.body;
 
   if (!cv) {
     return next(new BadRequestException('No cv file received'));
@@ -37,7 +37,6 @@ export const createCandidate = async (
 
     const data = await candidateService.CreateCandidate(
       {
-        id,
         name,
         email,
         phone,

@@ -2,8 +2,8 @@ import { NextFunction, Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import IUser from '../db/interfaces/User/IUser.interface';
 import * as userService from '../services/User.service';
-import ForbiddenException from '../exceptions/ForbiddenException';
 import InternalServerException from '../exceptions/InternalServerError';
+import InvalidCredentialsException from '../exceptions/InvalidCredentialsException';
 
 export const signIn = async (
   req: Request,
@@ -13,14 +13,14 @@ export const signIn = async (
   const userInfo: IUser = req.body;
 
   try {
-    const userFound = await userService.SignIn(userInfo, next);
+    const userFound = await userService.SignIn(userInfo.email, next);
 
     if (!userFound) {
-      return next(new ForbiddenException('Invalid email or password'));
+      return next(new InvalidCredentialsException('Invalid email or password'));
     }
 
     if (!bcrypt.compare(userInfo.password, userFound.password)) {
-      return next(new ForbiddenException('Invalid email or password'));
+      return next(new InvalidCredentialsException('Invalid email or password'));
     }
   } catch (e: any) {
     return next(
