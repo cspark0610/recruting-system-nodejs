@@ -10,10 +10,6 @@ export default async function validateSignUp(
 ) {
   const { name, email, password }: IUser = req.body;
 
-  if (!name || !email || !password) {
-    return res.status(400).send('Some fields are missing');
-  }
-
   try {
     const userExists = await User.findOne({ email });
 
