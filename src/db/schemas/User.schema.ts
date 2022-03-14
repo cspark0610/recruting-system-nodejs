@@ -21,14 +21,6 @@ const UserSchema = new Schema<IUser, UserModel>(
       type: String,
       required: true,
     },
-
-    role: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: 'Role',
-        autopopulate: true,
-      },
-    ],
   },
   { versionKey: false },
 );

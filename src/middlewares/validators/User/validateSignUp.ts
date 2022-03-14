@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import User from '../../../db/schemas/User.schema';
 import IUser from '../../../db/interfaces/User/IUser.interface';
+import BadRequestException from '../../../exceptions/BadRequestException';
 
 export default async function validateSignUp(
   req: Request,
@@ -17,9 +18,7 @@ export default async function validateSignUp(
     const userExists = await User.findOne({ email });
 
     if (userExists) {
-      return res
-        .status(400)
-        .send(`There is already a user with the email ${email}`);
+      next(new BadRequestException(`User already in use with email ${email}`));
     }
 
     next();
