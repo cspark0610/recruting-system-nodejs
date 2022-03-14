@@ -13,11 +13,9 @@ export default async function validateJobExists(
     const jobExists = await Job.findOne({ title });
 
     if (jobExists) {
-      return res
-        .status(400)
-        .send({
-          message: `There is already an application with the name ${title}`,
-        });
+      return res.status(400).send({
+        message: `There is already an application with the name ${title}`,
+      });
     }
 
     next();
