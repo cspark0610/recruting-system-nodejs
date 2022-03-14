@@ -2,14 +2,11 @@
 /* eslint-disable no-unused-vars */
 import { NextFunction, Request, Response } from 'express';
 import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
-import dotenv from 'dotenv';
 import IUser from '../db/interfaces/User/IUser.interface';
 import * as userService from '../services/User.service';
 import InternalServerException from '../exceptions/InternalServerError';
 import InvalidCredentialsException from '../exceptions/InvalidCredentialsException';
-
-dotenv.config();
+import createToken from '../lib/createToken';
 
 export const signIn = async (
   req: Request,
@@ -25,9 +22,18 @@ export const signIn = async (
       return next(new InvalidCredentialsException('Invalid email or password'));
     }
 
-    if (!bcrypt.compare(userInfo.password, userFound.password)) {
+    const passwordMatch = await bcrypt.compare(
+      userInfo.password,
+      userFound.password,
+    );
+
+    if (!passwordMatch) {
       return next(new InvalidCredentialsException('Invalid email or password'));
     }
+
+    const token = createToken(userFound);
+
+    return res.status(200).send(token);
   } catch (e: any) {
     return next(
       new InternalServerException(
@@ -54,9 +60,7 @@ export const signUp = async (
       );
     }
 
-    user.password = '';
-
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET as string);
+    const token = createToken(user);
 
     return res.status(201).send(token);
   } catch (e: any) {

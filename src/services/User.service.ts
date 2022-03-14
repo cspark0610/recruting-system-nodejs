@@ -35,7 +35,7 @@ export const SignUp = async (userInfo: IUser, next: NextFunction) => {
   } catch (e: any) {
     next(
       new InternalServerException(
-        `There was an error with the signIn service. ${e.messge}`,
+        `There was an error with the signUp service. ${e.messge}`,
       ),
     );
   }
@@ -49,7 +49,7 @@ export const SignIn = async (email: string, next: NextFunction) => {
   } catch (e: any) {
     return next(
       new InternalServerException(
-        `There was an error with the signUp service. ${e.message}`,
+        `There was an error with the signIn service. ${e.message}`,
       ),
     );
   }

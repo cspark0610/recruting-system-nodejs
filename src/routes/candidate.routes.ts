@@ -2,7 +2,7 @@ import { Router } from 'express';
 import multer from 'multer';
 import storage from '../lib/multerConfig';
 import * as candidateController from '../controllers/candidate.controller';
-import requestBodyValidation from '../middlewares/validators/requestBodyValidation.middleware';
+import requestBodyValidation from '../middlewares/validators/requests/requestBodyValidation.middleware';
 import CreateCandidateDto from '../db/schemas/dtos/CreateCandidate.dto';
 
 const router = Router();

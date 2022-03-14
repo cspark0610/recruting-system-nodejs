@@ -22,7 +22,7 @@ const UserSchema = new Schema<IUser, UserModel>(
       required: true,
     },
 
-    role: [Schema.Types.ObjectId],
+    role: [{ type: Schema.Types.ObjectId, ref: 'role', autopopulate: true }],
   },
   { versionKey: false },
 );

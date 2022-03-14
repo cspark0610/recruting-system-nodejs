@@ -1,7 +1,7 @@
 import { plainToClass } from 'class-transformer';
 import { validate, ValidationError } from 'class-validator';
 import * as express from 'express';
-import BadRequestException from '../../exceptions/BadRequestException';
+import BadRequestException from '../../../exceptions/BadRequestException';
 
 function requestBodyValidation<T>(type: any): express.RequestHandler {
   return (req, res, next) => {
