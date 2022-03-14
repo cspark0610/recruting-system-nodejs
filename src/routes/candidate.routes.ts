@@ -2,7 +2,6 @@ import { Router } from 'express';
 import multer from 'multer';
 import storage from '../lib/multerConfig';
 import * as candidateController from '../controllers/candidate.controller';
-import * as videoController from '../controllers/video.controller';
 import validateCandidateCreation from '../middlewares/validators/validateCandidateCreation';
 
 const router = Router();
@@ -10,7 +9,7 @@ const router = Router();
 const upload = multer({ storage });
 
 router.get('/cv/:key', candidateController.getCV);
-router.get('/video/:key', videoController.getVideoFromS3);
+router.get('/video/:key', candidateController.getVideoFromS3);
 
 router.post(
   '/create',
@@ -21,10 +20,10 @@ router.post(
 router.post(
   '/video/upload/:candidate_id',
   upload.single('video'),
-  videoController.uploadVideoToS3,
+  candidateController.uploadVideoToS3,
 );
-router.post('/url/create', videoController.generateUniqueUrl);
+router.post('/url/create', candidateController.generateUniqueUrl);
 
-router.delete('/url/delete/:url_id', videoController.deleteUrl);
+router.delete('/url/delete/:url_id', candidateController.deleteUrl);
 
 export default router;
