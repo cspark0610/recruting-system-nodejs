@@ -9,7 +9,9 @@ function validationMiddleware<T>(type: any): express.RequestHandler {
       (errors: ValidationError[]) => {
         if (errors.length > 0) {
           const message = errors
-            .map((error: ValidationError) => Object.values(error.constraints))
+            .map((error: ValidationError) =>
+              Object.values(error.constraints as { [type: string]: string }),
+            )
             .join(', ');
           next(
             new BadRequestException(
