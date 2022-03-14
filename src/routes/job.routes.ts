@@ -7,7 +7,7 @@ const router = Router();
 
 router.post(
   '/create',
-  [authJwt.verifyJwt, authJwt.isCEO, validateJobExists],
+  [authJwt.verifyJwt, authJwt.JobAuthorization, validateJobExists],
   createJob,
 );
 router.put('/setCandidate/:_id', setCandidate);

@@ -1,3 +1,4 @@
+/* eslint-disable operator-linebreak */
 /* eslint-disable no-underscore-dangle */
 import { Response, NextFunction } from 'express';
 import dotenv from 'dotenv';
@@ -13,6 +14,12 @@ import ForbiddenException from '../../exceptions/ForbiddenException';
 dotenv.config();
 
 const { JWT_SECRET } = process.env;
+
+const authorizedRoles: any = {
+  CEO: 'CEO',
+  CTO: 'CTO',
+  'RRHH ADMIN': 'RRHH ADMIN',
+};
 
 export async function verifyJwt(
   req: RequestWithUser,
@@ -47,21 +54,24 @@ export async function verifyJwt(
   next();
 }
 
-export async function isCEO(
+export async function JobAuthorization(
   req: RequestWithUser,
-  res: Response,
+  _res: Response,
   next: NextFunction,
 ) {
   const user = await User.findById(req.user?._id);
   const roles = await Role.find({ _id: { $in: user?.role } });
+  const rolesParsed = roles.map((role) => role.name);
 
-  if (roles[0].name !== 'CEO') {
-    return next(
-      new ForbiddenException(
-        'You don´t have the necessary permissions to execute this action',
-      ),
-    );
-  }
+  rolesParsed.forEach((role: string) => {
+    if (!authorizedRoles[role]) {
+      return next(
+        new ForbiddenException(
+          'You don´t have the necessary permissions to execute this action',
+        ),
+      );
+    }
+  });
 
   next();
 }
