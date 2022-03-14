@@ -13,7 +13,7 @@ export const signIn = async (
   const userInfo: IUser = req.body;
 
   try {
-    const userFound = await userService.SignIn(userInfo);
+    const userFound = await userService.SignIn(userInfo, next);
 
     if (!userFound) {
       return next(new ForbiddenException('Invalid email or password'));
@@ -25,7 +25,7 @@ export const signIn = async (
   } catch (e: any) {
     return next(
       new InternalServerException(
-        `There was an unexpected error. ${e.message}`,
+        `There was an unexpected error with the signIn controller. ${e.message}`,
       ),
     );
   }
@@ -38,13 +38,13 @@ export const signUp = async (
 ) => {
   try {
     const userInfo: IUser = req.body;
-    const user = await userService.SignUp(userInfo);
+    const user = await userService.SignUp(userInfo, next);
 
     return res.status(201).send(user);
   } catch (e: any) {
     return next(
       new InternalServerException(
-        `There was an unexpected error. ${e.message}`,
+        `There was an unexpected error with the signUp controller. ${e.message}`,
       ),
     );
   }

@@ -12,7 +12,7 @@ export const createJob = async (
   const { title, designated }: IJob = req.body;
 
   try {
-    const newJob = await CreateJob({ title, designated });
+    const newJob = await CreateJob({ title, designated }, next);
 
     if (!newJob) {
       return next(
@@ -26,7 +26,7 @@ export const createJob = async (
   } catch (e: any) {
     return next(
       new InternalServerException(
-        `There was an unexpected error. ${e.message}`,
+        `There was an unexpected error with the job creation controller. ${e.message}`,
       ),
     );
   }
@@ -41,7 +41,7 @@ export const setCandidate = async (
   const { candidateId } = req.body;
 
   try {
-    const data = await SetCandidate(_id, candidateId);
+    const data = await SetCandidate(_id, candidateId, next);
 
     if (!data) {
       return next(
@@ -55,7 +55,7 @@ export const setCandidate = async (
   } catch (e: any) {
     return next(
       new InternalServerException(
-        `There was an unexpected error. ${e.message}`,
+        `There was an unexpected error with the candidate job setting controller. ${e.message}`,
       ),
     );
   }

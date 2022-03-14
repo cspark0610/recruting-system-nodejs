@@ -1,7 +1,9 @@
+import { NextFunction } from 'express';
 import User from '../db/schemas/User.schema';
 import IUser from '../db/interfaces/User/IUser.interface';
+import InternalServerException from '../exceptions/InternalServerError';
 
-export const SignUp = async (userInfo: IUser) => {
+export const SignUp = async (userInfo: IUser, next: NextFunction) => {
   try {
     const hashedPassword = await User.hashPassword(userInfo.password, 12);
 
@@ -11,17 +13,25 @@ export const SignUp = async (userInfo: IUser) => {
     });
 
     return newUser;
-  } catch (e) {
-    console.error(e);
+  } catch (e: any) {
+    return next(
+      new InternalServerException(
+        `There was an error with the signIn service. ${e.messge}`,
+      ),
+    );
   }
 };
 
-export const SignIn = async (userInfo: IUser) => {
+export const SignIn = async (userInfo: IUser, next: NextFunction) => {
   try {
     const userFound = await User.findOne({ email: userInfo.email });
 
     return userFound;
   } catch (e: any) {
-    console.error(e);
+    return next(
+      new InternalServerException(
+        `There was an error with the signUp service. ${e.message}`,
+      ),
+    );
   }
 };

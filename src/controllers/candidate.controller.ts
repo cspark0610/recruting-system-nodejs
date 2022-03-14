@@ -30,19 +30,22 @@ export const createCandidate = async (
   }
 
   try {
-    const result = await candidateService.UploadCV(cv);
+    const result = await candidateService.UploadCV(cv, next);
     await unlinkFile(cv.path);
 
     const cvKey = result?.Key;
 
-    const data = await candidateService.CreateCandidate({
-      id,
-      name,
-      email,
-      phone,
-      country,
-      cv: cvKey,
-    });
+    const data = await candidateService.CreateCandidate(
+      {
+        id,
+        name,
+        email,
+        phone,
+        country,
+        cv: cvKey,
+      },
+      next,
+    );
 
     if (!data) {
       return next(
@@ -56,7 +59,7 @@ export const createCandidate = async (
   } catch (e: any) {
     return next(
       new InternalServerException(
-        `There was an unexpected error. ${e.message}`,
+        `There was an unexpected error with the candidate creation controller. ${e.message}`,
       ),
     );
   }
@@ -68,7 +71,7 @@ export const generateUniqueUrl = async (
   next: NextFunction,
 ) => {
   try {
-    const data = await candidateService.GenerateUrl();
+    const data = await candidateService.GenerateUrl(next);
 
     if (!data) {
       return next(
@@ -88,7 +91,7 @@ export const generateUniqueUrl = async (
   } catch (e: any) {
     return next(
       new InternalServerException(
-        `There was an unexpected error. ${e.message}`,
+        `There was an unexpected error with the url creation controller. ${e.message}`,
       ),
     );
   }
@@ -102,7 +105,7 @@ export const getVideoFromS3 = (
   try {
     const { key } = req.params;
 
-    const candidateVideo = candidateService.GetVideoFromS3(key);
+    const candidateVideo = candidateService.GetVideoFromS3(key, next);
 
     if (!candidateVideo) {
       return next(new NotFoundException(`No video found with key ${key}`));
@@ -112,7 +115,7 @@ export const getVideoFromS3 = (
   } catch (e: any) {
     return next(
       new InternalServerException(
-        `There was an unexpected error. ${e.message}`,
+        `There was an unexpected error with the video download controller. ${e.message}`,
       ),
     );
   }
@@ -133,13 +136,17 @@ export const uploadVideoToS3 = async (
       return next(new BadRequestException('No video file was received'));
     }
 
-    const result = await candidateService.UploadVideoToS3(newCandidateVideo);
+    const result = await candidateService.UploadVideoToS3(
+      newCandidateVideo,
+      next,
+    );
 
     await unlinkFile(newCandidateVideo.path);
 
     await candidateService.SaveVideoKeyToUser(
       question_id,
       candidate_id,
+      next,
       result?.Key,
     );
 
@@ -149,16 +156,20 @@ export const uploadVideoToS3 = async (
   } catch (e: any) {
     return next(
       new InternalServerException(
-        `There was an unexpected error. ${e.message}`,
+        `There was an unexpected error with the video upload controller. ${e.message}`,
       ),
     );
   }
 };
 
-export const deleteUrl = async (req: Request, res: Response) => {
+export const deleteUrl = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   const { url_id } = req.params;
 
-  await candidateService.DeleteUrl(url_id);
+  await candidateService.DeleteUrl(url_id, next);
 
   return res.status(200).send({
     message: 'Url deleted successfully',
@@ -173,7 +184,7 @@ export const getCV = async (
   const { key } = req.params;
 
   try {
-    const candidateCV = await candidateService.GetCV(key);
+    const candidateCV = await candidateService.GetCV(key, next);
 
     if (!candidateCV) {
       return next(new NotFoundException(`CV file not found with key ${key}`));
@@ -183,7 +194,7 @@ export const getCV = async (
   } catch (e: any) {
     return next(
       new InternalServerException(
-        `There was an unexpected error. ${e.message}`,
+        `There was an unexpected error with the cv download controller. ${e.message}`,
       ),
     );
   }
