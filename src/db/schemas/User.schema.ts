@@ -21,6 +21,8 @@ const UserSchema = new Schema<IUser, UserModel>(
       type: String,
       required: true,
     },
+
+    role: [Schema.Types.ObjectId],
   },
   { versionKey: false },
 );

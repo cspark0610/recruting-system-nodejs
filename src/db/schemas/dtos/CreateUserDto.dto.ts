@@ -1,7 +1,6 @@
 /* eslint-disable object-curly-newline */
 /* eslint-disable indent */
-import { IsString, IsNotEmpty, IsEmail, IsArray } from 'class-validator';
-import { Types } from 'mongoose';
+import { IsString, IsNotEmpty, IsEmail } from 'class-validator';
 import IUser from '../../interfaces/User/IUser.interface';
 
 export default class CreateUserDto implements IUser {
@@ -17,8 +16,4 @@ export default class CreateUserDto implements IUser {
   @IsNotEmpty()
   @IsString()
   password!: string;
-
-  @IsNotEmpty()
-  @IsArray()
-  role!: Array<Types.ObjectId>;
 }

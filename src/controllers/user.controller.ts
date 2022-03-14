@@ -1,9 +1,15 @@
+/* eslint-disable no-underscore-dangle */
+/* eslint-disable no-unused-vars */
 import { NextFunction, Request, Response } from 'express';
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
 import IUser from '../db/interfaces/User/IUser.interface';
 import * as userService from '../services/User.service';
 import InternalServerException from '../exceptions/InternalServerError';
 import InvalidCredentialsException from '../exceptions/InvalidCredentialsException';
+
+dotenv.config();
 
 export const signIn = async (
   req: Request,
@@ -40,7 +46,19 @@ export const signUp = async (
     const userInfo: IUser = req.body;
     const user = await userService.SignUp(userInfo, next);
 
-    return res.status(201).send(user);
+    if (!user) {
+      return next(
+        new InternalServerException(
+          'There was an error creating a new user. Please try again',
+        ),
+      );
+    }
+
+    user.password = '';
+
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET as string);
+
+    return res.status(201).send(token);
   } catch (e: any) {
     return next(
       new InternalServerException(

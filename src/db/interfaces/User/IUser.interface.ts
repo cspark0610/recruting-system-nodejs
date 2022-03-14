@@ -4,5 +4,5 @@ export default interface IUser {
   name: string;
   email: string;
   password: string;
-  role: Array<Types.ObjectId>;
+  role?: Array<Types.ObjectId>;
 }
