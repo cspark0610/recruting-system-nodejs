@@ -3,4 +3,5 @@ import IUser from '../db/interfaces/User/IUser.interface';
 
 export default interface RequestWithUser extends Request {
   user?: IUser;
+  designated?: Array<IUser>;
 }
