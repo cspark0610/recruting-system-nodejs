@@ -1,10 +1,15 @@
 import { Router } from 'express';
 import { createJob, setCandidate } from '../controllers/job.controller';
-import validateJobExists from '../middlewares/validators/Job/validateJobExists';
+import * as authJwt from '../middlewares/validators/authJwt.middleware';
+import validateJobExists from '../middlewares/validators/validateJobExists.middleware';
 
 const router = Router();
 
-router.post('/create', validateJobExists, createJob);
+router.post(
+  '/create',
+  [authJwt.verifyJwt, authJwt.JobAuthorization, validateJobExists],
+  createJob,
+);
 router.put('/setCandidate/:_id', setCandidate);
 
 export default router;

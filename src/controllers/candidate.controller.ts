@@ -1,11 +1,14 @@
 /* eslint-disable operator-linebreak */
 /* eslint-disable object-curly-newline */
-import { Request, Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import { unlink } from 'fs';
 import { promisify } from 'util';
 import dotenv from 'dotenv';
 import ICandidate from '../db/interfaces/ICandidate.interface';
 import * as candidateService from '../services/Candidate.Service';
+import NotFoundException from '../exceptions/NotFoundException';
+import BadRequestException from '../exceptions/BadRequestException';
+import InternalServerException from '../exceptions/InternalServerError';
 
 dotenv.config();
 
@@ -14,49 +17,67 @@ const unlinkFile = promisify(unlink);
 const { NODE_ENV, REDIRECT_URL_DEVELOPMENT, REDIRECT_URL_PRODUCTION } =
   process.env;
 
-export const createCandidate = async (req: Request, res: Response) => {
+export const createCandidate = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   const cv = req.file;
-  const { id, name, email, phone, country }: ICandidate = req.body;
+  const { name, email, phone, country }: ICandidate = req.body;
 
   if (!cv) {
-    return res.status(400).send('no cv received');
+    return next(new BadRequestException('No cv file received'));
   }
 
   try {
-    const result = await candidateService.UploadCV(cv);
+    const result = await candidateService.UploadCV(cv, next);
     await unlinkFile(cv.path);
 
     const cvKey = result?.Key;
 
-    const data = await candidateService.CreateCandidate({
-      id,
-      name,
-      email,
-      phone,
-      country,
-      cv: cvKey,
-    });
+    const data = await candidateService.CreateCandidate(
+      {
+        name,
+        email,
+        phone,
+        country,
+        cv: cvKey,
+      },
+      next,
+    );
 
     if (!data) {
-      return res.status(500).send({
-        message: 'There was an error creating the candidate. Please try again',
-      });
+      return next(
+        new InternalServerException(
+          'There was an error creating the candidate. Please try again',
+        ),
+      );
     }
 
     return res.status(201).send(data);
   } catch (e: any) {
-    return res.status(500).send({ message: e.message });
+    return next(
+      new InternalServerException(
+        `There was an unexpected error with the candidate creation controller. ${e.message}`,
+      ),
+    );
   }
 };
 
-export const generateUniqueUrl = async (_req: Request, res: Response) => {
+export const generateUniqueUrl = async (
+  _req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
-    const data = await candidateService.GenerateUrl();
+    const data = await candidateService.GenerateUrl(next);
 
     if (!data) {
-      return res
-        .status(500)
-        .send({ message: 'There was an error. Please try again.' });
+      return next(
+        new InternalServerException(
+          'There was an error creating the url. Please try again',
+        ),
+      );
     }
 
     return res.status(201).send({
@@ -66,30 +87,44 @@ export const generateUniqueUrl = async (_req: Request, res: Response) => {
           ? `${REDIRECT_URL_DEVELOPMENT}/url/validate?id=${data.short_url}`
           : `${REDIRECT_URL_PRODUCTION}/url/validate?id=${data.short_url}`,
     });
-  } catch (e) {
-    return res.send(e);
+  } catch (e: any) {
+    return next(
+      new InternalServerException(
+        `There was an unexpected error with the url creation controller. ${e.message}`,
+      ),
+    );
   }
 };
 
-export const getVideoFromS3 = (req: Request, res: Response) => {
+export const getVideoFromS3 = (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const { key } = req.params;
 
-    const candidateVideo = candidateService.GetVideoFromS3(key);
+    const candidateVideo = candidateService.GetVideoFromS3(key, next);
 
     if (!candidateVideo) {
-      return res.status(404).send({
-        message: 'Video not found',
-      });
+      return next(new NotFoundException(`No video found with key ${key}`));
     }
 
     candidateVideo.pipe(res);
   } catch (e: any) {
-    return new Error(e);
+    return next(
+      new InternalServerException(
+        `There was an unexpected error with the video download controller. ${e.message}`,
+      ),
+    );
   }
 };
 
-export const uploadVideoToS3 = async (req: Request, res: Response) => {
+export const uploadVideoToS3 = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const newCandidateVideo = req.file;
 
@@ -97,18 +132,20 @@ export const uploadVideoToS3 = async (req: Request, res: Response) => {
     const { question_id } = req.body;
 
     if (!newCandidateVideo) {
-      return res.status(400).send({
-        message: 'No video file was received',
-      });
+      return next(new BadRequestException('No video file was received'));
     }
 
-    const result = await candidateService.UploadVideoToS3(newCandidateVideo);
+    const result = await candidateService.UploadVideoToS3(
+      newCandidateVideo,
+      next,
+    );
 
     await unlinkFile(newCandidateVideo.path);
 
     await candidateService.SaveVideoKeyToUser(
       question_id,
       candidate_id,
+      next,
       result?.Key,
     );
 
@@ -116,32 +153,48 @@ export const uploadVideoToS3 = async (req: Request, res: Response) => {
       message: 'video uploaded successfully',
     });
   } catch (e: any) {
-    return new Error(e);
+    return next(
+      new InternalServerException(
+        `There was an unexpected error with the video upload controller. ${e.message}`,
+      ),
+    );
   }
 };
 
-export const deleteUrl = async (req: Request, res: Response) => {
+export const deleteUrl = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   const { url_id } = req.params;
 
-  await candidateService.DeleteUrl(url_id);
+  await candidateService.DeleteUrl(url_id, next);
 
   return res.status(200).send({
     message: 'Url deleted successfully',
   });
 };
 
-export const getCV = async (req: Request, res: Response) => {
+export const getCV = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   const { key } = req.params;
 
   try {
-    const candidateCV = await candidateService.GetCV(key);
+    const candidateCV = await candidateService.GetCV(key, next);
 
     if (!candidateCV) {
-      return res.status(404).send({ message: 'No cv found' });
+      return next(new NotFoundException(`CV file not found with key ${key}`));
     }
 
     candidateCV.pipe(res);
   } catch (e: any) {
-    return res.status(500).send({ message: e.message });
+    return next(
+      new InternalServerException(
+        `There was an unexpected error with the cv download controller. ${e.message}`,
+      ),
+    );
   }
 };

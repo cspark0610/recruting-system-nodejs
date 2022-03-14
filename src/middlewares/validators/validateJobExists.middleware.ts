@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
-import Job from '../../../db/schemas/Job.schema';
-import IJob from '../../../db/interfaces/IJob.interface';
+import Job from '../../db/schemas/Job.schema';
+import IJob from '../../db/interfaces/IJob.interface';
 
 export default async function validateJobExists(
   req: Request,
