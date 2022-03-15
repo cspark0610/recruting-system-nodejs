@@ -26,6 +26,18 @@ const s3 = new S3({
   region: AWS_BUCKET_REGION,
 });
 
+export const GetAllCandidates = async (next: NextFunction) => {
+  try {
+    return await Candidate.find();
+  } catch (e: any) {
+    return next(
+      new InternalServerException(
+        `There was an unexpected error with the GetAllCandidates service. ${e.message}`,
+      ),
+    );
+  }
+};
+
 export const CreateCandidate = async (
   candidateInfo: ICandidate,
   job_id: string,
