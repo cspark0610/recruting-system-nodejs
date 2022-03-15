@@ -1,10 +1,10 @@
 /* eslint-disable no-underscore-dangle */
 import { Request, Response, NextFunction } from 'express';
-import * as jobService from '../services/Job.service';
 import IJob from '../db/interfaces/IJob.interface';
 import InternalServerException from '../exceptions/InternalServerError';
 import RequestWithUser from '../interfaces/RequestWithUser.interface';
 import BadRequestException from '../exceptions/BadRequestException';
+import * as jobService from '../services/Job.service';
 
 export const createJob = async (
   req: RequestWithUser,

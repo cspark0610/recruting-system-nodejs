@@ -21,7 +21,7 @@ export async function verifyJwt(
   _res: Response,
   next: NextFunction,
 ) {
-  const token = req.header('x-access-token');
+  const token = req.headers.authorization?.split(' ').pop();
 
   if (!token) {
     return next(
