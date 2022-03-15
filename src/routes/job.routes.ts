@@ -1,9 +1,9 @@
 import { Router } from 'express';
-import { createJob, setCandidate } from '../controllers/job.controller';
+import * as jobController from '../controllers/job.controller';
 import CreateJobDto from '../db/schemas/dtos/CreateJobDto.dto';
 import * as authJwt from '../middlewares/validators/authJwt.middleware';
+import * as jobAuth from '../middlewares/validators/Job.middleware';
 import requestBodyValidation from '../middlewares/validators/requests/requestBodyValidation.middleware';
-import validateJobExists from '../middlewares/validators/validateJobExists.middleware';
 
 const router = Router();
 
@@ -11,12 +11,21 @@ router.post(
   '/create',
   [
     authJwt.verifyJwt,
-    authJwt.JobAuthorization,
+    authJwt.authRole({ CEO: 'CEO', CTO: 'CTO', 'RRHH ADMIN': 'RRHH ADMIN' }),
     requestBodyValidation(CreateJobDto),
-    validateJobExists,
+    jobAuth.validateJobExists,
   ],
-  createJob,
+  jobController.createJob,
 );
-router.put('/setCandidate/:_id', setCandidate);
+
+router.delete(
+  '/delete/:_id',
+  [
+    authJwt.verifyJwt,
+    authJwt.authRole({ CEO: 'CEO', CTO: 'CTO', 'RRHH ADMIN': 'RRHH ADMIN' }),
+    jobAuth.verifyJobDeleted,
+  ],
+  jobController.deleteJob,
+);
 
 export default router;

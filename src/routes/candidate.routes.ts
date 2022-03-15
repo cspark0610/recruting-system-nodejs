@@ -4,17 +4,24 @@ import storage from '../lib/multerConfig';
 import * as candidateController from '../controllers/candidate.controller';
 import requestBodyValidation from '../middlewares/validators/requests/requestBodyValidation.middleware';
 import CreateCandidateDto from '../db/schemas/dtos/CreateCandidate.dto';
+import * as candidateAuth from '../middlewares/validators/Candidate.middleware';
+import * as authJwt from '../middlewares/validators/authJwt.middleware';
 
 const router = Router();
 
 const upload = multer({ storage });
 
+router.get('/', authJwt.verifyJwt, candidateController.getAllCandidates);
 router.get('/cv/:key', candidateController.getCV);
 router.get('/video/:key', candidateController.getVideoFromS3);
 
 router.post(
   '/create',
-  [upload.single('cv'), requestBodyValidation(CreateCandidateDto)],
+  [
+    upload.single('cv'),
+    requestBodyValidation(CreateCandidateDto),
+    candidateAuth.default,
+  ],
   candidateController.createCandidate,
 );
 router.post(

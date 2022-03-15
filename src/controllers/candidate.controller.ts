@@ -5,10 +5,10 @@ import { unlink } from 'fs';
 import { promisify } from 'util';
 import dotenv from 'dotenv';
 import ICandidate from '../db/interfaces/ICandidate.interface';
-import * as candidateService from '../services/Candidate.Service';
 import NotFoundException from '../exceptions/NotFoundException';
 import BadRequestException from '../exceptions/BadRequestException';
 import InternalServerException from '../exceptions/InternalServerError';
+import * as candidateService from '../services/Candidate.Service';
 
 dotenv.config();
 
@@ -17,13 +17,35 @@ const unlinkFile = promisify(unlink);
 const { NODE_ENV, REDIRECT_URL_DEVELOPMENT, REDIRECT_URL_PRODUCTION } =
   process.env;
 
+export const getAllCandidates = async (
+  _req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const allCandidates = await candidateService.GetAllCandidates(next);
+
+    if (!allCandidates || allCandidates.length === 0) {
+      return next(new NotFoundException('No candidates were found'));
+    }
+
+    return res.status(200).send({ status: 200, allCandidates });
+  } catch (e: any) {
+    return next(
+      new InternalServerException(
+        `There was an unexpected error with the getAllCandidates controller. ${e.message}`,
+      ),
+    );
+  }
+};
+
 export const createCandidate = async (
   req: Request,
   res: Response,
   next: NextFunction,
 ) => {
   const cv = req.file;
-  const { name, email, phone, country }: ICandidate = req.body;
+  const { name, email, phone, job, country }: ICandidate = req.body;
 
   if (!cv) {
     return next(new BadRequestException('No cv file received'));
@@ -41,6 +63,7 @@ export const createCandidate = async (
         email,
         phone,
         country,
+        job,
         cv: cvKey,
       },
       next,
@@ -54,7 +77,7 @@ export const createCandidate = async (
       );
     }
 
-    return res.status(201).send(data);
+    return res.status(201).send({ status: 201, data });
   } catch (e: any) {
     return next(
       new InternalServerException(
@@ -81,7 +104,7 @@ export const generateUniqueUrl = async (
     }
 
     return res.status(201).send({
-      message: 'url created',
+      status: 201,
       client_url:
         NODE_ENV === 'development'
           ? `${REDIRECT_URL_DEVELOPMENT}/url/validate?id=${data.short_url}`
@@ -149,8 +172,9 @@ export const uploadVideoToS3 = async (
       result?.Key,
     );
 
-    return res.send({
-      message: 'video uploaded successfully',
+    return res.status(201).send({
+      status: 201,
+      message: 'Video uploaded successfully',
     });
   } catch (e: any) {
     return next(
@@ -171,6 +195,7 @@ export const deleteUrl = async (
   await candidateService.DeleteUrl(url_id, next);
 
   return res.status(200).send({
+    status: 201,
     message: 'Url deleted successfully',
   });
 };

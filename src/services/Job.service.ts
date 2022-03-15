@@ -2,7 +2,6 @@
 import { NextFunction } from 'express';
 import dotenv from 'dotenv';
 import Job from '../db/schemas/Job.schema';
-import Candidate from '../db/schemas/Candidate.schema';
 import IJob from '../db/interfaces/IJob.interface';
 import InternalServerException from '../exceptions/InternalServerError';
 import RequestWithUser from '../interfaces/RequestWithUser.interface';
@@ -45,25 +44,13 @@ export const CreateJob = async (
   }
 };
 
-export const SetCandidate = async (
-  _id: string,
-  candidateId: string,
-  next: NextFunction,
-) => {
+export const DeleteJob = async (_id: string, next: NextFunction) => {
   try {
-    const candidate = await Candidate.findByIdAndUpdate(candidateId, {
-      job: _id,
-    });
-
-    await candidate?.save();
-
-    const allCandidates = await Candidate.find({});
-
-    return allCandidates;
+    await Job.findOneAndRemove({ _id });
   } catch (e: any) {
     return next(
       new InternalServerException(
-        `There was an unexpected error with the candidate job setting service. ${e.message}`,
+        `There was an unexpected error with the job deletion service. ${e.message}`,
       ),
     );
   }

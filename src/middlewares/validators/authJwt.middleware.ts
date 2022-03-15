@@ -1,3 +1,4 @@
+/* eslint-disable func-names */
 /* eslint-disable operator-linebreak */
 /* eslint-disable no-underscore-dangle */
 import { Response, NextFunction } from 'express';
@@ -48,30 +49,26 @@ export async function verifyJwt(
   next();
 }
 
-export async function JobAuthorization(
-  req: RequestWithUser,
-  _res: Response,
-  next: NextFunction,
-) {
-  const authorizedRoles: any = {
-    CEO: 'CEO',
-    CTO: 'CTO',
-    'RRHH ADMIN': 'RRHH ADMIN',
+export function authRole(ROLES: Record<string, string>) {
+  return async function (
+    req: RequestWithUser,
+    _res: Response,
+    next: NextFunction,
+  ) {
+    const user = await User.findById(req.user?._id);
+    const roles = await Role.find({ _id: { $in: user?.role } });
+    const rolesParsed = roles.map((role) => role.name);
+
+    rolesParsed.forEach((role: string) => {
+      if (!ROLES[role]) {
+        return next(
+          new ForbiddenException(
+            'You don´t have the necessary permissions to execute this action',
+          ),
+        );
+      }
+    });
+
+    next();
   };
-
-  const user = await User.findById(req.user?._id);
-  const roles = await Role.find({ _id: { $in: user?.role } });
-  const rolesParsed = roles.map((role) => role.name);
-
-  rolesParsed.forEach((role: string) => {
-    if (!authorizedRoles[role]) {
-      return next(
-        new ForbiddenException(
-          'You don´t have the necessary permissions to execute this action',
-        ),
-      );
-    }
-  });
-
-  next();
 }

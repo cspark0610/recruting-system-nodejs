@@ -1,9 +1,10 @@
 /* eslint-disable no-underscore-dangle */
-import { NextFunction, Request, Response } from 'express';
-import { CreateJob, SetCandidate } from '../services/Job.service';
+import { Request, Response, NextFunction } from 'express';
+import * as jobService from '../services/Job.service';
 import IJob from '../db/interfaces/IJob.interface';
 import InternalServerException from '../exceptions/InternalServerError';
 import RequestWithUser from '../interfaces/RequestWithUser.interface';
+import BadRequestException from '../exceptions/BadRequestException';
 
 export const createJob = async (
   req: RequestWithUser,
@@ -13,7 +14,7 @@ export const createJob = async (
   const { title, designated }: IJob = req.body;
 
   try {
-    const newJob = await CreateJob({ title, designated }, next, req);
+    const newJob = await jobService.CreateJob({ title, designated }, next, req);
 
     if (!newJob) {
       return next(
@@ -23,7 +24,7 @@ export const createJob = async (
       );
     }
 
-    return res.status(201).send(newJob);
+    return res.status(201).send({ status: 201, newJob });
   } catch (e: any) {
     return next(
       new InternalServerException(
@@ -33,31 +34,27 @@ export const createJob = async (
   }
 };
 
-export const setCandidate = async (
+export const deleteJob = async (
   req: Request,
   res: Response,
   next: NextFunction,
 ) => {
   const { _id } = req.params;
-  const { candidateId } = req.body;
+
+  if (!_id) {
+    return next(new BadRequestException('No job id was provided'));
+  }
 
   try {
-    const data = await SetCandidate(_id, candidateId, next);
-
-    if (!data) {
-      return next(
-        new InternalServerException(
-          'There was an error setting the job into the candidate. Please try again',
-        ),
-      );
-    }
-
-    return res.status(200).send(data);
+    await jobService.DeleteJob(_id, next);
   } catch (e: any) {
     return next(
       new InternalServerException(
-        `There was an unexpected error with the candidate job setting controller. ${e.message}`,
+        `There was an unexpected error with the job deletion controller. ${e.message}`,
       ),
     );
   }
+  return res
+    .status(200)
+    .send({ status: 200, message: 'Job deleted successfully' });
 };

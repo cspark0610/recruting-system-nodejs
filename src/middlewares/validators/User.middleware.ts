@@ -1,9 +1,37 @@
 import { Request, Response, NextFunction } from 'express';
+import User from '../../db/schemas/User.schema';
+import IUser from '../../db/interfaces/User/IUser.interface';
 import Candidate from '../../db/schemas/Candidate.schema';
 import ICandidate from '../../db/interfaces/ICandidate.interface';
+import BadRequestException from '../../exceptions/BadRequestException';
+import InternalServerException from '../../exceptions/InternalServerError';
 import temp from '../../lib/tempVariables';
 
-export default async function validateUser(
+export default async function validateSignUp(
+  req: Request,
+  _res: Response,
+  next: NextFunction,
+) {
+  const { email }: IUser = req.body;
+
+  try {
+    const userExists = await User.findOne({ email });
+
+    if (userExists) {
+      next(new BadRequestException(`User already in use with email ${email}`));
+    }
+
+    next();
+  } catch (e: any) {
+    return next(
+      new InternalServerException(
+        `There was an unexpected error validating the user. ${e.message}`,
+      ),
+    );
+  }
+}
+
+export async function validateUser(
   req: Request,
   res: Response,
   next: NextFunction,
