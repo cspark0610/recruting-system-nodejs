@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import * as userController from '../controllers/user.controller';
-import validateUserExists from '../middlewares/validators/validateUserExists.middleware';
+import * as userAuth from '../middlewares/validators/User.middleware';
 import requestBodyValidation from '../middlewares/validators/requests/requestBodyValidation.middleware';
 import CreateUserDto from '../db/schemas/dtos/CreateUserDto.dto';
 import UserSignInParamsDto from '../db/schemas/dtos/UserSignInParamsDto.dto';
@@ -14,7 +14,7 @@ router.post(
 );
 router.post(
   '/signUp',
-  [validateUserExists, requestBodyValidation(CreateUserDto)],
+  [requestBodyValidation(CreateUserDto), userAuth.default],
   userController.signUp,
 );
 

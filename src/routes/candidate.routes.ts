@@ -4,7 +4,7 @@ import storage from '../lib/multerConfig';
 import * as candidateController from '../controllers/candidate.controller';
 import requestBodyValidation from '../middlewares/validators/requests/requestBodyValidation.middleware';
 import CreateCandidateDto from '../db/schemas/dtos/CreateCandidate.dto';
-import verifyCandidateExists from '../middlewares/validators/verifyCandidateExists.middleware';
+import * as candidateAuth from '../middlewares/validators/Candidate.middleware';
 
 const router = Router();
 
@@ -18,7 +18,7 @@ router.post(
   [
     upload.single('cv'),
     requestBodyValidation(CreateCandidateDto),
-    verifyCandidateExists,
+    candidateAuth.default,
   ],
   candidateController.createCandidate,
 );

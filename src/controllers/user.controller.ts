@@ -33,7 +33,7 @@ export const signIn = async (
 
     const token = createToken(userFound);
 
-    return res.status(200).send({ status: 200, token });
+    return res.status(200).send(token);
   } catch (e: any) {
     return next(
       new InternalServerException(
@@ -62,7 +62,7 @@ export const signUp = async (
 
     const token = createToken(user);
 
-    return res.status(201).send({ status: 201, token });
+    return res.status(201).send(token);
   } catch (e: any) {
     return next(
       new InternalServerException(

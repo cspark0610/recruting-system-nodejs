@@ -1,11 +1,13 @@
-import { Response, NextFunction } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import Job from '../../db/schemas/Job.schema';
 import User from '../../db/schemas/User.schema';
 import IJob from '../../db/interfaces/IJob.interface';
 import BadRequestException from '../../exceptions/BadRequestException';
+import InternalServerException from '../../exceptions/InternalServerError';
+import NotFoundException from '../../exceptions/NotFoundException';
 import RequestWithUser from '../../interfaces/RequestWithUser.interface';
 
-export default async function validateJobExists(
+export async function validateJobExists(
   req: RequestWithUser,
   res: Response,
   next: NextFunction,
@@ -36,5 +38,33 @@ export default async function validateJobExists(
     next();
   } catch (e: any) {
     return res.status(500).send({ message: e.message });
+  }
+}
+
+export async function verifyJobDeleted(
+  req: Request,
+  _res: Response,
+  next: NextFunction,
+) {
+  const { _id } = req.params;
+
+  try {
+    const jobDeleted = await Job.findById(_id);
+
+    if (!jobDeleted) {
+      return next(
+        new NotFoundException(
+          `Job with id ${_id} not found. Probably has already been deleted or has not been created yet.`,
+        ),
+      );
+    }
+
+    next();
+  } catch (e: any) {
+    return next(
+      new InternalServerException(
+        `There was an unexpected error with the job deletion request. ${e.message}`,
+      ),
+    );
   }
 }
