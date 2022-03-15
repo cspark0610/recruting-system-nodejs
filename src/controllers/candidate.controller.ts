@@ -24,6 +24,7 @@ export const createCandidate = async (
 ) => {
   const cv = req.file;
   const { name, email, phone, country }: ICandidate = req.body;
+  const job_id = req.query.job_id as string;
 
   if (!cv) {
     return next(new BadRequestException('No cv file received'));
@@ -43,6 +44,7 @@ export const createCandidate = async (
         country,
         cv: cvKey,
       },
+      job_id,
       next,
     );
 

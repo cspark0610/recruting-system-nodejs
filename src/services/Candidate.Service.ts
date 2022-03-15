@@ -28,10 +28,14 @@ const s3 = new S3({
 
 export const CreateCandidate = async (
   candidateInfo: ICandidate,
+  job_id: string,
   next: NextFunction,
 ) => {
   try {
-    const newCandidate = await Candidate.create(candidateInfo);
+    const newCandidate = await Candidate.create({
+      ...candidateInfo,
+      job: job_id,
+    });
 
     return newCandidate;
   } catch (e: any) {

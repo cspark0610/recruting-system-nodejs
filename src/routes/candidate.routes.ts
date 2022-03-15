@@ -4,6 +4,7 @@ import storage from '../lib/multerConfig';
 import * as candidateController from '../controllers/candidate.controller';
 import requestBodyValidation from '../middlewares/validators/requests/requestBodyValidation.middleware';
 import CreateCandidateDto from '../db/schemas/dtos/CreateCandidate.dto';
+import verifyCandidateExists from '../middlewares/validators/verifyCandidateExists.middleware';
 
 const router = Router();
 
@@ -14,7 +15,11 @@ router.get('/video/:key', candidateController.getVideoFromS3);
 
 router.post(
   '/create',
-  [upload.single('cv'), requestBodyValidation(CreateCandidateDto)],
+  [
+    upload.single('cv'),
+    requestBodyValidation(CreateCandidateDto),
+    verifyCandidateExists,
+  ],
   candidateController.createCandidate,
 );
 router.post(
