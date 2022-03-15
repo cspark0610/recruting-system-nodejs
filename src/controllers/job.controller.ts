@@ -1,11 +1,11 @@
 /* eslint-disable no-underscore-dangle */
-import { NextFunction, Request, Response } from 'express';
-import { CreateJob, SetCandidate } from '../services/Job.service';
+import { NextFunction, Response } from 'express';
+import CreateJob from '../services/Job.service';
 import IJob from '../db/interfaces/IJob.interface';
 import InternalServerException from '../exceptions/InternalServerError';
 import RequestWithUser from '../interfaces/RequestWithUser.interface';
 
-export const createJob = async (
+const createJob = async (
   req: RequestWithUser,
   res: Response,
   next: NextFunction,
@@ -33,31 +33,4 @@ export const createJob = async (
   }
 };
 
-export const setCandidate = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
-  const { _id } = req.params;
-  const { candidateId } = req.body;
-
-  try {
-    const data = await SetCandidate(_id, candidateId, next);
-
-    if (!data) {
-      return next(
-        new InternalServerException(
-          'There was an error setting the job into the candidate. Please try again',
-        ),
-      );
-    }
-
-    return res.status(200).send(data);
-  } catch (e: any) {
-    return next(
-      new InternalServerException(
-        `There was an unexpected error with the candidate job setting controller. ${e.message}`,
-      ),
-    );
-  }
-};
+export default createJob;

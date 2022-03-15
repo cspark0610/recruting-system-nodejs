@@ -54,7 +54,7 @@ export const GenerateUrl = async (
     const newUrl: IVideoRecordingUrl = await VideoRecordingUrl.create({});
     return newUrl;
   } catch (e: any) {
-    return next(
+    next(
       new InternalServerException(
         `There was an unexpected error with the url creation service. ${e.message}`,
       ),
@@ -91,7 +91,7 @@ export const UploadVideoToS3 = async (file: File, next: NextFunction) => {
 
     return await s3.upload(uploadParams).promise();
   } catch (e: any) {
-    return next(
+    next(
       new InternalServerException(
         `There was an unexpected error with the video upload service. ${e.message}`,
       ),
@@ -137,7 +137,7 @@ export const GetCV = async (key: string, next: NextFunction) => {
 
     return s3.getObject(getParams).createReadStream();
   } catch (e: any) {
-    return next(
+    next(
       new InternalServerException(
         `There was an unexpected error with the cv download service. ${e.message}`,
       ),
@@ -157,7 +157,7 @@ export const UploadCV = async (cv: File, next: NextFunction) => {
 
     return s3.upload(uploadParams).promise();
   } catch (e: any) {
-    return next(
+    next(
       new InternalServerException(
         `There was an unexpected error with the cv upload service. ${e.message}`,
       ),

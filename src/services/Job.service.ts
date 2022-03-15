@@ -2,7 +2,6 @@
 import { NextFunction } from 'express';
 import dotenv from 'dotenv';
 import Job from '../db/schemas/Job.schema';
-import Candidate from '../db/schemas/Candidate.schema';
 import IJob from '../db/interfaces/IJob.interface';
 import InternalServerException from '../exceptions/InternalServerError';
 import RequestWithUser from '../interfaces/RequestWithUser.interface';
@@ -13,7 +12,7 @@ dotenv.config();
 const { NODE_ENV, REDIRECT_URL_DEVELOPMENT, REDIRECT_URL_PRODUCTION } =
   process.env;
 
-export const CreateJob = async (
+const CreateJob = async (
   jobInfo: IJob,
   next: NextFunction,
   req: RequestWithUser,
@@ -45,26 +44,4 @@ export const CreateJob = async (
   }
 };
 
-export const SetCandidate = async (
-  _id: string,
-  candidateId: string,
-  next: NextFunction,
-) => {
-  try {
-    const candidate = await Candidate.findByIdAndUpdate(candidateId, {
-      job: _id,
-    });
-
-    await candidate?.save();
-
-    const allCandidates = await Candidate.find({});
-
-    return allCandidates;
-  } catch (e: any) {
-    return next(
-      new InternalServerException(
-        `There was an unexpected error with the candidate job setting service. ${e.message}`,
-      ),
-    );
-  }
-};
+export default CreateJob;
