@@ -43,4 +43,4 @@ UserSchema.static(
   },
 );
 
-export default model<IUser, UserModel>('User', UserSchema);
+export default model<IUser, UserModel>('user', UserSchema);

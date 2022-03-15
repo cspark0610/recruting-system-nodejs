@@ -40,4 +40,4 @@ const CandidateSchema = new Schema<ICandidate>(
 
 CandidateSchema.plugin(require('mongoose-autopopulate'));
 
-export default model<ICandidate>('Candidate', CandidateSchema);
+export default model<ICandidate>('candidate', CandidateSchema);
