@@ -21,7 +21,11 @@ router.post(
 
 router.delete(
   '/delete/:_id',
-  [authJwt.verifyJwt, verifyJobDeleted],
+  [
+    authJwt.verifyJwt,
+    authJwt.authRole({ CEO: 'CEO', CTO: 'CTO', 'RRHH ADMIN': 'RRHH ADMIN' }),
+    verifyJobDeleted,
+  ],
   jobController.deleteJob,
 );
 
