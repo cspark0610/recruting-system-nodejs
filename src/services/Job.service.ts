@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 import Job from '../db/schemas/Job.schema';
 import IJob from '../db/interfaces/IJob.interface';
 import InternalServerException from '../exceptions/InternalServerError';
-import RequestWithUser from '../interfaces/RequestWithUser.interface';
+import RequestExtended from '../interfaces/RequestExtended.interface';
 
 dotenv.config();
 
@@ -15,7 +15,7 @@ const { NODE_ENV, REDIRECT_URL_DEVELOPMENT, REDIRECT_URL_PRODUCTION } =
 export const CreateJob = async (
   jobInfo: IJob,
   next: NextFunction,
-  req: RequestWithUser,
+  req: RequestExtended,
 ) => {
   try {
     const newJob = await Job.create({

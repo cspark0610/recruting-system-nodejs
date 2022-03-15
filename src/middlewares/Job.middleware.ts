@@ -5,10 +5,10 @@ import IJob from '../db/interfaces/IJob.interface';
 import BadRequestException from '../exceptions/BadRequestException';
 import InternalServerException from '../exceptions/InternalServerError';
 import NotFoundException from '../exceptions/NotFoundException';
-import RequestWithUser from '../interfaces/RequestWithUser.interface';
+import RequestExtended from '../interfaces/RequestExtended.interface';
 
 export async function validateJobExists(
-  req: RequestWithUser,
+  req: RequestExtended,
   res: Response,
   next: NextFunction,
 ) {
