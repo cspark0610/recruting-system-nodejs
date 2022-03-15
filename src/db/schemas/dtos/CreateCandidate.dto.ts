@@ -1,6 +1,7 @@
 /* eslint-disable object-curly-newline */
 /* eslint-disable indent */
 import { IsString, IsNotEmpty, IsEmail } from 'class-validator';
+import { Types } from 'mongoose';
 import ICandidate from '../../interfaces/ICandidate.interface';
 
 export default class CreateCandidateDto implements ICandidate {
@@ -16,6 +17,9 @@ export default class CreateCandidateDto implements ICandidate {
   @IsNotEmpty()
   @IsString()
   phone!: number;
+
+  @IsNotEmpty()
+  job!: Types.ObjectId;
 
   @IsNotEmpty()
   @IsString()

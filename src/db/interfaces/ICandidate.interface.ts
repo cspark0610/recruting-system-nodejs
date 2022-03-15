@@ -6,7 +6,7 @@ export default interface ICandidate {
   email: string;
   phone: number;
   country: string;
-  job?: Types.ObjectId;
+  job: Types.ObjectId;
   videos_question_list?: Types.Array<IQuestion>;
   cv?: string;
 }

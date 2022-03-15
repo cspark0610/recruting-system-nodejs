@@ -40,13 +40,11 @@ export const GetAllCandidates = async (next: NextFunction) => {
 
 export const CreateCandidate = async (
   candidateInfo: ICandidate,
-  job_id: string,
   next: NextFunction,
 ) => {
   try {
     const newCandidate = await Candidate.create({
       ...candidateInfo,
-      job: job_id,
     });
 
     return newCandidate;
