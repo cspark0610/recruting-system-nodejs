@@ -4,7 +4,7 @@ import { Request, Response, NextFunction } from 'express';
 import { unlink } from 'fs';
 import { promisify } from 'util';
 import dotenv from 'dotenv';
-import ICandidate from '../db/interfaces/ICandidate.interface';
+import ICandidate from '../db/schemas/interfaces/ICandidate.interface';
 import NotFoundException from '../exceptions/NotFoundException';
 import BadRequestException from '../exceptions/BadRequestException';
 import InternalServerException from '../exceptions/InternalServerError';

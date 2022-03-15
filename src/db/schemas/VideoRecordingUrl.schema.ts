@@ -1,6 +1,6 @@
 import { Schema, model } from 'mongoose';
 import { generate } from 'shortid';
-import IVideoRecordingUrl from '../interfaces/IVideoRecordingUrl.interface';
+import IVideoRecordingUrl from './interfaces/IVideoRecordingUrl.interface';
 
 const VideoRecoringUrlSchema = new Schema<IVideoRecordingUrl>(
   {

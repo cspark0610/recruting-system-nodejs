@@ -2,11 +2,13 @@ import { Router } from 'express';
 import multer from 'multer';
 import storage from '../lib/multerConfig';
 import requestBodyValidation from '../middlewares/validators/requests/requestBodyValidation.middleware';
-import CreateCandidateDto from '../db/schemas/dtos/CreateCandidate.dto';
+import {
+  CreateCandidateDto,
+  UpdateCandidateInfoDto,
+} from '../db/schemas/dtos/Candidate';
 import * as candidateController from '../controllers/candidate.controller';
 import * as candidateAuth from '../middlewares/Candidate.middleware';
 import * as authJwt from '../middlewares/authJwt.middleware';
-import UpdateCandidateInfoDto from '../db/schemas/dtos/UpdateCandidateInfoDto.dto';
 
 const router = Router();
 

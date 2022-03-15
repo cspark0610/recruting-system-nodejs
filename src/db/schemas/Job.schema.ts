@@ -1,7 +1,7 @@
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable indent */
 import { Schema, model } from 'mongoose';
-import IJob from '../interfaces/IJob.interface';
+import IJob from './interfaces/IJob.interface';
 
 const JobSchema = new Schema<IJob>(
   {

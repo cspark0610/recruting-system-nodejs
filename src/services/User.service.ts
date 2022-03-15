@@ -2,7 +2,7 @@
 import { NextFunction } from 'express';
 import User from '../db/schemas/User.schema';
 import Role from '../db/schemas/Role.schema';
-import IUser from '../db/interfaces/User/IUser.interface';
+import { IUser } from '../db/schemas/interfaces/User';
 import InternalServerException from '../exceptions/InternalServerError';
 import BadRequestException from '../exceptions/BadRequestException';
 

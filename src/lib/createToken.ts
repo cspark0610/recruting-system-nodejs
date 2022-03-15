@@ -1,7 +1,7 @@
 /* eslint-disable no-underscore-dangle */
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
-import IUser from '../db/interfaces/User/IUser.interface';
+import { IUser } from '../db/schemas/interfaces/User';
 import TokenData from '../interfaces/TokenData.interface';
 import DataStoredInToken from '../interfaces/DataStoredInToken.interface';
 

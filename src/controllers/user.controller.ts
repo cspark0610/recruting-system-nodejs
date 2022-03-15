@@ -2,7 +2,7 @@
 /* eslint-disable no-unused-vars */
 import { NextFunction, Request, Response } from 'express';
 import bcrypt from 'bcrypt';
-import IUser from '../db/interfaces/User/IUser.interface';
+import { IUser } from '../db/schemas/interfaces/User';
 import InternalServerException from '../exceptions/InternalServerError';
 import InvalidCredentialsException from '../exceptions/InvalidCredentialsException';
 import createToken from '../lib/createToken';

@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import User from '../db/schemas/User.schema';
-import IUser from '../db/interfaces/User/IUser.interface';
+import { IUser } from '../db/schemas/interfaces/User';
 import BadRequestException from '../exceptions/BadRequestException';
 import InternalServerException from '../exceptions/InternalServerError';
 
