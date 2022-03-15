@@ -1,9 +1,10 @@
 import { Router } from 'express';
-import createJob from '../controllers/job.controller';
+import * as jobController from '../controllers/job.controller';
 import CreateJobDto from '../db/schemas/dtos/CreateJobDto.dto';
 import * as authJwt from '../middlewares/validators/authJwt.middleware';
 import requestBodyValidation from '../middlewares/validators/requests/requestBodyValidation.middleware';
 import validateJobExists from '../middlewares/validators/validateJobExists.middleware';
+import verifyJobDeleted from '../middlewares/validators/verifyJobDeleted.middleware';
 
 const router = Router();
 
@@ -15,7 +16,13 @@ router.post(
     requestBodyValidation(CreateJobDto),
     validateJobExists,
   ],
-  createJob,
+  jobController.createJob,
+);
+
+router.delete(
+  '/delete/:_id',
+  [authJwt.verifyJwt, verifyJobDeleted],
+  jobController.deleteJob,
 );
 
 export default router;

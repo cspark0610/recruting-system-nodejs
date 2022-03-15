@@ -12,7 +12,7 @@ dotenv.config();
 const { NODE_ENV, REDIRECT_URL_DEVELOPMENT, REDIRECT_URL_PRODUCTION } =
   process.env;
 
-const CreateJob = async (
+export const CreateJob = async (
   jobInfo: IJob,
   next: NextFunction,
   req: RequestWithUser,
@@ -44,4 +44,14 @@ const CreateJob = async (
   }
 };
 
-export default CreateJob;
+export const DeleteJob = async (_id: string, next: NextFunction) => {
+  try {
+    await Job.findOneAndRemove({ _id });
+  } catch (e: any) {
+    return next(
+      new InternalServerException(
+        `There was an unexpected error with the job deletion service. ${e.message}`,
+      ),
+    );
+  }
+};

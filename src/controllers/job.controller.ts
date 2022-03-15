@@ -1,11 +1,12 @@
 /* eslint-disable no-underscore-dangle */
-import { NextFunction, Response } from 'express';
-import CreateJob from '../services/Job.service';
+import { Request, Response, NextFunction } from 'express';
+import * as jobService from '../services/Job.service';
 import IJob from '../db/interfaces/IJob.interface';
 import InternalServerException from '../exceptions/InternalServerError';
 import RequestWithUser from '../interfaces/RequestWithUser.interface';
+import BadRequestException from '../exceptions/BadRequestException';
 
-const createJob = async (
+export const createJob = async (
   req: RequestWithUser,
   res: Response,
   next: NextFunction,
@@ -13,7 +14,7 @@ const createJob = async (
   const { title, designated }: IJob = req.body;
 
   try {
-    const newJob = await CreateJob({ title, designated }, next, req);
+    const newJob = await jobService.CreateJob({ title, designated }, next, req);
 
     if (!newJob) {
       return next(
@@ -23,7 +24,7 @@ const createJob = async (
       );
     }
 
-    return res.status(201).send(newJob);
+    return res.status(201).send({ status: 201, newJob });
   } catch (e: any) {
     return next(
       new InternalServerException(
@@ -33,4 +34,27 @@ const createJob = async (
   }
 };
 
-export default createJob;
+export const deleteJob = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  const { _id } = req.params;
+
+  if (!_id) {
+    return next(new BadRequestException('No job id was provided'));
+  }
+
+  try {
+    await jobService.DeleteJob(_id, next);
+  } catch (e: any) {
+    return next(
+      new InternalServerException(
+        `There was an unexpected error with the job deletion controller. ${e.message}`,
+      ),
+    );
+  }
+  return res
+    .status(200)
+    .send({ status: 200, message: 'Job deleted successfully' });
+};
