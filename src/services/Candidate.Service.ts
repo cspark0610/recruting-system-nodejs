@@ -9,6 +9,7 @@ import ICandidate from '../db/interfaces/ICandidate.interface';
 import VideoRecordingUrl from '../db/schemas/VideoRecordingUrl.schema';
 import IVideoRecordingUrl from '../db/interfaces/IVideoRecordingUrl.interface';
 import InternalServerException from '../exceptions/InternalServerError';
+import UpdateCandidateInfoDto from '../db/schemas/dtos/UpdateCandidateInfoDto.dto';
 
 dotenv.config();
 
@@ -62,6 +63,22 @@ export const CreateCandidate = async (
     return next(
       new InternalServerException(
         `There was an unexpected error with the candidate creation service. ${e.message}`,
+      ),
+    );
+  }
+};
+
+export const UpdateCandidateInfo = async (
+  _id: string,
+  newCandidateInfo: UpdateCandidateInfoDto,
+  next: NextFunction,
+) => {
+  try {
+    await Candidate.findByIdAndUpdate(_id, newCandidateInfo);
+  } catch (e: any) {
+    return next(
+      new InternalServerException(
+        `There was an unexpected error with the candidate info update service. ${e.message}`,
       ),
     );
   }

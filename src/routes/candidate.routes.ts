@@ -6,6 +6,7 @@ import CreateCandidateDto from '../db/schemas/dtos/CreateCandidate.dto';
 import * as candidateController from '../controllers/candidate.controller';
 import * as candidateAuth from '../middlewares/Candidate.middleware';
 import * as authJwt from '../middlewares/authJwt.middleware';
+import UpdateCandidateInfoDto from '../db/schemas/dtos/UpdateCandidateInfoDto.dto';
 
 const router = Router();
 
@@ -32,6 +33,12 @@ router.post(
   candidateController.uploadVideoToS3,
 );
 router.post('/url/create', candidateController.generateUniqueUrl);
+
+router.put(
+  '/info/update/:_id',
+  requestBodyValidation(UpdateCandidateInfoDto),
+  candidateController.updateCandidateInfo,
+);
 
 router.delete('/url/delete/:url_id', candidateController.deleteUrl);
 
