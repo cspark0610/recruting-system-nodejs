@@ -56,18 +56,15 @@ export function authRole(ROLES: Record<string, string>) {
     next: NextFunction,
   ) {
     const user = await User.findById(req.user?._id);
-    const roles = await Role.find({ _id: { $in: user?.role } });
-    const rolesParsed = roles.map((role) => role.name);
+    const role = await Role.findOne({ _id: { $in: user?.role } });
 
-    rolesParsed.forEach((role: string) => {
-      if (!ROLES[role]) {
-        return next(
-          new ForbiddenException(
-            'You don´t have the necessary permissions to execute this action',
-          ),
-        );
-      }
-    });
+    if (!ROLES[role!.name]) {
+      return next(
+        new ForbiddenException(
+          'You don´t have the necessary permissions to execute this action',
+        ),
+      );
+    }
 
     next();
   };
