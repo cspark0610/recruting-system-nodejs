@@ -43,9 +43,7 @@ export const CreateCandidate = async (
   next: NextFunction,
 ) => {
   try {
-    const newCandidate = await Candidate.create({
-      ...candidateInfo,
-    });
+    const newCandidate = await Candidate.create(candidateInfo);
 
     return newCandidate;
   } catch (e: any) {
