@@ -113,6 +113,47 @@ export const createCandidate = async (
   }
 };
 
+export const updateCandidateInfo = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  const { _id } = req.params;
+  const {
+    academic_training,
+    salary_expectations,
+    available_from,
+    skills,
+    linkedin,
+    portfolio,
+    working_reason,
+  }: ICandidate = req.body;
+
+  const newCandidateInfo = {
+    academic_training: academic_training!,
+    salary_expectations: salary_expectations!,
+    available_from,
+    skills: skills!,
+    linkedin: linkedin!,
+    portfolio,
+    working_reason,
+  };
+
+  try {
+    await candidateService.UpdateCandidateInfo(_id, newCandidateInfo, next);
+
+    return res
+      .status(200)
+      .send({ status: 200, message: 'Candidate updated successfully' });
+  } catch (e: any) {
+    return next(
+      new InternalServerException(
+        `There was an error with the candidate info update controller. ${e.message}`,
+      ),
+    );
+  }
+};
+
 export const generateUniqueUrl = async (
   _req: Request,
   res: Response,

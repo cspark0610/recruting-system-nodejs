@@ -11,6 +11,20 @@ const CandidateSchema = new Schema<ICandidate>(
 
     country: { type: String, required: true },
 
+    academic_training: { type: String, required: false },
+
+    salary_expectations: { type: Number, required: false },
+
+    available_from: { type: String, required: false },
+
+    skills: { type: [String], required: false },
+
+    linkedin: { type: String, required: false },
+
+    portfolio: { type: String, required: false },
+
+    working_reason: { type: String, required: false },
+
     job: { type: Schema.Types.ObjectId, ref: 'Job', autopopulate: true },
 
     videos_question_list: [],

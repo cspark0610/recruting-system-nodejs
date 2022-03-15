@@ -6,6 +6,13 @@ export default interface ICandidate {
   email: string;
   phone: number;
   country: string;
+  academic_training?: string;
+  salary_expectations?: number;
+  available_from?: string;
+  skills?: Array<string>;
+  linkedin?: string;
+  portfolio?: string;
+  working_reason?: string;
   job: Types.ObjectId;
   videos_question_list?: Types.Array<IQuestion>;
   cv?: string;

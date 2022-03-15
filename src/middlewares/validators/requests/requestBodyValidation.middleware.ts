@@ -4,7 +4,7 @@ import * as express from 'express';
 import BadRequestException from '../../../exceptions/BadRequestException';
 
 function requestBodyValidation<T>(type: any): express.RequestHandler {
-  return (req, res, next) => {
+  return (req, _res, next) => {
     validate(plainToClass(type, req.body)).then((errors: ValidationError[]) => {
       if (errors.length > 0) {
         const message = errors
