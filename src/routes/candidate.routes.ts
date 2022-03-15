@@ -21,7 +21,8 @@ router.post(
   [
     upload.single('cv'),
     requestBodyValidation(CreateCandidateDto),
-    candidateAuth.default,
+    candidateAuth.verifyCandidateExists,
+    candidateAuth.validateCV,
   ],
   candidateController.createCandidate,
 );

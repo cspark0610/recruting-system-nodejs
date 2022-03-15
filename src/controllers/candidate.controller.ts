@@ -74,12 +74,8 @@ export const createCandidate = async (
   res: Response,
   next: NextFunction,
 ) => {
-  const cv = req.file;
+  const cv = req.file as Express.Multer.File;
   const { name, email, phone, job, country }: ICandidate = req.body;
-
-  if (!cv) {
-    return next(new BadRequestException('No cv file received'));
-  }
 
   try {
     const result = await candidateService.UploadCV(cv, next);

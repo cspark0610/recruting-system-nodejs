@@ -1,10 +1,12 @@
 import { Request, Response, NextFunction } from 'express';
+import { unlink } from 'fs';
+import { promisify } from 'util';
 import Candidate from '../../db/schemas/Candidate.schema';
 import ICandidate from '../../db/interfaces/ICandidate.interface';
 import InternalServerException from '../../exceptions/InternalServerError';
 import BadRequestException from '../../exceptions/BadRequestException';
 
-export default async function verifyCandidateExists(
+export async function verifyCandidateExists(
   req: Request,
   _res: Response,
   next: NextFunction,
@@ -30,4 +32,25 @@ export default async function verifyCandidateExists(
       ),
     );
   }
+}
+
+export async function validateCV(
+  req: Request,
+  _res: Response,
+  next: NextFunction,
+) {
+  const cv = req.file;
+
+  const unlinkFile = promisify(unlink);
+
+  if (!cv) {
+    return next(new BadRequestException('No cv was provided'));
+  }
+
+  if (cv.mimetype !== 'application/pdf') {
+    await unlinkFile(cv.path);
+    return next(new BadRequestException('Only pdf files are supported'));
+  }
+
+  next();
 }
