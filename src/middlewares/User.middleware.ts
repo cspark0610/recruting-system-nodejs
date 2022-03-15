@@ -1,11 +1,11 @@
 import { Request, Response, NextFunction } from 'express';
-import User from '../../db/schemas/User.schema';
-import IUser from '../../db/interfaces/User/IUser.interface';
-import Candidate from '../../db/schemas/Candidate.schema';
-import ICandidate from '../../db/interfaces/ICandidate.interface';
-import BadRequestException from '../../exceptions/BadRequestException';
-import InternalServerException from '../../exceptions/InternalServerError';
-import temp from '../../lib/tempVariables';
+import User from '../db/schemas/User.schema';
+import IUser from '../db/interfaces/User/IUser.interface';
+import Candidate from '../db/schemas/Candidate.schema';
+import ICandidate from '../db/interfaces/ICandidate.interface';
+import BadRequestException from '../exceptions/BadRequestException';
+import InternalServerException from '../exceptions/InternalServerError';
+import temp from '../lib/tempVariables';
 
 export default async function validateSignUp(
   req: Request,

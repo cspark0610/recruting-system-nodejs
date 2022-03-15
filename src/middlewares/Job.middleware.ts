@@ -1,11 +1,11 @@
 import { Request, Response, NextFunction } from 'express';
-import Job from '../../db/schemas/Job.schema';
-import User from '../../db/schemas/User.schema';
-import IJob from '../../db/interfaces/IJob.interface';
-import BadRequestException from '../../exceptions/BadRequestException';
-import InternalServerException from '../../exceptions/InternalServerError';
-import NotFoundException from '../../exceptions/NotFoundException';
-import RequestWithUser from '../../interfaces/RequestWithUser.interface';
+import Job from '../db/schemas/Job.schema';
+import User from '../db/schemas/User.schema';
+import IJob from '../db/interfaces/IJob.interface';
+import BadRequestException from '../exceptions/BadRequestException';
+import InternalServerException from '../exceptions/InternalServerError';
+import NotFoundException from '../exceptions/NotFoundException';
+import RequestWithUser from '../interfaces/RequestWithUser.interface';
 
 export async function validateJobExists(
   req: RequestWithUser,
