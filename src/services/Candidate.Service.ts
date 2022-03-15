@@ -40,7 +40,7 @@ export const GetAllCandidates = async (next: NextFunction) => {
 
 export const GetOneCandidate = async (_id: string, next: NextFunction) => {
   try {
-    return await Candidate.findById({ _id });
+    return await Candidate.findById(_id);
   } catch (e: any) {
     return next(
       new InternalServerException(

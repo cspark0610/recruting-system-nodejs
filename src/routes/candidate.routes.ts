@@ -1,9 +1,9 @@
 import { Router } from 'express';
 import multer from 'multer';
 import storage from '../lib/multerConfig';
-import * as candidateController from '../controllers/candidate.controller';
 import requestBodyValidation from '../middlewares/validators/requests/requestBodyValidation.middleware';
 import CreateCandidateDto from '../db/schemas/dtos/CreateCandidate.dto';
+import * as candidateController from '../controllers/candidate.controller';
 import * as candidateAuth from '../middlewares/validators/Candidate.middleware';
 import * as authJwt from '../middlewares/validators/authJwt.middleware';
 
