@@ -1,10 +1,10 @@
 /* eslint-disable operator-linebreak */
 import { Request, Response, NextFunction } from 'express';
-import VideoRecordingUrl from '../../db/schemas/VideoRecordingUrl.schema';
-import Candidate from '../../db/schemas/Candidate.schema';
-import IVideoRecordingUrl from '../../db/interfaces/IVideoRecordingUrl.interface';
-import ICandidate from '../../db/interfaces/ICandidate.interface';
-import temp from '../../lib/tempVariables';
+import VideoRecordingUrl from '../db/schemas/VideoRecordingUrl.schema';
+import Candidate from '../db/schemas/Candidate.schema';
+import IVideoRecordingUrl from '../db/interfaces/IVideoRecordingUrl.interface';
+import ICandidate from '../db/interfaces/ICandidate.interface';
+import temp from '../lib/tempVariables';
 
 export async function validateUrl(
   req: Request,

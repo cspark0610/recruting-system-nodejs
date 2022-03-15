@@ -39,17 +39,43 @@ export const getAllCandidates = async (
   }
 };
 
+export const getOneCandidate = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  const { _id } = req.params;
+
+  if (!_id) {
+    return next(new BadRequestException('No candidate id was provided'));
+  }
+
+  try {
+    const candidate = await candidateService.GetOneCandidate(_id, next);
+
+    if (!candidate) {
+      return next(
+        new NotFoundException(`No candidate with id ${_id} was found`),
+      );
+    }
+
+    return res.status(200).send({ status: 200, candidate });
+  } catch (e: any) {
+    return next(
+      new InternalServerException(
+        `There was an unexpected error with the getOneCandidate controller. ${e.message}`,
+      ),
+    );
+  }
+};
+
 export const createCandidate = async (
   req: Request,
   res: Response,
   next: NextFunction,
 ) => {
-  const cv = req.file;
+  const cv = req.file as Express.Multer.File;
   const { name, email, phone, job, country }: ICandidate = req.body;
-
-  if (!cv) {
-    return next(new BadRequestException('No cv file received'));
-  }
 
   try {
     const result = await candidateService.UploadCV(cv, next);

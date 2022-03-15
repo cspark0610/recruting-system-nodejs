@@ -38,6 +38,18 @@ export const GetAllCandidates = async (next: NextFunction) => {
   }
 };
 
+export const GetOneCandidate = async (_id: string, next: NextFunction) => {
+  try {
+    return await Candidate.findById(_id);
+  } catch (e: any) {
+    return next(
+      new InternalServerException(
+        `There was an unexpected error with the GetOneCandidate service. ${e.message}`,
+      ),
+    );
+  }
+};
+
 export const CreateCandidate = async (
   candidateInfo: ICandidate,
   next: NextFunction,

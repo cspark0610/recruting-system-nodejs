@@ -4,26 +4,26 @@
 import { Response, NextFunction } from 'express';
 import dotenv from 'dotenv';
 import jwt from 'jsonwebtoken';
-import User from '../../db/schemas/User.schema';
-import Role from '../../db/schemas/Role.schema';
-import InvalidAccessToken from '../../exceptions/InvalidAccessToken';
-import AuthenticationTokenMissingExeption from '../../exceptions/AuthenticationTokenMissingExeption';
-import DataStoredInToken from '../../interfaces/DataStoredInToken.interface';
-import RequestWithUser from '../../interfaces/RequestWithUser.interface';
-import ForbiddenException from '../../exceptions/ForbiddenException';
+import User from '../db/schemas/User.schema';
+import Role from '../db/schemas/Role.schema';
+import InvalidAccessToken from '../exceptions/InvalidAccessToken';
+import AuthenticationTokenMissingExeption from '../exceptions/AuthenticationTokenMissingExeption';
+import DataStoredInToken from '../interfaces/DataStoredInToken.interface';
+import RequestExtended from '../interfaces/RequestExtended.interface';
+import ForbiddenException from '../exceptions/ForbiddenException';
 
 dotenv.config();
 
 const { JWT_SECRET } = process.env;
 
 export async function verifyJwt(
-  req: RequestWithUser,
+  req: RequestExtended,
   _res: Response,
   next: NextFunction,
 ) {
-  const token = req.header('x-access-token');
+  const token = req.headers.authorization?.split(' ').pop();
 
-  if (!token) {
+  if (!token || token === 'Bearer') {
     return next(
       new AuthenticationTokenMissingExeption('No access token provided'),
     );
@@ -51,23 +51,20 @@ export async function verifyJwt(
 
 export function authRole(ROLES: Record<string, string>) {
   return async function (
-    req: RequestWithUser,
+    req: RequestExtended,
     _res: Response,
     next: NextFunction,
   ) {
     const user = await User.findById(req.user?._id);
-    const roles = await Role.find({ _id: { $in: user?.role } });
-    const rolesParsed = roles.map((role) => role.name);
+    const role = await Role.findOne({ _id: { $in: user?.role } });
 
-    rolesParsed.forEach((role: string) => {
-      if (!ROLES[role]) {
-        return next(
-          new ForbiddenException(
-            'You don´t have the necessary permissions to execute this action',
-          ),
-        );
-      }
-    });
+    if (!ROLES[role!.name]) {
+      return next(
+        new ForbiddenException(
+          'You don´t have the necessary permissions to execute this action',
+        ),
+      );
+    }
 
     next();
   };

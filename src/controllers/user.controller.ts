@@ -3,10 +3,10 @@
 import { NextFunction, Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import IUser from '../db/interfaces/User/IUser.interface';
-import * as userService from '../services/User.service';
 import InternalServerException from '../exceptions/InternalServerError';
 import InvalidCredentialsException from '../exceptions/InvalidCredentialsException';
 import createToken from '../lib/createToken';
+import * as userService from '../services/User.service';
 
 export const signIn = async (
   req: Request,

@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import * as userController from '../controllers/user.controller';
-import * as userAuth from '../middlewares/validators/User.middleware';
+import * as userAuth from '../middlewares/User.middleware';
 import requestBodyValidation from '../middlewares/validators/requests/requestBodyValidation.middleware';
 import CreateUserDto from '../db/schemas/dtos/CreateUserDto.dto';
 import UserSignInParamsDto from '../db/schemas/dtos/UserSignInParamsDto.dto';
