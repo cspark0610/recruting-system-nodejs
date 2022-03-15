@@ -56,7 +56,7 @@ export const createCandidate = async (
       );
     }
 
-    return res.status(201).send(data);
+    return res.status(201).send({ status: 201, data });
   } catch (e: any) {
     return next(
       new InternalServerException(
@@ -83,7 +83,7 @@ export const generateUniqueUrl = async (
     }
 
     return res.status(201).send({
-      message: 'url created',
+      status: 201,
       client_url:
         NODE_ENV === 'development'
           ? `${REDIRECT_URL_DEVELOPMENT}/url/validate?id=${data.short_url}`
@@ -151,8 +151,9 @@ export const uploadVideoToS3 = async (
       result?.Key,
     );
 
-    return res.send({
-      message: 'video uploaded successfully',
+    return res.status(201).send({
+      status: 201,
+      message: 'Video uploaded successfully',
     });
   } catch (e: any) {
     return next(
@@ -173,6 +174,7 @@ export const deleteUrl = async (
   await candidateService.DeleteUrl(url_id, next);
 
   return res.status(200).send({
+    status: 201,
     message: 'Url deleted successfully',
   });
 };
