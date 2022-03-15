@@ -1,8 +1,9 @@
+/* eslint-disable import/prefer-default-export */
 /* eslint-disable object-curly-newline */
 /* eslint-disable indent */
 import { IsString, IsEmail, IsNotEmpty, MinLength } from 'class-validator';
 
-export default class UserSignInParamsDto {
+export class UserSignInParamsDto {
   @IsNotEmpty()
   @IsString()
   @IsEmail()

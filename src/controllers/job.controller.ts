@@ -1,6 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 import { Request, Response, NextFunction } from 'express';
-import IJob from '../db/interfaces/IJob.interface';
+import IJob from '../db/schemas/interfaces/IJob.interface';
 import InternalServerException from '../exceptions/InternalServerError';
 import RequestExtended from '../interfaces/RequestExtended.interface';
 import BadRequestException from '../exceptions/BadRequestException';

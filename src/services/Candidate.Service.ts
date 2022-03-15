@@ -5,11 +5,11 @@ import dotenv from 'dotenv';
 import File from '../interfaces/File.interface';
 import UploadParams from '../interfaces/UploadParams.interface';
 import Candidate from '../db/schemas/Candidate.schema';
-import ICandidate from '../db/interfaces/ICandidate.interface';
+import ICandidate from '../db/schemas/interfaces/ICandidate.interface';
 import VideoRecordingUrl from '../db/schemas/VideoRecordingUrl.schema';
-import IVideoRecordingUrl from '../db/interfaces/IVideoRecordingUrl.interface';
+import IVideoRecordingUrl from '../db/schemas/interfaces/IVideoRecordingUrl.interface';
 import InternalServerException from '../exceptions/InternalServerError';
-import UpdateCandidateInfoDto from '../db/schemas/dtos/UpdateCandidateInfoDto.dto';
+import { UpdateCandidateInfoDto } from '../db/schemas/dtos/Candidate';
 
 dotenv.config();
 

@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { unlink } from 'fs';
 import { promisify } from 'util';
 import Candidate from '../db/schemas/Candidate.schema';
-import ICandidate from '../db/interfaces/ICandidate.interface';
+import ICandidate from '../db/schemas/interfaces/ICandidate.interface';
 import InternalServerException from '../exceptions/InternalServerError';
 import BadRequestException from '../exceptions/BadRequestException';
 

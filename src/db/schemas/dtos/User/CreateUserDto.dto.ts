@@ -1,10 +1,10 @@
 /* eslint-disable object-curly-newline */
 /* eslint-disable indent */
 import { IsString, IsNotEmpty, IsEmail } from 'class-validator';
-import { Types } from 'mongoose';
-import ICandidate from '../../interfaces/ICandidate.interface';
+import { IUser } from '../../interfaces/User';
 
-export default class CreateCandidateDto implements ICandidate {
+// eslint-disable-next-line import/prefer-default-export
+export class CreateUserDto implements IUser {
   @IsNotEmpty()
   @IsString()
   name!: string;
@@ -16,12 +16,5 @@ export default class CreateCandidateDto implements ICandidate {
 
   @IsNotEmpty()
   @IsString()
-  phone!: number;
-
-  @IsNotEmpty()
-  job!: Types.ObjectId;
-
-  @IsNotEmpty()
-  @IsString()
-  country!: string;
+  password!: string;
 }

@@ -1,8 +1,7 @@
 /* eslint-disable prefer-arrow-callback */
 import { Schema, model } from 'mongoose';
 import bcrypt from 'bcrypt';
-import IUser from '../interfaces/User/IUser.interface';
-import UserModel from '../interfaces/User/UserModel.interface';
+import { IUser, UserModel } from './interfaces/User';
 
 const UserSchema = new Schema<IUser, UserModel>(
   {
@@ -43,4 +42,4 @@ UserSchema.static(
   },
 );
 
-export default model<IUser, UserModel>('User', UserSchema);
+export default model<IUser, UserModel>('user', UserSchema);

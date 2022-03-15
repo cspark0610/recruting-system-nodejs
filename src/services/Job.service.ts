@@ -2,7 +2,7 @@
 import { NextFunction } from 'express';
 import dotenv from 'dotenv';
 import Job from '../db/schemas/Job.schema';
-import IJob from '../db/interfaces/IJob.interface';
+import IJob from '../db/schemas/interfaces/IJob.interface';
 import InternalServerException from '../exceptions/InternalServerError';
 import RequestExtended from '../interfaces/RequestExtended.interface';
 

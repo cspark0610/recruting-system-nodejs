@@ -1,5 +1,5 @@
 import { Schema, model } from 'mongoose';
-import ICandidate from '../interfaces/ICandidate.interface';
+import ICandidate from './interfaces/ICandidate.interface';
 
 const CandidateSchema = new Schema<ICandidate>(
   {
@@ -25,7 +25,7 @@ const CandidateSchema = new Schema<ICandidate>(
 
     working_reason: { type: String, required: false },
 
-    job: { type: Schema.Types.ObjectId, ref: 'Job', autopopulate: true },
+    job: { type: Schema.Types.ObjectId, ref: 'job', autopopulate: true },
 
     videos_question_list: [],
 
@@ -40,4 +40,4 @@ const CandidateSchema = new Schema<ICandidate>(
 
 CandidateSchema.plugin(require('mongoose-autopopulate'));
 
-export default model<ICandidate>('Candidate', CandidateSchema);
+export default model<ICandidate>('candidate', CandidateSchema);

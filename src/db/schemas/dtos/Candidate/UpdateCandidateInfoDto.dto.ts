@@ -7,7 +7,8 @@ import {
   IsArray,
 } from 'class-validator';
 
-export default class UpdateCandidateInfoDto {
+// eslint-disable-next-line import/prefer-default-export
+export class UpdateCandidateInfoDto {
   @IsNotEmpty()
   @IsString()
   academic_training!: string;

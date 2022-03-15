@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import Job from '../db/schemas/Job.schema';
 import User from '../db/schemas/User.schema';
-import IJob from '../db/interfaces/IJob.interface';
+import IJob from '../db/schemas/interfaces/IJob.interface';
 import BadRequestException from '../exceptions/BadRequestException';
 import InternalServerException from '../exceptions/InternalServerError';
 import NotFoundException from '../exceptions/NotFoundException';

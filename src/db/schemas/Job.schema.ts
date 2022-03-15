@@ -1,7 +1,7 @@
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable indent */
 import { Schema, model } from 'mongoose';
-import IJob from '../interfaces/IJob.interface';
+import IJob from './interfaces/IJob.interface';
 
 const JobSchema = new Schema<IJob>(
   {
@@ -9,7 +9,7 @@ const JobSchema = new Schema<IJob>(
     designated: [
       {
         type: Schema.Types.ObjectId,
-        ref: 'User',
+        ref: 'user',
         autopopulate: true,
       },
     ],
@@ -22,4 +22,4 @@ const JobSchema = new Schema<IJob>(
 
 JobSchema.plugin(require('mongoose-autopopulate'));
 
-export default model<IJob>('Job', JobSchema);
+export default model<IJob>('job', JobSchema);
