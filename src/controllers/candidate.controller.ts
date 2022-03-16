@@ -288,7 +288,7 @@ export const deleteUrl = async (
   await candidateService.DeleteUrl(url_id, next);
 
   return res.status(200).send({
-    status: 201,
+    status: 200,
     message: 'Url deleted successfully',
   });
 };

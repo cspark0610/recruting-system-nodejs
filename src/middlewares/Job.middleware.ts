@@ -54,7 +54,7 @@ export async function verifyJobDeleted(
     if (!jobDeleted) {
       return next(
         new NotFoundException(
-          `Job with id ${_id} not found. Probably has already been deleted or has not been created yet.`,
+          `Job with id ${_id} not found. Probably it has already been deleted or has not been created yet.`,
         ),
       );
     }

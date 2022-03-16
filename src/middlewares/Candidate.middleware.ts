@@ -46,6 +46,68 @@ export async function verifyCandidateExistsBeforeSignUp(
   }
 }
 
+export async function verifyCandidateExistsBeforeUrlGeneration(
+  req: RequestExtended,
+  _res: Response,
+  next: NextFunction,
+) {
+  const { _id } = req.params;
+
+  try {
+    const candidate = await Candidate.findById(_id);
+
+    if (!candidate) {
+      return next(
+        new NotFoundException(`No candidate found with the id ${_id}`),
+      );
+    }
+
+    if (candidate.video_recording_url) {
+      return next(
+        new BadRequestException('Candidate already has an url created'),
+      );
+    }
+
+    req.candidate = candidate;
+
+    next();
+  } catch (e: any) {
+    return next(
+      new InternalServerException(
+        `There was an unexpected error verifying the candidate. ${e.message}`,
+      ),
+    );
+  }
+}
+
+export async function verifyCandidateVideoUrlExistsBeforeDeletion(
+  req: Request,
+  _res: Response,
+  next: NextFunction,
+) {
+  const { url_id } = req.params;
+
+  try {
+    const url = await VideoRecordingUrlSchema.findOne({ short_url: url_id });
+
+    if (!url) {
+      return next(
+        new NotFoundException(
+          `Url with id ${url_id} not found. Probably it has already been deleted or has not been created yet`,
+        ),
+      );
+    }
+
+    next();
+  } catch (e: any) {
+    return next(
+      new InternalServerException(
+        `There was an unexpected error while verifying the candidate video url. ${e.message}`,
+      ),
+    );
+  }
+}
+
 export async function validateCV(
   req: Request,
   _res: Response,
@@ -65,40 +127,6 @@ export async function validateCV(
   }
 
   next();
-}
-
-export async function verifyCandidateExistsBeforeUrlGeneration(
-  req: RequestExtended,
-  _res: Response,
-  next: NextFunction,
-) {
-  const { _id } = req.params;
-
-  try {
-    const candidate = await Candidate.findById(_id);
-
-    if (!candidate) {
-      return next(
-        new NotFoundException(`No candidate found with the id ${_id}`),
-      );
-    }
-
-    if (candidate.video_recording_url) {
-      return next(
-        new BadRequestException('Candidate already has a url created'),
-      );
-    }
-
-    req.candidate = candidate;
-
-    next();
-  } catch (e: any) {
-    return next(
-      new InternalServerException(
-        `There was an unexpected error verifying the candidate. ${e.message}`,
-      ),
-    );
-  }
 }
 
 export async function validateCandidateJwt(
