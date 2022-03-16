@@ -1,10 +1,23 @@
 /* eslint-disable no-underscore-dangle */
 import { NextFunction } from 'express';
+import { Types } from 'mongoose';
 import User from '../db/schemas/User.schema';
 import Role from '../db/schemas/Role.schema';
 import { IUser } from '../db/schemas/interfaces/User';
 import InternalServerException from '../exceptions/InternalServerError';
 import BadRequestException from '../exceptions/BadRequestException';
+
+export const GetAllUsers = async (next: NextFunction) => {
+  try {
+    return await User.find();
+  } catch (e: any) {
+    return next(
+      new InternalServerException(
+        `There was an unexpected error with the GetAllUsers service. ${e.message}`,
+      ),
+    );
+  }
+};
 
 export const SignUp = async (userInfo: IUser, next: NextFunction) => {
   try {
@@ -31,7 +44,12 @@ export const SignUp = async (userInfo: IUser, next: NextFunction) => {
       role: foundRoles?.map((role) => role._id),
     });
 
-    return newUser;
+    const newUserInfo = await User.findOne(
+      { email: newUser.email },
+      { password: 0 },
+    );
+
+    return newUserInfo;
   } catch (e: any) {
     next(
       new InternalServerException(
@@ -50,6 +68,22 @@ export const SignIn = async (email: string, next: NextFunction) => {
     return next(
       new InternalServerException(
         `There was an error with the signIn service. ${e.message}`,
+      ),
+    );
+  }
+};
+
+export const ChangeRole = async (
+  _id: string,
+  newRole: Types.ObjectId,
+  next: NextFunction,
+) => {
+  try {
+    await User.findByIdAndUpdate(_id, { role: newRole });
+  } catch (e: any) {
+    return next(
+      new InternalServerException(
+        `There was an unexpected error in the change role service. ${e.message}`,
       ),
     );
   }

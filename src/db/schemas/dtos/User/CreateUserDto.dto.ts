@@ -1,6 +1,6 @@
 /* eslint-disable object-curly-newline */
 /* eslint-disable indent */
-import { IsString, IsNotEmpty, IsEmail } from 'class-validator';
+import { IsString, IsNotEmpty, IsEmail, MinLength } from 'class-validator';
 import { IUser } from '../../interfaces/User';
 
 // eslint-disable-next-line import/prefer-default-export
@@ -16,5 +16,6 @@ export class CreateUserDto implements IUser {
 
   @IsNotEmpty()
   @IsString()
+  @MinLength(8)
   password!: string;
 }

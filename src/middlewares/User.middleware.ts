@@ -1,10 +1,13 @@
+/* eslint-disable no-underscore-dangle */
 import { Request, Response, NextFunction } from 'express';
 import User from '../db/schemas/User.schema';
+import Role from '../db/schemas/Role.schema';
 import { IUser } from '../db/schemas/interfaces/User';
 import BadRequestException from '../exceptions/BadRequestException';
 import InternalServerException from '../exceptions/InternalServerError';
+import RequestExtended from '../interfaces/RequestExtended.interface';
 
-export default async function validateSignUp(
+export async function validateSignUp(
   req: Request,
   _res: Response,
   next: NextFunction,
@@ -27,6 +30,47 @@ export default async function validateSignUp(
     return next(
       new InternalServerException(
         `There was an unexpected error validating the user. ${e.message}`,
+      ),
+    );
+  }
+}
+
+export async function validateNewRole(
+  req: RequestExtended,
+  _res: Response,
+  next: NextFunction,
+) {
+  const { _id } = req.params;
+  const { newRole } = req.body;
+
+  try {
+    const user = await User.findById(_id);
+
+    if (!user) {
+      return next(
+        new BadRequestException(
+          `The user with the id ${_id} does not exist on the database`,
+        ),
+      );
+    }
+
+    const roleExists = await Role.findOne({ name: newRole });
+
+    if (!roleExists) {
+      return next(
+        new BadRequestException(
+          `The role ${newRole} does not exist on the database`,
+        ),
+      );
+    }
+
+    req.role = roleExists._id;
+
+    next();
+  } catch (e: any) {
+    return next(
+      new InternalServerException(
+        `There was an unexpected error with the new role validation. ${e.message}`,
       ),
     );
   }
