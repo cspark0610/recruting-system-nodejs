@@ -1,12 +1,12 @@
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable no-unused-vars */
-import { NextFunction, Request, Response } from 'express';
 import bcrypt from 'bcrypt';
+import { NextFunction, Request, Response } from 'express';
 import { IUser } from '../db/schemas/interfaces/User';
+import { createToken } from '../lib/jwt';
 import InternalServerException from '../exceptions/InternalServerError';
 import InvalidCredentialsException from '../exceptions/InvalidCredentialsException';
 import RequestExtended from '../interfaces/RequestExtended.interface';
-import createToken from '../lib/createToken';
 import * as userService from '../services/User.service';
 
 export const getAllUsers = async (

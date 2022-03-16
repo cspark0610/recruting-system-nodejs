@@ -1,9 +1,9 @@
 /* eslint-disable no-underscore-dangle */
 import { NextFunction } from 'express';
 import { Types } from 'mongoose';
+import { IUser } from '../db/schemas/interfaces/User';
 import User from '../db/schemas/User.schema';
 import Role from '../db/schemas/Role.schema';
-import { IUser } from '../db/schemas/interfaces/User';
 import InternalServerException from '../exceptions/InternalServerError';
 import BadRequestException from '../exceptions/BadRequestException';
 

@@ -3,14 +3,13 @@
 /* eslint-disable no-underscore-dangle */
 import { Response, NextFunction } from 'express';
 import dotenv from 'dotenv';
-import jwt from 'jsonwebtoken';
 import User from '../db/schemas/User.schema';
 import Role from '../db/schemas/Role.schema';
 import InvalidAccessToken from '../exceptions/InvalidAccessToken';
 import AuthenticationTokenMissingExeption from '../exceptions/AuthenticationTokenMissingExeption';
-import DataStoredInToken from '../interfaces/DataStoredInToken.interface';
 import RequestExtended from '../interfaces/RequestExtended.interface';
 import ForbiddenException from '../exceptions/ForbiddenException';
+import { decodeToken } from '../lib/jwt';
 
 dotenv.config();
 
@@ -30,10 +29,7 @@ export async function verifyJwt(
   }
 
   try {
-    const decoded = jwt.verify(
-      token,
-      JWT_SECRET as string,
-    ) as DataStoredInToken;
+    const decoded = decodeToken(token);
 
     const userFound = await User.findById(decoded._id, { password: '' });
 

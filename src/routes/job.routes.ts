@@ -1,9 +1,9 @@
 import { Router } from 'express';
-import * as jobController from '../controllers/job.controller';
 import { CreateJobDto } from '../db/schemas/dtos/Job';
+import requestBodyValidation from '../middlewares/validators/requests/requestBodyValidation.middleware';
+import * as jobController from '../controllers/job.controller';
 import * as authJwt from '../middlewares/authJwt.middleware';
 import * as jobAuth from '../middlewares/Job.middleware';
-import requestBodyValidation from '../middlewares/validators/requests/requestBodyValidation.middleware';
 
 const router = Router();
 

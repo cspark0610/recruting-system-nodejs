@@ -2,7 +2,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { unlink } from 'fs';
 import { promisify } from 'util';
-import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import Candidate from '../db/schemas/Candidate.schema';
 import ICandidate from '../db/schemas/interfaces/ICandidate.interface';
@@ -10,9 +9,9 @@ import InternalServerException from '../exceptions/InternalServerError';
 import BadRequestException from '../exceptions/BadRequestException';
 import RequestExtended from '../interfaces/RequestExtended.interface';
 import NotFoundException from '../exceptions/NotFoundException';
-import DataStoredInToken from '../interfaces/DataStoredInToken.interface';
 import InvalidAccessToken from '../exceptions/InvalidAccessToken';
 import VideoRecordingUrlSchema from '../db/schemas/VideoRecordingUrl.schema';
+import { decodeToken } from '../lib/jwt';
 
 dotenv.config();
 
@@ -137,26 +136,15 @@ export async function validateCandidateJwt(
   const token = req.query.token as string;
 
   try {
-    const decoded = jwt.verify(
-      token,
-      JWT_SECRET as string,
-    ) as DataStoredInToken;
+    const decoded = decodeToken(token);
 
     const candidate = await Candidate.findById(decoded._id);
-    const url = await VideoRecordingUrlSchema.find({
+    const url = await VideoRecordingUrlSchema.findOne({
       short_url: decoded.url_id,
     });
 
     if (!candidate || !url) {
       return next(new InvalidAccessToken('Invalid access token'));
-    }
-
-    if (!candidate.video_recording_url) {
-      return next(
-        new InvalidAccessToken(
-          'The url has expired or has not been created yet',
-        ),
-      );
     }
 
     next();
