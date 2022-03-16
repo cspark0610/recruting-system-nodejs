@@ -70,7 +70,7 @@ export async function validateNewRole(
     if (rolesMatch) {
       return next(
         new BadRequestException(
-          `The user ${user.name} already has the role ${newRole} assigned`,
+          `The user ${user.name} already has the role '${newRole}' assigned`,
         ),
       );
     }
