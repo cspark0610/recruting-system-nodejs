@@ -143,20 +143,12 @@ export async function validateCandidateJwt(
     ) as DataStoredInToken;
 
     const candidate = await Candidate.findById(decoded._id);
-    const url = await VideoRecordingUrlSchema.find({
+    const url = await VideoRecordingUrlSchema.findOne({
       short_url: decoded.url_id,
     });
 
     if (!candidate || !url) {
       return next(new InvalidAccessToken('Invalid access token'));
-    }
-
-    if (!candidate.video_recording_url) {
-      return next(
-        new InvalidAccessToken(
-          'The url has expired or has not been created yet',
-        ),
-      );
     }
 
     next();
