@@ -1,7 +1,8 @@
 import { Types } from 'mongoose';
-import IQuestion from '../../interfaces/IQuestion.interface';
+import IQuestion from '../../../interfaces/IQuestion.interface';
 
 export default interface ICandidate {
+  _id?: string;
   name: string;
   email: string;
   phone: number;
@@ -14,6 +15,7 @@ export default interface ICandidate {
   portfolio?: string;
   working_reason?: string;
   job: Types.ObjectId;
+  video_recording_url?: Types.ObjectId;
   videos_question_list?: Types.Array<IQuestion>;
   cv?: string;
 }

@@ -1,12 +1,24 @@
+/* eslint-disable no-underscore-dangle */
 import { Request, Response, NextFunction } from 'express';
 import { unlink } from 'fs';
 import { promisify } from 'util';
+import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
 import Candidate from '../db/schemas/Candidate.schema';
 import ICandidate from '../db/schemas/interfaces/ICandidate.interface';
 import InternalServerException from '../exceptions/InternalServerError';
 import BadRequestException from '../exceptions/BadRequestException';
+import RequestExtended from '../interfaces/RequestExtended.interface';
+import NotFoundException from '../exceptions/NotFoundException';
+import DataStoredInToken from '../interfaces/DataStoredInToken.interface';
+import InvalidAccessToken from '../exceptions/InvalidAccessToken';
+import VideoRecordingUrlSchema from '../db/schemas/VideoRecordingUrl.schema';
 
-export async function verifyCandidateExists(
+dotenv.config();
+
+const { JWT_SECRET } = process.env;
+
+export async function verifyCandidateExistsBeforeSignUp(
   req: Request,
   _res: Response,
   next: NextFunction,
@@ -53,4 +65,78 @@ export async function validateCV(
   }
 
   next();
+}
+
+export async function verifyCandidateExistsBeforeUrlGeneration(
+  req: RequestExtended,
+  _res: Response,
+  next: NextFunction,
+) {
+  const { _id } = req.params;
+
+  try {
+    const candidate = await Candidate.findById(_id);
+
+    if (!candidate) {
+      return next(
+        new NotFoundException(`No candidate found with the id ${_id}`),
+      );
+    }
+
+    if (candidate.video_recording_url) {
+      return next(
+        new BadRequestException('Candidate already has a url created'),
+      );
+    }
+
+    req.candidate = candidate;
+
+    next();
+  } catch (e: any) {
+    return next(
+      new InternalServerException(
+        `There was an unexpected error verifying the candidate. ${e.message}`,
+      ),
+    );
+  }
+}
+
+export async function validateCandidateJwt(
+  req: Request,
+  _res: Response,
+  next: NextFunction,
+) {
+  const token = req.query.token as string;
+
+  try {
+    const decoded = jwt.verify(
+      token,
+      JWT_SECRET as string,
+    ) as DataStoredInToken;
+
+    const candidate = await Candidate.findById(decoded._id);
+    const url = await VideoRecordingUrlSchema.find({
+      short_url: decoded.url_id,
+    });
+
+    if (!candidate || !url) {
+      return next(new InvalidAccessToken('Invalid access token'));
+    }
+
+    if (!candidate.video_recording_url) {
+      return next(
+        new InvalidAccessToken(
+          'The url has expired or has not been created yet',
+        ),
+      );
+    }
+
+    next();
+  } catch (e: any) {
+    return next(
+      new InternalServerException(
+        `There was an unexpected error with the candidate url jwt validation. ${e.message}`,
+      ),
+    );
+  }
 }

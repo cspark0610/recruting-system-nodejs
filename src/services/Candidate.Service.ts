@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import { NextFunction } from 'express';
 import { createReadStream } from 'fs';
 import S3 from 'aws-sdk/clients/s3';
@@ -7,9 +8,10 @@ import UploadParams from '../interfaces/UploadParams.interface';
 import Candidate from '../db/schemas/Candidate.schema';
 import ICandidate from '../db/schemas/interfaces/ICandidate.interface';
 import VideoRecordingUrl from '../db/schemas/VideoRecordingUrl.schema';
-import IVideoRecordingUrl from '../db/schemas/interfaces/IVideoRecordingUrl.interface';
 import InternalServerException from '../exceptions/InternalServerError';
 import { UpdateCandidateInfoDto } from '../db/schemas/dtos/Candidate';
+import TokenData from '../interfaces/TokenData.interface';
+import createToken from '../lib/createToken';
 
 dotenv.config();
 
@@ -85,11 +87,17 @@ export const UpdateCandidateInfo = async (
 };
 
 export const GenerateUrl = async (
+  candidate: ICandidate,
   next: NextFunction,
-): Promise<IVideoRecordingUrl | undefined | void> => {
+): Promise<TokenData | undefined | void> => {
   try {
-    const newUrl: IVideoRecordingUrl = await VideoRecordingUrl.create({});
-    return newUrl;
+    const newUrl = await VideoRecordingUrl.create({});
+    const token = createToken(candidate, newUrl.short_url);
+    await Candidate.findByIdAndUpdate(candidate._id, {
+      video_recording_url: newUrl._id,
+    });
+
+    return token;
   } catch (e: any) {
     next(
       new InternalServerException(

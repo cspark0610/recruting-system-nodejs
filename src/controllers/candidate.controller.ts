@@ -9,6 +9,7 @@ import NotFoundException from '../exceptions/NotFoundException';
 import BadRequestException from '../exceptions/BadRequestException';
 import InternalServerException from '../exceptions/InternalServerError';
 import * as candidateService from '../services/Candidate.Service';
+import RequestExtended from '../interfaces/RequestExtended.interface';
 
 dotenv.config();
 
@@ -64,6 +65,30 @@ export const getOneCandidate = async (
     return next(
       new InternalServerException(
         `There was an unexpected error with the getOneCandidate controller. ${e.message}`,
+      ),
+    );
+  }
+};
+
+export const getCV = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  const { key } = req.params;
+
+  try {
+    const candidateCV = await candidateService.GetCV(key, next);
+
+    if (!candidateCV) {
+      return next(new NotFoundException(`CV file not found with key ${key}`));
+    }
+
+    candidateCV.pipe(res);
+  } catch (e: any) {
+    return next(
+      new InternalServerException(
+        `There was an unexpected error with the cv download controller. ${e.message}`,
       ),
     );
   }
@@ -155,14 +180,15 @@ export const updateCandidateInfo = async (
 };
 
 export const generateUniqueUrl = async (
-  _req: Request,
+  req: RequestExtended,
   res: Response,
   next: NextFunction,
 ) => {
   try {
-    const data = await candidateService.GenerateUrl(next);
+    const { candidate } = req;
+    const token = await candidateService.GenerateUrl(candidate!, next);
 
-    if (!data) {
+    if (!token) {
       return next(
         new InternalServerException(
           'There was an error creating the url. Please try again',
@@ -174,8 +200,8 @@ export const generateUniqueUrl = async (
       status: 201,
       client_url:
         NODE_ENV === 'development'
-          ? `${REDIRECT_URL_DEVELOPMENT}/url/validate?id=${data.short_url}`
-          : `${REDIRECT_URL_PRODUCTION}/url/validate?id=${data.short_url}`,
+          ? `${REDIRECT_URL_DEVELOPMENT}/url/validate?token=${token.token}`
+          : `${REDIRECT_URL_PRODUCTION}/url/validate?token=${token.token}`,
     });
   } catch (e: any) {
     return next(
@@ -265,28 +291,4 @@ export const deleteUrl = async (
     status: 201,
     message: 'Url deleted successfully',
   });
-};
-
-export const getCV = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
-  const { key } = req.params;
-
-  try {
-    const candidateCV = await candidateService.GetCV(key, next);
-
-    if (!candidateCV) {
-      return next(new NotFoundException(`CV file not found with key ${key}`));
-    }
-
-    candidateCV.pipe(res);
-  } catch (e: any) {
-    return next(
-      new InternalServerException(
-        `There was an unexpected error with the cv download controller. ${e.message}`,
-      ),
-    );
-  }
 };

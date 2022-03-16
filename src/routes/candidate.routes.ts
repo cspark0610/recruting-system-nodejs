@@ -24,17 +24,25 @@ router.post(
   [
     upload.single('cv'),
     requestBodyValidation(CreateCandidateDto),
-    candidateAuth.verifyCandidateExists,
+    candidateAuth.verifyCandidateExistsBeforeSignUp,
     candidateAuth.validateCV,
   ],
   candidateController.createCandidate,
 );
+
 router.post(
   '/video/upload/:candidate_id',
   upload.single('video'),
   candidateController.uploadVideoToS3,
 );
-router.post('/url/create', candidateController.generateUniqueUrl);
+
+router.post(
+  '/url/create/:_id',
+  candidateAuth.verifyCandidateExistsBeforeUrlGeneration,
+  candidateController.generateUniqueUrl,
+);
+
+router.post('/url/validate', candidateAuth.validateCandidateJwt);
 
 router.put(
   '/info/update/:_id',
