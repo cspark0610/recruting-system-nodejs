@@ -9,7 +9,7 @@ import RequestExtended from '../interfaces/RequestExtended.interface';
 
 export async function validateJobExists(
   req: RequestExtended,
-  res: Response,
+  _res: Response,
   next: NextFunction,
 ) {
   const { title, designated }: IJob = req.body;
@@ -18,9 +18,11 @@ export async function validateJobExists(
     const jobExists = await Job.findOne({ title });
 
     if (jobExists) {
-      return res.status(400).send({
-        message: `There is already an application with the name ${title}`,
-      });
+      return next(
+        new BadRequestException(
+          `There is already a job registered with the name ${title}`,
+        ),
+      );
     }
 
     const designatedUsers = await User.find({
@@ -37,7 +39,11 @@ export async function validateJobExists(
 
     next();
   } catch (e: any) {
-    return res.status(500).send({ message: e.message });
+    return next(
+      new InternalServerException(
+        `There was an unexpected error with the job verification. ${e.message}`,
+      ),
+    );
   }
 }
 
