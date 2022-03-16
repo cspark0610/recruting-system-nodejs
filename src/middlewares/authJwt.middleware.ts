@@ -13,8 +13,6 @@ import { decodeToken } from '../lib/jwt';
 
 dotenv.config();
 
-const { JWT_SECRET } = process.env;
-
 export async function verifyJwt(
   req: RequestExtended,
   _res: Response,
