@@ -13,6 +13,9 @@ const JobSchema = new Schema<IJob>(
         autopopulate: true,
       },
     ],
+
+    skills_required: { type: [String], required: true },
+
     url: {
       type: String,
     },

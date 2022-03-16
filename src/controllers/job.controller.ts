@@ -11,10 +11,14 @@ export const createJob = async (
   res: Response,
   next: NextFunction,
 ) => {
-  const { title, designated }: IJob = req.body;
+  const { title, designated, skills_required }: IJob = req.body;
 
   try {
-    const newJob = await jobService.CreateJob({ title, designated }, next, req);
+    const newJob = await jobService.CreateJob(
+      { title, designated, skills_required },
+      next,
+      req,
+    );
 
     if (!newJob) {
       return next(
