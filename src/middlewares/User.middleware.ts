@@ -6,6 +6,7 @@ import Role from '../db/schemas/Role.schema';
 import BadRequestException from '../exceptions/BadRequestException';
 import InternalServerException from '../exceptions/InternalServerError';
 import RequestExtended from '../interfaces/RequestExtended.interface';
+import NotFoundException from '../exceptions/NotFoundException';
 
 export async function validateSignUp(
   req: Request,
@@ -48,7 +49,7 @@ export async function validateNewRole(
 
     if (!user) {
       return next(
-        new BadRequestException(
+        new NotFoundException(
           `The user with the id ${_id} does not exist on the database`,
         ),
       );
@@ -58,8 +59,18 @@ export async function validateNewRole(
 
     if (!roleExists) {
       return next(
-        new BadRequestException(
+        new NotFoundException(
           `The role ${newRole} does not exist on the database`,
+        ),
+      );
+    }
+
+    const rolesMatch = user.role?._id.equals(roleExists._id);
+
+    if (roleMatch) {
+      return next(
+        new BadRequestException(
+          `The user ${user.name} already has the role ${newRole} assigned`,
         ),
       );
     }
