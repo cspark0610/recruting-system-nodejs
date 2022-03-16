@@ -13,8 +13,14 @@ router.post(
 );
 router.post(
   '/signUp',
-  [requestBodyValidation(CreateUserDto), userAuth.default],
+  [requestBodyValidation(CreateUserDto), userAuth.validateSignUp],
   userController.signUp,
+);
+
+router.put(
+  '/role/change/:_id',
+  userAuth.validateNewRole,
+  userController.changeRole,
 );
 
 export default router;

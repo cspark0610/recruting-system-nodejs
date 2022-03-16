@@ -5,6 +5,7 @@ import bcrypt from 'bcrypt';
 import { IUser } from '../db/schemas/interfaces/User';
 import InternalServerException from '../exceptions/InternalServerError';
 import InvalidCredentialsException from '../exceptions/InvalidCredentialsException';
+import RequestExtended from '../interfaces/RequestExtended.interface';
 import createToken from '../lib/createToken';
 import * as userService from '../services/User.service';
 
@@ -74,4 +75,19 @@ export const signUp = async (
       ),
     );
   }
+};
+
+export const changeRole = async (
+  req: RequestExtended,
+  res: Response,
+  next: NextFunction,
+) => {
+  const { _id } = req.params;
+  const newRole = req.role?._id;
+
+  await userService.ChangeRole(_id, newRole!, next);
+
+  return res
+    .status(200)
+    .send({ status: 200, message: 'User updated successfully' });
 };

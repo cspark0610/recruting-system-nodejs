@@ -1,5 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 import { NextFunction } from 'express';
+import { Types } from 'mongoose';
 import User from '../db/schemas/User.schema';
 import Role from '../db/schemas/Role.schema';
 import { IUser } from '../db/schemas/interfaces/User';
@@ -55,6 +56,22 @@ export const SignIn = async (email: string, next: NextFunction) => {
     return next(
       new InternalServerException(
         `There was an error with the signIn service. ${e.message}`,
+      ),
+    );
+  }
+};
+
+export const ChangeRole = async (
+  _id: string,
+  newRole: Types.ObjectId,
+  next: NextFunction,
+) => {
+  try {
+    await User.findByIdAndUpdate(_id, { role: newRole });
+  } catch (e: any) {
+    return next(
+      new InternalServerException(
+        `There was an unexpected error in the change role service. ${e.message}`,
       ),
     );
   }
