@@ -11,7 +11,7 @@ import VideoRecordingUrl from '../db/schemas/VideoRecordingUrl.schema';
 import InternalServerException from '../exceptions/InternalServerError';
 import { UpdateCandidateInfoDto } from '../db/schemas/dtos/Candidate';
 import TokenData from '../interfaces/TokenData.interface';
-import createToken from '../lib/createToken';
+import { createToken } from '../lib/jwt';
 
 dotenv.config();
 

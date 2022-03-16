@@ -1,9 +1,9 @@
 import { Router } from 'express';
+import { CreateUserDto, UserSignInParamsDto } from '../db/schemas/dtos/User';
+import requestBodyValidation from '../middlewares/validators/requests/requestBodyValidation.middleware';
 import * as userController from '../controllers/user.controller';
 import * as userAuth from '../middlewares/User.middleware';
 import * as authJwt from '../middlewares/authJwt.middleware';
-import requestBodyValidation from '../middlewares/validators/requests/requestBodyValidation.middleware';
-import { CreateUserDto, UserSignInParamsDto } from '../db/schemas/dtos/User';
 
 const router = Router();
 
