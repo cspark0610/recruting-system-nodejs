@@ -15,8 +15,6 @@ import { decodeToken } from '../lib/jwt';
 
 dotenv.config();
 
-const { JWT_SECRET } = process.env;
-
 export async function verifyCandidateExistsBeforeSignUp(
   req: Request,
   _res: Response,
