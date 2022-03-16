@@ -27,6 +27,12 @@ const CandidateSchema = new Schema<ICandidate>(
 
     job: { type: Schema.Types.ObjectId, ref: 'job', autopopulate: true },
 
+    video_recording_url: {
+      type: Schema.Types.ObjectId,
+      ref: 'video_recording_url',
+      autopopulate: true,
+    },
+
     videos_question_list: [],
 
     cv: {
