@@ -50,6 +50,10 @@ router.put(
   candidateController.updateCandidateInfo,
 );
 
-router.delete('/url/delete/:url_id', candidateController.deleteUrl);
+router.delete(
+  '/url/delete/:url_id',
+  candidateAuth.verifyCandidateVideoUrlExistsBeforeDeletion,
+  candidateController.deleteUrl,
+);
 
 export default router;

@@ -15,7 +15,11 @@ export default async function validateSignUp(
     const userExists = await User.findOne({ email });
 
     if (userExists) {
-      next(new BadRequestException(`User already in use with email ${email}`));
+      next(
+        new BadRequestException(
+          `There is already an user registered with the email ${email}`,
+        ),
+      );
     }
 
     next();
