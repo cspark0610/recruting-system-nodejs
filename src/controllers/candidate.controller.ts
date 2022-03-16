@@ -8,8 +8,8 @@ import ICandidate from '../db/schemas/interfaces/ICandidate.interface';
 import NotFoundException from '../exceptions/NotFoundException';
 import BadRequestException from '../exceptions/BadRequestException';
 import InternalServerException from '../exceptions/InternalServerError';
-import * as candidateService from '../services/Candidate.Service';
 import RequestExtended from '../interfaces/RequestExtended.interface';
+import * as candidateService from '../services/Candidate.Service';
 
 dotenv.config();
 

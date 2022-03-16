@@ -7,6 +7,18 @@ import { IUser } from '../db/schemas/interfaces/User';
 import InternalServerException from '../exceptions/InternalServerError';
 import BadRequestException from '../exceptions/BadRequestException';
 
+export const GetAllUsers = async (next: NextFunction) => {
+  try {
+    return await User.find();
+  } catch (e: any) {
+    return next(
+      new InternalServerException(
+        `There was an unexpected error with the GetAllUsers service. ${e.message}`,
+      ),
+    );
+  }
+};
+
 export const SignUp = async (userInfo: IUser, next: NextFunction) => {
   try {
     const hashedPassword = await User.hashPassword(userInfo.password, 12);

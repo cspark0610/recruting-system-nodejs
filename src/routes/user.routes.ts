@@ -7,6 +7,12 @@ import { CreateUserDto, UserSignInParamsDto } from '../db/schemas/dtos/User';
 
 const router = Router();
 
+router.get(
+  '/',
+  [authJwt.verifyJwt, authJwt.authRole({ CEO: 'CEO' })],
+  userController.getAllUsers,
+);
+
 router.post(
   '/signIn',
   [requestBodyValidation(UserSignInParamsDto)],

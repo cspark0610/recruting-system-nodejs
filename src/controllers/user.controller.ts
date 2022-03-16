@@ -9,6 +9,24 @@ import RequestExtended from '../interfaces/RequestExtended.interface';
 import createToken from '../lib/createToken';
 import * as userService from '../services/User.service';
 
+export const getAllUsers = async (
+  _req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const users = await userService.GetAllUsers(next);
+
+    return res.status(200).send({ status: 200, users });
+  } catch (e: any) {
+    return next(
+      new InternalServerException(
+        `There was an unexpected error with the getAllUsers controller. ${e.message}`,
+      ),
+    );
+  }
+};
+
 export const signIn = async (
   req: Request,
   res: Response,
