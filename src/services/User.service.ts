@@ -31,7 +31,12 @@ export const SignUp = async (userInfo: IUser, next: NextFunction) => {
       role: foundRoles?.map((role) => role._id),
     });
 
-    return newUser;
+    const newUserInfo = await User.findOne(
+      { email: newUser.email },
+      { password: 0 },
+    );
+
+    return newUserInfo;
   } catch (e: any) {
     next(
       new InternalServerException(
