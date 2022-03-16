@@ -67,7 +67,7 @@ export async function validateNewRole(
 
     const rolesMatch = user.role?._id.equals(roleExists._id);
 
-    if (roleMatch) {
+    if (rolesMatch) {
       return next(
         new BadRequestException(
           `The user ${user.name} already has the role ${newRole} assigned`,
