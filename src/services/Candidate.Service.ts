@@ -3,8 +3,8 @@
 /* eslint-disable no-underscore-dangle */
 import { NextFunction } from 'express';
 import { createReadStream } from 'fs';
-import S3 from 'aws-sdk/clients/s3';
 import dotenv from 'dotenv';
+import s3 from '../lib/awsConfig';
 import File from '../interfaces/File.interface';
 import UploadParams from '../interfaces/UploadParams.interface';
 import Candidate from '../db/schemas/Candidate.schema';
@@ -18,19 +18,7 @@ import { createToken } from '../lib/jwt';
 
 dotenv.config();
 
-const {
-  AWS_BUCKET_REGION,
-  AWS_BUCKET_ACCESS_KEY,
-  AWS_BUCKET_SECRET_ACCESS_KEY,
-  AWS_VIDEO_BUCKET_NAME,
-  AWS_CV_BUCKET_NAME,
-} = process.env;
-
-const s3 = new S3({
-  accessKeyId: AWS_BUCKET_ACCESS_KEY,
-  secretAccessKey: AWS_BUCKET_SECRET_ACCESS_KEY,
-  region: AWS_BUCKET_REGION,
-});
+const { AWS_VIDEO_BUCKET_NAME, AWS_CV_BUCKET_NAME } = process.env;
 
 export const GetAllCandidates = async (next: NextFunction) => {
   try {

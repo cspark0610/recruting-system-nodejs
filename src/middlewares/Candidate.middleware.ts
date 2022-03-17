@@ -151,7 +151,7 @@ export async function validateCandidateJwt(
     });
 
     if (!candidate || !url) {
-      return next(new InvalidAccessToken('Invalid access token'));
+      return next(new InvalidAccessToken());
     }
 
     next();
@@ -159,45 +159,6 @@ export async function validateCandidateJwt(
     return next(
       new InternalServerException(
         `There was an unexpected error with the candidate url jwt validation. ${e.message}`,
-      ),
-    );
-  }
-}
-
-export async function verifyCandidateVideoEmptyBeforeUpload(
-  req: Request,
-  _res: Response,
-  next: NextFunction,
-) {
-  const { candidate_id } = req.params;
-  const { question_id } = req.body;
-
-  try {
-    const candidate = await Candidate.findById(candidate_id);
-
-    if (!candidate) {
-      return next(
-        new NotFoundException(`NO candidate foun with id ${candidate_id}`),
-      );
-    }
-
-    if (!candidate.videos_question_list) {
-      return next(new InternalServerException('Error'));
-    }
-
-    if (candidate.videos_question_list[question_id - 1].video_key) {
-      return next(
-        new BadRequestException(
-          `Candidate has already uploaded their video for question ${question_id}`,
-        ),
-      );
-    }
-
-    next();
-  } catch (e: any) {
-    return next(
-      new InternalServerException(
-        `There was an unexpected error whilte verifying the candididate video.${e.message}`,
       ),
     );
   }
