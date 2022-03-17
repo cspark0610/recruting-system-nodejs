@@ -151,7 +151,7 @@ export async function validateCandidateJwt(
     });
 
     if (!candidate || !url) {
-      return next(new InvalidAccessToken('Invalid access token'));
+      return next(new InvalidAccessToken());
     }
 
     next();
