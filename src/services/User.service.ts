@@ -9,7 +9,7 @@ import BadRequestException from '../exceptions/BadRequestException';
 
 export const GetAllUsers = async (next: NextFunction) => {
   try {
-    return await User.find();
+    return await User.find({}, { password: 0 });
   } catch (e: any) {
     return next(
       new InternalServerException(

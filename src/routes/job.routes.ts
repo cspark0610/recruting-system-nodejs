@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { CreateJobDto } from '../db/schemas/dtos/Job';
-import requestBodyValidation from '../middlewares/validators/requests/requestBodyValidation.middleware';
+import { requestBodyValidation } from '../middlewares/validators/requests';
 import * as jobController from '../controllers/job.controller';
 import * as authJwt from '../middlewares/authJwt.middleware';
 import * as jobAuth from '../middlewares/Job.middleware';

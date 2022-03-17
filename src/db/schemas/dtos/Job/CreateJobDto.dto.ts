@@ -8,11 +8,13 @@ export class CreateJobDto implements IJob {
   @IsNotEmpty()
   title!: string;
 
-  @IsArray()
   @IsNotEmpty()
+  @IsArray()
+  @IsString({ each: true })
   designated: Array<string> | undefined;
 
-  @IsArray()
   @IsNotEmpty()
-  skills_required!: string[];
+  @IsArray()
+  @IsString({ each: true })
+  skills_required!: Array<string>;
 }

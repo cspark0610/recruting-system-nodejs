@@ -1,14 +1,20 @@
 import { Router } from 'express';
 import multer from 'multer';
 import storage from '../lib/multerConfig';
-import requestBodyValidation from '../middlewares/validators/requests/requestBodyValidation.middleware';
+import {
+  requestBodyValidation,
+  requestParamsValidation,
+  requestQueryValidation,
+} from '../middlewares/validators/requests';
 import {
   CreateCandidateDto,
+  JwtValidationDto,
   UpdateCandidateInfoDto,
 } from '../db/schemas/dtos/Candidate';
 import * as candidateController from '../controllers/candidate.controller';
 import * as candidateAuth from '../middlewares/Candidate.middleware';
 import * as authJwt from '../middlewares/authJwt.middleware';
+import ValidateUrlParamsDto from '../db/schemas/dtos/ValidateUrlParams.dto';
 
 const router = Router();
 
@@ -32,21 +38,31 @@ router.post(
 
 router.post(
   '/video/upload/:candidate_id',
-  upload.single('video'),
+  [upload.single('video'), requestParamsValidation(ValidateUrlParamsDto)],
   candidateController.uploadVideoToS3,
 );
 
 router.post(
   '/url/create/:_id',
-  candidateAuth.verifyCandidateExistsBeforeUrlGeneration,
+  [
+    authJwt.verifyJwt,
+    requestParamsValidation(ValidateUrlParamsDto),
+    candidateAuth.verifyCandidateExistsBeforeUrlGeneration,
+  ],
   candidateController.generateUniqueUrl,
 );
 
-router.post('/url/validate', candidateAuth.validateCandidateJwt);
+router.post('/url/validate', [
+  requestQueryValidation(JwtValidationDto),
+  candidateAuth.validateCandidateJwt,
+]);
 
 router.put(
   '/info/update/:_id',
-  requestBodyValidation(UpdateCandidateInfoDto),
+  [
+    requestParamsValidation(ValidateUrlParamsDto),
+    requestBodyValidation(UpdateCandidateInfoDto),
+  ],
   candidateController.updateCandidateInfo,
 );
 

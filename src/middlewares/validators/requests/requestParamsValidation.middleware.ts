@@ -1,9 +1,10 @@
+/* eslint-disable import/prefer-default-export */
 import { plainToClass } from 'class-transformer';
 import { validate, ValidationError } from 'class-validator';
 import * as express from 'express';
 import BadRequestException from '../../../exceptions/BadRequestException';
 
-function validationMiddleware<T>(type: any): express.RequestHandler {
+export function requestParamsValidation<T>(type: any): express.RequestHandler {
   return (req, res, next) => {
     validate(plainToClass(type, req.params)).then(
       (errors: ValidationError[]) => {
@@ -25,5 +26,3 @@ function validationMiddleware<T>(type: any): express.RequestHandler {
     );
   };
 }
-
-export default validationMiddleware;
