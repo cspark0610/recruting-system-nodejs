@@ -1,6 +1,12 @@
 /* eslint-disable object-curly-newline */
 /* eslint-disable indent */
-import { IsString, IsNotEmpty, IsEmail } from 'class-validator';
+import {
+  IsString,
+  IsNotEmpty,
+  IsEmail,
+  IsNumberString,
+  IsMongoId,
+} from 'class-validator';
 import { Types } from 'mongoose';
 import ICandidate from '../../interfaces/ICandidate.interface';
 
@@ -16,10 +22,11 @@ export class CreateCandidateDto implements ICandidate {
   email!: string;
 
   @IsNotEmpty()
-  @IsString()
+  @IsNumberString()
   phone!: number;
 
   @IsNotEmpty()
+  @IsMongoId()
   job!: Types.ObjectId;
 
   @IsNotEmpty()

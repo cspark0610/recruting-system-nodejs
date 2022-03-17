@@ -5,6 +5,7 @@ import { promisify } from 'util';
 import dotenv from 'dotenv';
 import Candidate from '../db/schemas/Candidate.schema';
 import ICandidate from '../db/schemas/interfaces/ICandidate.interface';
+import Job from '../db/schemas/Job.schema';
 import InternalServerException from '../exceptions/InternalServerError';
 import BadRequestException from '../exceptions/BadRequestException';
 import RequestExtended from '../interfaces/RequestExtended.interface';
@@ -20,7 +21,7 @@ export async function verifyCandidateExistsBeforeSignUp(
   _res: Response,
   next: NextFunction,
 ) {
-  const { email }: ICandidate = req.body;
+  const { email, job }: ICandidate = req.body;
 
   try {
     const candidateExists = await Candidate.findOne({ email });
@@ -30,6 +31,14 @@ export async function verifyCandidateExistsBeforeSignUp(
         new BadRequestException(
           `There is already a candidate registered with the email ${email}`,
         ),
+      );
+    }
+
+    const jobExists = await Job.findById(job);
+
+    if (!jobExists) {
+      return next(
+        new BadRequestException(`No job has been found with the id ${job}`),
       );
     }
 
