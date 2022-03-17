@@ -1,6 +1,13 @@
 import { Router } from 'express';
-import { CreateUserDto, UserSignInParamsDto } from '../db/schemas/dtos/User';
-import requestBodyValidation from '../middlewares/validators/requests/requestBodyValidation.middleware';
+import {
+  ChangeRoleParamsDto,
+  CreateUserDto,
+  UserSignInParamsDto,
+} from '../db/schemas/dtos/User';
+import {
+  requestBodyValidation,
+  requestParamsValidation,
+} from '../middlewares/validators/requests';
 import * as userController from '../controllers/user.controller';
 import * as userAuth from '../middlewares/User.middleware';
 import * as authJwt from '../middlewares/authJwt.middleware';
@@ -27,6 +34,7 @@ router.post(
 router.put(
   '/role/change/:_id',
   [
+    requestParamsValidation(ChangeRoleParamsDto),
     authJwt.verifyJwt,
     authJwt.authRole({ CEO: 'CEO' }),
     userAuth.validateNewRole,

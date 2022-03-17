@@ -1,9 +1,10 @@
+/* eslint-disable import/prefer-default-export */
 import { plainToClass } from 'class-transformer';
 import { validate, ValidationError } from 'class-validator';
 import * as express from 'express';
 import BadRequestException from '../../../exceptions/BadRequestException';
 
-function requestBodyValidation<T>(type: any): express.RequestHandler {
+export function requestBodyValidation<T>(type: any): express.RequestHandler {
   return (req, _res, next) => {
     validate(plainToClass(type, req.body)).then((errors: ValidationError[]) => {
       if (errors.length > 0) {
@@ -21,5 +22,3 @@ function requestBodyValidation<T>(type: any): express.RequestHandler {
     });
   };
 }
-
-export default requestBodyValidation;

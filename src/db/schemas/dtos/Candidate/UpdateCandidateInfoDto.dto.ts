@@ -2,9 +2,11 @@
 import {
   IsNotEmpty,
   IsString,
-  IsNumber,
   IsUrl,
   IsArray,
+  IsOptional,
+  IsInt,
+  IsDateString,
 } from 'class-validator';
 
 // eslint-disable-next-line import/prefer-default-export
@@ -14,23 +16,30 @@ export class UpdateCandidateInfoDto {
   academic_training!: string;
 
   @IsNotEmpty()
-  @IsNumber()
+  @IsInt()
   salary_expectations!: number;
 
-  @IsString()
+  @IsOptional()
+  @IsNotEmpty()
+  @IsDateString()
   available_from?: string;
 
   @IsNotEmpty()
   @IsArray()
+  @IsString({ each: true })
   skills!: Array<string>;
 
   @IsNotEmpty()
   @IsUrl()
   linkedin!: string;
 
+  @IsOptional()
+  @IsNotEmpty()
   @IsUrl()
   portfolio?: string;
 
+  @IsOptional()
   @IsString()
+  @IsNotEmpty()
   working_reason?: string;
 }
