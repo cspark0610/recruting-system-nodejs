@@ -7,7 +7,7 @@ const storage = diskStorage({
 
   filename: (_req, file, cb) => {
     const fileType = file.originalname.split('.').pop();
-    cb(null, `${file.fieldname}-${Date.now()}.${fileType}`);
+    cb(null, `${file.originalname.split('.')[0]}-${Date.now()}.${fileType}`);
   },
 });
 
