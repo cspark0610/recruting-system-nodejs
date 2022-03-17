@@ -15,7 +15,6 @@ import InternalServerException from '../exceptions/InternalServerError';
 import { UpdateCandidateInfoDto } from '../db/schemas/dtos/Candidate';
 import TokenData from '../interfaces/TokenData.interface';
 import { createToken } from '../lib/jwt';
-import IQuestion from '../interfaces/IQuestion.interface';
 
 dotenv.config();
 
@@ -62,7 +61,11 @@ export const CreateCandidate = async (
   next: NextFunction,
 ) => {
   try {
-    const newCandidate = await Candidate.create(candidateInfo);
+    const job = await Job.findById(candidateInfo.job);
+    const newCandidate = await Candidate.create({
+      ...candidateInfo,
+      videos_question_list: job?.video_questions_list,
+    });
 
     return newCandidate;
   } catch (e: any) {
@@ -155,19 +158,12 @@ export const SaveVideoKeyToUser = async (
   video_key: string,
 ) => {
   try {
-    const candidate = await Candidate.findById(id);
-
-    const questions = await Job.findById(candidate?.job._id);
-
-    candidate!.videos_question_list!.push(
-      questions!.video_questions_list[question_id - 1] as IQuestion,
+    const candidate = await Candidate.findOneAndUpdate(
+      { _id: id, $and: [{ 'videos_question_list.question_id': question_id }] },
+      { $set: { 'videos_question_list.$.video_key': video_key } },
+      { upsert: true },
     );
-
-    candidate!.videos_question_list!.map(
-      (question) => (question.video_key = video_key),
-    );
-
-    candidate!.save();
+    await candidate!.save();
   } catch (e: any) {
     return next(
       new InternalServerException(
