@@ -9,7 +9,7 @@ export default interface ICandidate {
   country: string;
   academic_training?: string;
   salary_expectations?: number;
-  available_from?: string;
+  available_from?: Date;
   skills?: Array<string>;
   linkedin?: string;
   portfolio?: string;

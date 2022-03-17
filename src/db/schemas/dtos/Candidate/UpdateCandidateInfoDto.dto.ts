@@ -24,7 +24,7 @@ export class UpdateCandidateInfoDto {
   @IsOptional()
   @IsNotEmpty()
   @IsDateString()
-  available_from?: string;
+  available_from?: Date;
 
   @IsArray()
   @ArrayNotEmpty()
