@@ -1,9 +1,5 @@
 import { Router } from 'express';
-import {
-  ChangeRoleParamsDto,
-  CreateUserDto,
-  UserSignInParamsDto,
-} from '../db/schemas/dtos/User';
+import { CreateUserDto, UserSignInParamsDto } from '../db/schemas/dtos/User';
 import {
   requestBodyValidation,
   requestParamsValidation,
@@ -11,6 +7,7 @@ import {
 import * as userController from '../controllers/user.controller';
 import * as userAuth from '../middlewares/User.middleware';
 import * as authJwt from '../middlewares/authJwt.middleware';
+import ValidateUrlParamsDto from '../db/schemas/dtos/ValidateUrlParams.dto';
 
 const router = Router();
 
@@ -34,7 +31,7 @@ router.post(
 router.put(
   '/role/change/:_id',
   [
-    requestParamsValidation(ChangeRoleParamsDto),
+    requestParamsValidation(ValidateUrlParamsDto),
     authJwt.verifyJwt,
     authJwt.authRole({ CEO: 'CEO' }),
     userAuth.validateNewRole,
