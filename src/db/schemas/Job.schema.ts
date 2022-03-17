@@ -16,6 +16,17 @@ const JobSchema = new Schema<IJob>(
 
     skills_required: { type: [String], required: true },
 
+    video_questions_list: {
+      type: [
+        {
+          question_id: Number,
+          question_title: String,
+          video_key: String,
+        },
+      ],
+      required: true,
+    },
+
     url: {
       type: String,
     },

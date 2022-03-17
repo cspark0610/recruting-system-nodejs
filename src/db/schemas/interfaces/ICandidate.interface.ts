@@ -16,6 +16,6 @@ export default interface ICandidate {
   working_reason?: string;
   job: Types.ObjectId;
   video_recording_url?: Types.ObjectId;
-  videos_question_list?: Types.Array<IQuestion>;
+  videos_question_list?: Array<IQuestion>;
   cv?: string;
 }

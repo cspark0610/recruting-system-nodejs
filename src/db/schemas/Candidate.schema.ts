@@ -33,7 +33,13 @@ const CandidateSchema = new Schema<ICandidate>(
       autopopulate: true,
     },
 
-    videos_question_list: [],
+    videos_question_list: [
+      {
+        question_id: Number,
+        question_title: String,
+        video_key: String,
+      },
+    ],
 
     cv: {
       type: String,
