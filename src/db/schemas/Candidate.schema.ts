@@ -15,7 +15,7 @@ const CandidateSchema = new Schema<ICandidate>(
 
     salary_expectations: { type: Number, required: false },
 
-    available_from: { type: String, required: false },
+    available_from: { type: Date, required: false },
 
     skills: { type: [String], required: false },
 
