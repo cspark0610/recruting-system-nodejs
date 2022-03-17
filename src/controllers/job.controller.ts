@@ -1,3 +1,5 @@
+/* eslint-disable operator-linebreak */
+/* eslint-disable object-curly-newline */
 /* eslint-disable no-underscore-dangle */
 import { Request, Response, NextFunction } from 'express';
 import IJob from '../db/schemas/interfaces/IJob.interface';
@@ -11,11 +13,12 @@ export const createJob = async (
   res: Response,
   next: NextFunction,
 ) => {
-  const { title, designated, skills_required }: IJob = req.body;
+  const { title, designated, skills_required, video_questions_list }: IJob =
+    req.body;
 
   try {
     const newJob = await jobService.CreateJob(
-      { title, designated, skills_required },
+      { title, designated, skills_required, video_questions_list },
       next,
       req,
     );

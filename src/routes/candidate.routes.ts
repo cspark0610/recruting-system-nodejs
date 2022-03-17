@@ -38,7 +38,11 @@ router.post(
 
 router.post(
   '/video/upload/:candidate_id',
-  [upload.single('video'), requestParamsValidation(ValidateUrlParamsDto)],
+  [
+    upload.single('video'),
+    requestParamsValidation(ValidateUrlParamsDto),
+    candidateAuth.verifyCandidateVideoEmptyBeforeUpload,
+  ],
   candidateController.uploadVideoToS3,
 );
 

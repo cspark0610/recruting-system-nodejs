@@ -262,7 +262,7 @@ export const uploadVideoToS3 = async (
       question_id,
       candidate_id,
       next,
-      result?.Key,
+      result!.Key,
     );
 
     return res.status(201).send({

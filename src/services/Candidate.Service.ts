@@ -1,3 +1,5 @@
+/* eslint-disable no-param-reassign */
+/* eslint-disable no-return-assign */
 /* eslint-disable no-underscore-dangle */
 import { NextFunction } from 'express';
 import { createReadStream } from 'fs';
@@ -7,6 +9,7 @@ import File from '../interfaces/File.interface';
 import UploadParams from '../interfaces/UploadParams.interface';
 import Candidate from '../db/schemas/Candidate.schema';
 import ICandidate from '../db/schemas/interfaces/ICandidate.interface';
+import Job from '../db/schemas/Job.schema';
 import VideoRecordingUrl from '../db/schemas/VideoRecordingUrl.schema';
 import InternalServerException from '../exceptions/InternalServerError';
 import { UpdateCandidateInfoDto } from '../db/schemas/dtos/Candidate';
@@ -58,7 +61,11 @@ export const CreateCandidate = async (
   next: NextFunction,
 ) => {
   try {
-    const newCandidate = await Candidate.create(candidateInfo);
+    const job = await Job.findById(candidateInfo.job);
+    const newCandidate = await Candidate.create({
+      ...candidateInfo,
+      videos_question_list: job?.video_questions_list,
+    });
 
     return newCandidate;
   } catch (e: any) {
@@ -148,22 +155,15 @@ export const SaveVideoKeyToUser = async (
   question_id: number,
   id: string,
   next: NextFunction,
-  video_key?: string,
+  video_key: string,
 ) => {
   try {
     const candidate = await Candidate.findOneAndUpdate(
-      {
-        id,
-        $and: [{ 'videos_question_list.question_id': question_id }],
-      },
-      {
-        $set: {
-          'videos_question_list.$.video_key': video_key,
-        },
-      },
+      { _id: id, $and: [{ 'videos_question_list.question_id': question_id }] },
+      { $set: { 'videos_question_list.$.video_key': video_key } },
       { upsert: true },
     );
-    await candidate?.save();
+    await candidate!.save();
   } catch (e: any) {
     return next(
       new InternalServerException(
