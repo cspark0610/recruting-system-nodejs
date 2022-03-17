@@ -7,6 +7,8 @@ import {
   IsOptional,
   IsInt,
   IsDateString,
+  ArrayNotEmpty,
+  MinLength,
 } from 'class-validator';
 
 // eslint-disable-next-line import/prefer-default-export
@@ -24,9 +26,11 @@ export class UpdateCandidateInfoDto {
   @IsDateString()
   available_from?: string;
 
-  @IsNotEmpty()
   @IsArray()
+  @ArrayNotEmpty()
+  @IsNotEmpty()
   @IsString({ each: true })
+  @MinLength(3, { each: true })
   skills!: Array<string>;
 
   @IsNotEmpty()
