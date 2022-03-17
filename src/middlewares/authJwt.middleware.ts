@@ -21,9 +21,7 @@ export async function verifyJwt(
   const token = req.headers.authorization?.split(' ').pop();
 
   if (!token || token === 'Bearer') {
-    return next(
-      new AuthenticationTokenMissingExeption('No access token provided'),
-    );
+    return next(new AuthenticationTokenMissingExeption());
   }
 
   try {
@@ -32,7 +30,7 @@ export async function verifyJwt(
     const userFound = await User.findById(decoded._id, { password: '' });
 
     if (!userFound) {
-      return next(new InvalidAccessToken('Invalid access token'));
+      return next(new InvalidAccessToken());
     }
 
     req.user = userFound;
@@ -53,11 +51,7 @@ export function authRole(ROLES: Record<string, string>) {
     const role = await Role.findOne({ _id: { $in: user?.role } });
 
     if (!ROLES[role!.name]) {
-      return next(
-        new ForbiddenException(
-          'You don´t have the necessary permissions to execute this action',
-        ),
-      );
+      return next(new ForbiddenException());
     }
 
     next();

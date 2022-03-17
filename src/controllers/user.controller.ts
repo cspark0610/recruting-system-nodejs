@@ -38,7 +38,7 @@ export const signIn = async (
     const userFound = await userService.SignIn(userInfo.email, next);
 
     if (!userFound) {
-      return next(new InvalidCredentialsException('Invalid email or password'));
+      return next(new InvalidCredentialsException());
     }
 
     const passwordMatch = await bcrypt.compare(
@@ -47,7 +47,7 @@ export const signIn = async (
     );
 
     if (!passwordMatch) {
-      return next(new InvalidCredentialsException('Invalid email or password'));
+      return next(new InvalidCredentialsException());
     }
 
     const token = createToken(userFound);
@@ -107,5 +107,5 @@ export const changeRole = async (
 
   return res
     .status(200)
-    .send({ status: 200, message: 'User updated successfully' });
+    .send({ status: 200, message: 'User role updated successfully' });
 };
