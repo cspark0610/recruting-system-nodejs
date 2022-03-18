@@ -31,5 +31,9 @@ export class CreateCandidateDto implements ICandidate {
 
   @IsNotEmpty()
   @IsString()
+  english_level!: string;
+
+  @IsNotEmpty()
+  @IsString()
   country!: string;
 }

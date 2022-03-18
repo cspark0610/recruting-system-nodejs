@@ -101,7 +101,8 @@ export const createCandidate = async (
   next: NextFunction,
 ) => {
   const cv = req.file as Express.Multer.File;
-  const { name, email, phone, job, country }: ICandidate = req.body;
+  const { name, email, phone, job, english_level, country }: ICandidate =
+    req.body;
 
   try {
     const result = await candidateService.UploadCV(cv, next);
@@ -115,6 +116,7 @@ export const createCandidate = async (
         email,
         phone,
         country,
+        english_level,
         job,
         cv: cvKey,
       },

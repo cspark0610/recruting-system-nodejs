@@ -8,6 +8,7 @@ export default interface ICandidate {
   phone: number;
   country: string;
   academic_training?: string;
+  english_level: string;
   salary_expectations?: number;
   available_from?: Date;
   skills?: Array<string>;

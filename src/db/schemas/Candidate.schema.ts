@@ -17,6 +17,8 @@ const CandidateSchema = new Schema<ICandidate>(
 
     available_from: { type: Date, required: false },
 
+    english_level: { type: String, required: true },
+
     skills: { type: [String], required: false },
 
     linkedin: { type: String, required: false },
