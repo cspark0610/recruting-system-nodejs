@@ -10,6 +10,7 @@ import BadRequestException from '../exceptions/BadRequestException';
 import InternalServerException from '../exceptions/InternalServerError';
 import RequestExtended from '../interfaces/RequestExtended.interface';
 import * as candidateService from '../services/Candidate.Service';
+import { decodeToken } from '../lib/jwt';
 
 dotenv.config();
 
@@ -273,6 +274,26 @@ export const uploadVideoToS3 = async (
     return next(
       new InternalServerException(
         `There was an unexpected error with the video upload controller. ${e.message}`,
+      ),
+    );
+  }
+};
+
+export const validateUrl = (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const token = req.query.token as string;
+
+    const decoded = decodeToken(token);
+
+    return res.status(200).send({ status: 200, decoded });
+  } catch (e: any) {
+    return next(
+      new InternalServerException(
+        `There was an unexpected error returning the token. ${e.message}`,
       ),
     );
   }

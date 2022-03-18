@@ -52,10 +52,14 @@ router.post(
   candidateController.generateUniqueUrl,
 );
 
-router.post('/url/validate', [
-  requestQueryValidation(JwtValidationDto),
-  candidateAuth.validateCandidateJwt,
-]);
+router.post(
+  '/url/validate',
+  [
+    requestQueryValidation(JwtValidationDto),
+    candidateAuth.validateCandidateJwt,
+  ],
+  candidateController.validateUrl,
+);
 
 router.put(
   '/info/update/:_id',
