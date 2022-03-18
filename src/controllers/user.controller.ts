@@ -50,10 +50,12 @@ export const signIn = async (
       return next(new InvalidCredentialsException());
     }
 
-    const userWithoutPassword = await userService.GetUserWithoutPassword(
-      userInfo.email,
-      next,
-    );
+    const userWithoutPassword = {
+      _id: userFound._id,
+      name: userFound.name,
+      email: userFound.email,
+      role: userFound.role,
+    };
 
     const token = createToken(userFound);
 
