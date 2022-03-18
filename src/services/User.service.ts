@@ -73,6 +73,21 @@ export const SignIn = async (email: string, next: NextFunction) => {
   }
 };
 
+export const GetUserWithoutPassword = async (
+  email: string,
+  next: NextFunction,
+) => {
+  try {
+    return await User.findOne({ email }, { password: 0 });
+  } catch (e: any) {
+    return next(
+      new InternalServerException(
+        `There was an unexpected error while retrieving the user without password. ${e.message}`,
+      ),
+    );
+  }
+};
+
 export const ChangeRole = async (
   _id: string,
   newRole: Types.ObjectId,
