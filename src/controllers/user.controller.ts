@@ -50,11 +50,16 @@ export const signIn = async (
       return next(new InvalidCredentialsException());
     }
 
+    const userWithoutPassword = await userService.GetUserWithoutPassword(
+      userInfo.email,
+      next,
+    );
+
     const token = createToken(userFound);
 
     return res
       .status(200)
-      .send({ message: 'sucess', token: token.token, userFound });
+      .send({ message: 'sucess', token: token.token, userWithoutPassword });
   } catch (e: any) {
     return next(
       new InternalServerException(
