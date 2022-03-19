@@ -6,7 +6,7 @@ import dotenv from 'dotenv';
 import User from '../db/schemas/User.schema';
 import Role from '../db/schemas/Role.schema';
 import InvalidAccessToken from '../exceptions/InvalidAccessToken';
-import AuthenticationTokenMissingExeption from '../exceptions/AuthenticationTokenMissingExeption';
+import AcessTokenMissingException from '../exceptions/AcessTokenMissingException';
 import RequestExtended from '../interfaces/RequestExtended.interface';
 import ForbiddenException from '../exceptions/ForbiddenException';
 import { decodeToken } from '../lib/jwt';
@@ -21,7 +21,7 @@ export async function verifyJwt(
   const token = req.headers.authorization?.split(' ').pop();
 
   if (!token || token === 'Bearer') {
-    return next(new AuthenticationTokenMissingExeption());
+    return next(new AcessTokenMissingException());
   }
 
   try {
