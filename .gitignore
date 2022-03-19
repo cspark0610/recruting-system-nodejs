@@ -4,3 +4,5 @@ dist
 .env
 *.http
 bundle.js
+coverage
+coverage/

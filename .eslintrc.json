@@ -12,19 +12,6 @@
   },
   "plugins": ["@typescript-eslint"],
   "rules": {
-    "no-console": "off",
-    "no-plusplus": "off",
-    "no-undef": "off",
-    "no-octal": "off",
-    "no-use-before-define": "off",
-    "eqeqeq": "off",
-    "import/no-unresolved": "off",
-    "consistent-return": "off",
-    "camelcase": "off",
-    "semi": "off",
-    "import/extensions": "off",
-    "no-confusing-arrow": "off",
-    "implicit-arrow-linebreak": "off",
-    "function-paren-newline": "off"
+    "import/no-unresolved": false
   }
 }
