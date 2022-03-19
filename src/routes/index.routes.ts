@@ -16,7 +16,7 @@ router.use('/job', jobRoutes);
 router.use('/users', userRoutes);
 
 router.use('*', (_req, _res, next) =>
-  next(new NotFoundException('This page does not exists')),
+  next(new NotFoundException('This page does not exist')),
 );
 
 export default router;
