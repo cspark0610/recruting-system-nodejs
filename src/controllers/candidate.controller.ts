@@ -3,7 +3,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { unlink } from 'fs';
 import { promisify } from 'util';
-import dotenv from 'dotenv';
+import envConfig from '../lib/envConfig';
 import ICandidate from '../db/schemas/interfaces/ICandidate.interface';
 import NotFoundException from '../exceptions/NotFoundException';
 import BadRequestException from '../exceptions/BadRequestException';
@@ -12,12 +12,10 @@ import RequestExtended from '../interfaces/RequestExtended.interface';
 import * as candidateService from '../services/Candidate.Service';
 import { decodeToken } from '../lib/jwt';
 
-dotenv.config();
-
 const unlinkFile = promisify(unlink);
 
 const { NODE_ENV, REDIRECT_URL_DEVELOPMENT, REDIRECT_URL_PRODUCTION } =
-  process.env;
+  envConfig;
 
 export const getAllCandidates = async (
   _req: Request,

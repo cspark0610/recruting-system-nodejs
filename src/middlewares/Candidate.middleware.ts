@@ -2,7 +2,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { unlink } from 'fs';
 import { promisify } from 'util';
-import dotenv from 'dotenv';
 import Candidate from '../db/schemas/Candidate.schema';
 import ICandidate from '../db/schemas/interfaces/ICandidate.interface';
 import Job from '../db/schemas/Job.schema';
@@ -13,8 +12,6 @@ import NotFoundException from '../exceptions/NotFoundException';
 import InvalidAccessToken from '../exceptions/InvalidAccessToken';
 import VideoRecordingUrlSchema from '../db/schemas/VideoRecordingUrl.schema';
 import { decodeToken } from '../lib/jwt';
-
-dotenv.config();
 
 export async function verifyCandidateExistsBeforeSignUp(
   req: Request,

@@ -3,7 +3,7 @@
 /* eslint-disable no-underscore-dangle */
 import { NextFunction } from 'express';
 import { createReadStream } from 'fs';
-import dotenv from 'dotenv';
+import envConfig from '../lib/envConfig';
 import s3 from '../lib/awsConfig';
 import File from '../interfaces/File.interface';
 import UploadParams from '../interfaces/UploadParams.interface';
@@ -16,9 +16,7 @@ import { UpdateCandidateInfoDto } from '../db/schemas/dtos/Candidate';
 import TokenData from '../interfaces/TokenData.interface';
 import { createToken } from '../lib/jwt';
 
-dotenv.config();
-
-const { AWS_VIDEO_BUCKET_NAME, AWS_CV_BUCKET_NAME } = process.env;
+const { AWS_VIDEO_BUCKET_NAME, AWS_CV_BUCKET_NAME } = envConfig;
 
 export const GetAllCandidates = async (next: NextFunction) => {
   try {

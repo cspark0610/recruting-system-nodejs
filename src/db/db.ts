@@ -1,14 +1,14 @@
 import mongoose from 'mongoose';
-import dotenv from 'dotenv';
+import envConfig from '../lib/envConfig';
 
-dotenv.config();
+const { NODE_ENV, MONGODB_DEVELOPMENT_URI, MONGODB_PRODUCTION_URI } = envConfig;
 
-if (process.env.NODE_ENV === 'development') {
-  mongoose.connect(process.env.MONGODB_DEVELOPMENT_URI as string, (error) =>
+if (NODE_ENV === 'development') {
+  mongoose.connect(MONGODB_DEVELOPMENT_URI, (error) =>
     error ? console.error(error) : console.log('database connected'),
   );
-} else if (process.env.NODE_ENV === 'production') {
-  mongoose.connect(process.env.MONGODB_PRODUCTION_URI as string, (error) =>
+} else if (NODE_ENV === 'production') {
+  mongoose.connect(MONGODB_PRODUCTION_URI, (error) =>
     error ? console.error(error) : console.log('database connected'),
   );
 }

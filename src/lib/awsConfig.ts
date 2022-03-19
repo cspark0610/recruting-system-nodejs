@@ -1,13 +1,11 @@
 import S3 from 'aws-sdk/clients/s3';
-import dotenv from 'dotenv';
-
-dotenv.config();
+import envConfig from './envConfig';
 
 const {
   AWS_BUCKET_REGION,
   AWS_BUCKET_ACCESS_KEY,
   AWS_BUCKET_SECRET_ACCESS_KEY,
-} = process.env;
+} = envConfig;
 
 const s3 = new S3({
   accessKeyId: AWS_BUCKET_ACCESS_KEY,

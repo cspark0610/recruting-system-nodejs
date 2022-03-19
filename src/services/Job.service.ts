@@ -1,16 +1,14 @@
 /* eslint-disable no-underscore-dangle */
 import { NextFunction } from 'express';
-import dotenv from 'dotenv';
+import envConfig from '../lib/envConfig';
 import Job from '../db/schemas/Job.schema';
 import IJob from '../db/schemas/interfaces/IJob.interface';
 import InternalServerException from '../exceptions/InternalServerError';
 import RequestExtended from '../interfaces/RequestExtended.interface';
 
-dotenv.config();
-
 // eslint-disable-next-line operator-linebreak
 const { NODE_ENV, REDIRECT_URL_DEVELOPMENT, REDIRECT_URL_PRODUCTION } =
-  process.env;
+  envConfig;
 
 export const CreateJob = async (
   jobInfo: IJob,
