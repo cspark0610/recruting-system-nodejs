@@ -27,7 +27,7 @@ export async function verifyJwt(
   try {
     const decoded = decodeToken(token);
 
-    const userFound = await User.findById(decoded._id, { password: '' });
+    const userFound = await User.findById(decoded._id, { password: 0 });
 
     if (!userFound) {
       return next(new InvalidAccessToken());
