@@ -1,10 +1,10 @@
 import express, { Application } from 'express';
 import helmet from 'helmet';
 import cors from 'cors';
+import corsOptions from './lib/corsOptions';
 import errorMiddleware from './middlewares/error.middleware';
 import createRoles from './lib/createRoles';
 import routes from './routes/index.routes';
-import corsOptions from './lib/corsOptions';
 
 const app: Application = express();
 
