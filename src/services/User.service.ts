@@ -30,7 +30,7 @@ export const SignUp = async (userInfo: IUser, next: NextFunction) => {
       if (foundRoles.length === 0) {
         return next(
           new BadRequestException(
-            `Role(s) ${userInfo.role} not found in database`,
+            `The Role(s) ${userInfo.role} does not exist`,
           ),
         );
       }

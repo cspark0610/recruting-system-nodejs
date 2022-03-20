@@ -59,9 +59,11 @@ export const signIn = async (
 
     const token = createToken(userFound);
 
-    return res
-      .status(200)
-      .send({ message: 'sucess', token: token.token, userWithoutPassword });
+    return res.status(200).send({
+      status: 200,
+      access_token: token.token,
+      userWithoutPassword,
+    });
   } catch (e: any) {
     return next(
       new InternalServerException(
@@ -92,7 +94,7 @@ export const signUp = async (
 
     return res
       .status(201)
-      .send({ message: 'sucess', token: token.token, user });
+      .send({ status: 201, access_token: token.token, user });
   } catch (e: any) {
     return next(
       new InternalServerException(
