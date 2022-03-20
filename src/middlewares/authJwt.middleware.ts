@@ -15,14 +15,14 @@ export async function verifyJwt(
   _res: Response,
   next: NextFunction,
 ) {
-  const token = req.headers.authorization?.split(' ').pop();
+  const accessToken = req.headers.authorization?.split(' ').pop();
 
-  if (!token || token === 'Bearer') {
+  if (!accessToken || accessToken === 'Bearer') {
     return next(new AcessTokenMissingException());
   }
 
   try {
-    const decoded = decodeToken(token);
+    const decoded = decodeToken(accessToken);
 
     const userFound = await User.findById(decoded._id, { password: 0 });
 
