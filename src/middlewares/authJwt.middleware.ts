@@ -2,13 +2,13 @@
 /* eslint-disable operator-linebreak */
 /* eslint-disable no-underscore-dangle */
 import { Response, NextFunction } from 'express';
+import { decodeToken } from '../lib/jwt';
 import User from '../db/schemas/User.schema';
 import Role from '../db/schemas/Role.schema';
 import InvalidAccessToken from '../exceptions/InvalidAccessToken';
 import AcessTokenMissingException from '../exceptions/AcessTokenMissingException';
 import RequestExtended from '../interfaces/RequestExtended.interface';
 import ForbiddenException from '../exceptions/ForbiddenException';
-import { decodeToken } from '../lib/jwt';
 
 export async function verifyJwt(
   req: RequestExtended,

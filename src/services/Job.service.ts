@@ -1,6 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 import { NextFunction } from 'express';
-import envConfig from '../lib/envConfig';
+import envConfig from '../config/env';
 import Job from '../db/schemas/Job.schema';
 import IJob from '../db/schemas/interfaces/IJob.interface';
 import InternalServerException from '../exceptions/InternalServerError';

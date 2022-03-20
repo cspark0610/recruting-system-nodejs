@@ -2,16 +2,16 @@
 import { Request, Response, NextFunction } from 'express';
 import { unlink } from 'fs';
 import { promisify } from 'util';
+import { decodeToken } from '../lib/jwt';
 import Candidate from '../db/schemas/Candidate.schema';
 import ICandidate from '../db/schemas/interfaces/ICandidate.interface';
 import Job from '../db/schemas/Job.schema';
+import VideoRecordingUrlSchema from '../db/schemas/VideoRecordingUrl.schema';
 import InternalServerException from '../exceptions/InternalServerError';
 import BadRequestException from '../exceptions/BadRequestException';
 import RequestExtended from '../interfaces/RequestExtended.interface';
 import NotFoundException from '../exceptions/NotFoundException';
 import InvalidAccessToken from '../exceptions/InvalidAccessToken';
-import VideoRecordingUrlSchema from '../db/schemas/VideoRecordingUrl.schema';
-import { decodeToken } from '../lib/jwt';
 
 export async function verifyCandidateExistsBeforeSignUp(
   req: Request,

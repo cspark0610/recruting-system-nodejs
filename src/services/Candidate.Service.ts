@@ -3,8 +3,10 @@
 /* eslint-disable no-underscore-dangle */
 import { NextFunction } from 'express';
 import { createReadStream } from 'fs';
-import envConfig from '../lib/envConfig';
-import s3 from '../lib/awsConfig';
+import { createToken } from '../lib/jwt';
+import { UpdateCandidateInfoDto } from '../db/schemas/dtos/Candidate';
+import envConfig from '../config/env';
+import s3 from '../config/aws';
 import File from '../interfaces/File.interface';
 import UploadParams from '../interfaces/UploadParams.interface';
 import Candidate from '../db/schemas/Candidate.schema';
@@ -12,9 +14,7 @@ import ICandidate from '../db/schemas/interfaces/ICandidate.interface';
 import Job from '../db/schemas/Job.schema';
 import VideoRecordingUrl from '../db/schemas/VideoRecordingUrl.schema';
 import InternalServerException from '../exceptions/InternalServerError';
-import { UpdateCandidateInfoDto } from '../db/schemas/dtos/Candidate';
 import TokenData from '../interfaces/TokenData.interface';
-import { createToken } from '../lib/jwt';
 
 const { AWS_VIDEO_BUCKET_NAME, AWS_CV_BUCKET_NAME } = envConfig;
 

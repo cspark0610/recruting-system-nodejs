@@ -1,5 +1,5 @@
 import S3 from 'aws-sdk/clients/s3';
-import envConfig from './envConfig';
+import envConfig from './env';
 
 const {
   AWS_BUCKET_REGION,

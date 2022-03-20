@@ -1,6 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 import jwt from 'jsonwebtoken';
-import envConfig from './envConfig';
+import envConfig from '../config/env';
 import TokenData from '../interfaces/TokenData.interface';
 import DataStoredInToken from '../interfaces/DataStoredInToken.interface';
 import ICandidate from '../db/schemas/interfaces/ICandidate.interface';

@@ -1,7 +1,7 @@
 import express, { Application } from 'express';
 import helmet from 'helmet';
 import cors from 'cors';
-import corsOptions from './lib/corsOptions';
+import corsOptions from './config/cors';
 import errorMiddleware from './middlewares/error.middleware';
 import createRoles from './lib/createRoles';
 import routes from './routes/index.routes';
