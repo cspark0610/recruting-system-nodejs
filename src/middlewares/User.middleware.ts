@@ -19,7 +19,7 @@ export async function validateSignUp(
     const emailAt = email.split('@').pop();
 
     if (emailAt !== 'fulltimeforce.com') {
-      return next(new BadRequestException('The emal is invalid'));
+      return next(new BadRequestException('The email is invalid'));
     }
 
     const userExists = await User.findOne({ email });
