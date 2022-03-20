@@ -1,6 +1,6 @@
-import ICorsOptions from '../interfaces/ICorsOptions.interface';
+import { CorsOptions } from 'cors';
 
-const corsOptions: ICorsOptions = {
+const corsOptions: CorsOptions = {
   origin: '*',
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
 };
