@@ -16,6 +16,12 @@ export async function validateSignUp(
   const { email }: IUser = req.body;
 
   try {
+    const emailAt = email.split('@').pop();
+
+    if (emailAt !== 'fulltimeforce.com') {
+      return next(new BadRequestException('The emal is invalid'));
+    }
+
     const userExists = await User.findOne({ email });
 
     if (userExists) {
