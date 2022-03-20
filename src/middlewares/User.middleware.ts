@@ -6,7 +6,6 @@ import Role from '../db/schemas/Role.schema';
 import BadRequestException from '../exceptions/BadRequestException';
 import InternalServerException from '../exceptions/InternalServerError';
 import RequestExtended from '../interfaces/RequestExtended.interface';
-import NotFoundException from '../exceptions/NotFoundException';
 
 export async function validateSignUp(
   req: Request,
@@ -54,21 +53,13 @@ export async function validateNewRole(
     const user = await User.findById(_id);
 
     if (!user) {
-      return next(
-        new NotFoundException(
-          `The user with the id ${_id} does not exist on the database`,
-        ),
-      );
+      return next(new BadRequestException('Invalid user id'));
     }
 
     const roleExists = await Role.findOne({ name: newRole });
 
     if (!roleExists) {
-      return next(
-        new NotFoundException(
-          `The role ${newRole} does not exist on the database`,
-        ),
-      );
+      return next(new BadRequestException('Invalid role'));
     }
 
     const rolesMatch = user.role?._id.equals(roleExists._id);
