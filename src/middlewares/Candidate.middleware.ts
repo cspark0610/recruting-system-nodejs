@@ -13,6 +13,8 @@ import RequestExtended from '../interfaces/RequestExtended.interface';
 import NotFoundException from '../exceptions/NotFoundException';
 import InvalidAccessToken from '../exceptions/InvalidAccessToken';
 
+const unlinkFile = promisify(unlink);
+
 // checks that there is not another candidate with the same email before sign up
 export async function verifyCandidateExistsBeforeSignUp(
   req: Request,
@@ -20,11 +22,13 @@ export async function verifyCandidateExistsBeforeSignUp(
   next: NextFunction,
 ) {
   const { email, job }: ICandidate = req.body;
+  const cv = req.file as Express.Multer.File;
 
   try {
     const candidateExists = await Candidate.findOne({ email });
 
     if (candidateExists) {
+      await unlinkFile(cv.path);
       return next(
         new BadRequestException(
           `There is already a candidate registered with the email ${email}`,
@@ -119,8 +123,6 @@ export async function validateCV(
   next: NextFunction,
 ) {
   const cv = req.file;
-
-  const unlinkFile = promisify(unlink);
 
   if (!cv) {
     return next(new BadRequestException('No cv was provided'));
