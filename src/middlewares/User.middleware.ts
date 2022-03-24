@@ -41,6 +41,7 @@ export async function validateSignUp(
   }
 }
 
+// checks that the new role the ADMIN wants to set for an user is valid and that the user does not have the new role already assigned
 export async function validateNewRole(
   req: RequestExtended,
   _res: Response,

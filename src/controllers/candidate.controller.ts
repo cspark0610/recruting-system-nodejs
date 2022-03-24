@@ -103,6 +103,7 @@ export const createCandidate = async (
     req.body;
 
   try {
+    // uploads CV file to S3. Then the file is removed automatically from the server
     const result = await candidateService.UploadCV(cv, next);
     await unlinkFile(cv.path);
 
@@ -259,6 +260,7 @@ export const uploadVideoToS3 = async (
 
     await unlinkFile(newCandidateVideo.path);
 
+    // sets the video_key property in candidate schema after video is uploaded to S3
     await candidateService.SaveVideoKeyToUser(
       question_id,
       candidate_id,

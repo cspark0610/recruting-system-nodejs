@@ -13,6 +13,7 @@ import RequestExtended from '../interfaces/RequestExtended.interface';
 import NotFoundException from '../exceptions/NotFoundException';
 import InvalidAccessToken from '../exceptions/InvalidAccessToken';
 
+// checks that there is not another candidate with the same email before sign up
 export async function verifyCandidateExistsBeforeSignUp(
   req: Request,
   _res: Response,
@@ -31,6 +32,7 @@ export async function verifyCandidateExistsBeforeSignUp(
       );
     }
 
+    // checks that the job a candidate is applying for exists
     const jobExists = await Job.findById(job);
 
     if (!jobExists) {

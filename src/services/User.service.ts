@@ -24,6 +24,7 @@ export const SignUp = async (userInfo: IUser, next: NextFunction) => {
     const hashedPassword = await User.hashPassword(userInfo.password, 12);
     let foundRoles;
 
+    // checks if the role that will be set to the user indeed exists
     if (userInfo.role) {
       foundRoles = await Role.find({ name: { $in: userInfo.role } });
 
@@ -35,6 +36,7 @@ export const SignUp = async (userInfo: IUser, next: NextFunction) => {
         );
       }
     } else {
+      // if a role is not especified, the role COMMON is set by default
       foundRoles = await Role.find({ name: 'COMMON' });
     }
 

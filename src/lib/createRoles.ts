@@ -1,6 +1,7 @@
 import Role from '../db/schemas/Role.schema';
 import InternalServerException from '../exceptions/InternalServerError';
 
+// sets the roles in the dabatase before app routes are loaded
 export default async function createRoles() {
   try {
     const roleCount = await Role.estimatedDocumentCount();

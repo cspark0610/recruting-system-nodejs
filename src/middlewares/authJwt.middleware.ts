@@ -10,6 +10,7 @@ import AcessTokenMissingException from '../exceptions/AcessTokenMissingException
 import RequestExtended from '../interfaces/RequestExtended.interface';
 import ForbiddenException from '../exceptions/ForbiddenException';
 
+// checks if a JWT is valid
 export async function verifyJwt(
   req: RequestExtended,
   _res: Response,
@@ -38,6 +39,7 @@ export async function verifyJwt(
   next();
 }
 
+// checks if the user possess the permission to execute a certain task by checking if the user´s current role is in the ROLES array
 export function authRole(ROLES: Record<string, string>) {
   return async function (
     req: RequestExtended,

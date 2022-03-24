@@ -7,6 +7,7 @@ import InternalServerException from '../exceptions/InternalServerError';
 import NotFoundException from '../exceptions/NotFoundException';
 import RequestExtended from '../interfaces/RequestExtended.interface';
 
+// checks if there is already a job created with the provided name before creation
 export async function validateJobExists(
   req: RequestExtended,
   _res: Response,
@@ -25,6 +26,7 @@ export async function validateJobExists(
       );
     }
 
+    // checks if the designated users for job monitoring exists
     const designatedUsers = await User.find({
       name: { $in: designated },
     });

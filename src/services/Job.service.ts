@@ -21,6 +21,7 @@ export const CreateJob = async (
       designated: req?.designated?.map((user) => user._id),
     });
 
+    // creates the job application url once the job is created
     const newJobWithUrl = await Job.findByIdAndUpdate(
       newJob._id,
       {
