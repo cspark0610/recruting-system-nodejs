@@ -13,7 +13,7 @@ const CandidateSchema = new Schema<ICandidate>(
 
     academic_training: { type: String, required: false },
 
-    salary_expectations: { type: Number, required: false },
+    salary_expectations: { type: String, required: false },
 
     available_from: { type: Date, required: false },
 

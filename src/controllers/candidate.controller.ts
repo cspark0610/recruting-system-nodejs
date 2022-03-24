@@ -289,7 +289,12 @@ export const validateUrl = (
 
     const decoded = decodeToken(token);
 
-    return res.status(200).send({ status: 200, decoded });
+    return res
+      .status(200)
+      .send({
+        status: 200,
+        decoded: { _id: decoded._id, url_id: decoded.url_id },
+      });
   } catch (e: any) {
     return next(
       new InternalServerException(

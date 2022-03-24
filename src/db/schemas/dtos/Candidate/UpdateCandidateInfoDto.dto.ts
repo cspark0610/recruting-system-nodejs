@@ -5,7 +5,6 @@ import {
   IsUrl,
   IsArray,
   IsOptional,
-  IsInt,
   IsDateString,
   ArrayNotEmpty,
   MinLength,
@@ -18,8 +17,8 @@ export class UpdateCandidateInfoDto {
   academic_training!: string;
 
   @IsNotEmpty()
-  @IsInt()
-  salary_expectations!: number;
+  @IsString()
+  salary_expectations!: string;
 
   @IsOptional()
   @IsNotEmpty()
