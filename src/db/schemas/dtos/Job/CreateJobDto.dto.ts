@@ -7,7 +7,7 @@ import {
   IsObject,
   ArrayNotEmpty,
 } from 'class-validator';
-import IQuestionInterface from '../../../../interfaces/IQuestion.interface';
+import IQuestion from '../../../../interfaces/IQuestion.interface';
 import IJob from '../../interfaces/IJob.interface';
 
 // eslint-disable-next-line import/prefer-default-export
@@ -30,5 +30,5 @@ export class CreateJobDto implements IJob {
   @IsArray()
   @ArrayNotEmpty()
   @IsObject({ each: true })
-  video_questions_list!: IQuestionInterface[];
+  video_questions_list!: Array<IQuestion>;
 }
