@@ -157,10 +157,6 @@ export async function validateCandidateJwt(
 
     next();
   } catch (e: any) {
-    return next(
-      new InternalServerException(
-        `There was an unexpected error with the candidate url jwt validation. ${e.message}`,
-      ),
-    );
+    return next(new InvalidAccessToken(e.message));
   }
 }
