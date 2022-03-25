@@ -80,7 +80,7 @@ export const getCV = async (
     const candidateCV = await candidateService.GetCV(key, next);
 
     if (!candidateCV) {
-      return next(new NotFoundException(`CV file not found with key ${key}`));
+      return next(new NotFoundException(`CV file not found`));
     }
 
     candidateCV.pipe(res);
@@ -225,7 +225,7 @@ export const getVideoFromS3 = (
     const candidateVideo = candidateService.GetVideoFromS3(key, next);
 
     if (!candidateVideo) {
-      return next(new NotFoundException(`No video found with key ${key}`));
+      return next(new NotFoundException(`No video found`));
     }
 
     candidateVideo.pipe(res);
@@ -261,7 +261,7 @@ export const uploadVideoToS3 = async (
     await unlinkFile(newCandidateVideo.path);
 
     // sets the video_key property in candidate schema after video is uploaded to S3
-    await candidateService.SaveVideoKeyToUser(
+    await candidateService.SaveVideoKeyToCandidate(
       question_id,
       candidate_id,
       next,

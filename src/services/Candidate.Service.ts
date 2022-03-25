@@ -82,7 +82,7 @@ export const UpdateCandidateInfo = async (
 export const GenerateUrl = async (
   candidate: ICandidate,
   next: NextFunction,
-): Promise<TokenData | undefined | void> => {
+): Promise<TokenData | undefined> => {
   try {
     const newUrl = await VideoRecordingUrl.create({});
     const token = createToken(candidate, newUrl.short_url);
@@ -103,7 +103,7 @@ export const GenerateUrl = async (
 export const GetVideoFromS3 = (key: string, next: NextFunction) => {
   try {
     const getParams = {
-      Bucket: AWS_VIDEO_BUCKET_NAME as string,
+      Bucket: AWS_VIDEO_BUCKET_NAME,
       Key: key,
     };
 
@@ -122,7 +122,7 @@ export const UploadVideoToS3 = async (file: File, next: NextFunction) => {
     const fileStream = createReadStream(file.path);
 
     const uploadParams: UploadParams = {
-      Bucket: AWS_VIDEO_BUCKET_NAME as string,
+      Bucket: AWS_VIDEO_BUCKET_NAME,
       Body: fileStream,
       Key: file.filename,
     };
@@ -137,7 +137,7 @@ export const UploadVideoToS3 = async (file: File, next: NextFunction) => {
   }
 };
 
-export const SaveVideoKeyToUser = async (
+export const SaveVideoKeyToCandidate = async (
   question_id: number,
   id: string,
   next: NextFunction,
@@ -162,7 +162,7 @@ export const SaveVideoKeyToUser = async (
 export const GetCV = async (key: string, next: NextFunction) => {
   try {
     const getParams = {
-      Bucket: AWS_CV_BUCKET_NAME as string,
+      Bucket: AWS_CV_BUCKET_NAME,
       Key: key,
     };
 
@@ -181,7 +181,7 @@ export const UploadCV = async (cv: File, next: NextFunction) => {
     const fileStream = createReadStream(cv.path);
 
     const uploadParams: UploadParams = {
-      Bucket: AWS_CV_BUCKET_NAME as string,
+      Bucket: AWS_CV_BUCKET_NAME,
       Body: fileStream,
       Key: cv.filename,
     };
