@@ -4,8 +4,4 @@ import { IUser } from './IUser.interface';
 
 export interface UserModel extends Model<IUser> {
   hashPassword(password: string, salt: number): Promise<string>;
-  comparePassword(
-    originalPassword: string,
-    hashedPassword: string,
-  ): Promise<boolean>;
 }
