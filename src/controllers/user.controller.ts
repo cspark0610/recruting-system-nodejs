@@ -57,11 +57,11 @@ export const signIn = async (
       role: userFound.role,
     };
 
-    const token = createToken(userFound);
+    const { token } = createToken(userFound);
 
     return res.status(200).send({
       status: 200,
-      access_token: token.token,
+      access_token: token,
       userWithoutPassword,
     });
   } catch (e: any) {
@@ -90,11 +90,9 @@ export const signUp = async (
       );
     }
 
-    const token = createToken(user);
+    const { token } = createToken(user);
 
-    return res
-      .status(201)
-      .send({ status: 201, access_token: token.token, user });
+    return res.status(201).send({ status: 201, access_token: token, user });
   } catch (e: any) {
     return next(
       new InternalServerException(
