@@ -46,8 +46,10 @@ export function authRole(ROLES: Record<string, string>) {
     _res: Response,
     next: NextFunction,
   ) {
-    const user = await User.findById(req.user?._id);
-    const role = await Role.findOne({ _id: { $in: user?.role } });
+    const user = req.user!;
+
+    const userFound = await User.findById(user._id);
+    const role = await Role.findOne({ _id: { $in: userFound!.role } });
 
     if (!ROLES[role!.name]) {
       return next(new ForbiddenException());
