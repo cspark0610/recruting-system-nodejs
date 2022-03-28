@@ -3,11 +3,12 @@
 import bcrypt from 'bcrypt';
 import { NextFunction, Request, Response } from 'express';
 import { IUser } from '../db/schemas/interfaces/User';
-import { createToken } from '../lib/jwt';
+import { createToken, decodeToken } from '../lib/jwt';
 import InternalServerException from '../exceptions/InternalServerError';
 import InvalidCredentialsException from '../exceptions/InvalidCredentialsException';
 import RequestExtended from '../interfaces/RequestExtended.interface';
 import * as userService from '../services/User.service';
+import InvalidAccessToken from '../exceptions/InvalidAccessToken';
 
 export const getAllUsers = async (
   _req: Request,
@@ -57,12 +58,14 @@ export const signIn = async (
       role: userFound.role,
     };
 
-    const { token } = createToken(userFound);
+    const acessToken = createToken(userFound, '1d', 'access');
+    const refreshToken = createToken(userFound, '7d', 'refresh');
 
     return res.status(200).send({
       status: 200,
-      access_token: token,
       userWithoutPassword,
+      access_token: acessToken.token,
+      refresh_token: refreshToken.token,
     });
   } catch (e: any) {
     return next(
@@ -90,15 +93,51 @@ export const signUp = async (
       );
     }
 
-    const { token } = createToken(user);
+    const accessToken = createToken(user, '1d', 'access');
+    const refreshToken = createToken(user, '7d', 'refresh');
 
-    return res.status(201).send({ status: 201, access_token: token, user });
+    return res.status(201).send({
+      status: 201,
+      access_token: accessToken.token,
+      refresh_token: refreshToken.token,
+      user,
+    });
   } catch (e: any) {
     return next(
       new InternalServerException(
         `There was an unexpected error with the signUp controller. ${e.message}`,
       ),
     );
+  }
+};
+
+export const refreshToken = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  const { refresh_token } = req.body;
+
+  try {
+    const refreshTokenValid = decodeToken(refresh_token, 'refresh');
+    const userFound = await userService.GetUniqueUser(
+      refreshTokenValid._id,
+      next,
+    );
+
+    if (!userFound) {
+      return next(new InvalidAccessToken());
+    }
+
+    const accessToken = createToken(userFound, '1h', 'access');
+    const refreshToken = createToken(userFound, '7d', 'refresh');
+
+    return res.status(200).send({
+      access_token: accessToken.token,
+      refresh_token: refreshToken.token,
+    });
+  } catch (e: any) {
+    return next(new InternalServerException(e));
   }
 };
 

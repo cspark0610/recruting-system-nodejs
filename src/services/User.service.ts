@@ -19,6 +19,14 @@ export const GetAllUsers = async (next: NextFunction) => {
   }
 };
 
+export const GetUniqueUser = async (_id: string, next: NextFunction) => {
+  try {
+    return await User.findById(_id);
+  } catch (e: any) {
+    return next(new InternalServerException(e));
+  }
+};
+
 export const SignUp = async (userInfo: IUser, next: NextFunction) => {
   try {
     const hashedPassword = await User.hashPassword(userInfo.password, 12);
@@ -74,6 +82,8 @@ export const SignIn = async (email: string, next: NextFunction) => {
     );
   }
 };
+
+export const RefreshToken = (next: NextFunction) => {};
 
 export const ChangeRole = async (
   _id: string,

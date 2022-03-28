@@ -13,7 +13,8 @@ const envConfig = {
   REDIRECT_URL_PRODUCTION: process.env.REDIRECT_URL_PRODUCTION as string,
   REDIRECT_URL_DEVELOPMENT: process.env.REDIRECT_URL_DEVELOPMENT as string,
   NODE_ENV: process.env.NODE_ENV as string,
-  JWT_SECRET: process.env.JWT_SECRET as string,
+  JWT_ACCESS_TOKEN_SECRET: process.env.JWT_ACCESS_TOKEN_SECRET as string,
+  JWT_REFRESH_TOKEN_SECRET: process.env.JWT_REFRESH_TOKEN_SECRET as string,
 };
 
 export default envConfig;
