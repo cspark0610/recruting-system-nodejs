@@ -40,6 +40,7 @@ export async function verifyCandidateExistsBeforeSignUp(
     const jobExists = await Job.findById(job);
 
     if (!jobExists) {
+      await unlinkFile(cv.path);
       return next(
         new BadRequestException(`No job has been found with the id ${job}`),
       );
