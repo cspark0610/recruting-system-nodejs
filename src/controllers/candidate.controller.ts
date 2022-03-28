@@ -3,6 +3,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { unlink } from 'fs';
 import { promisify } from 'util';
+import { decodeToken } from '../lib/jwt';
 import envConfig from '../config/env';
 import ICandidate from '../db/schemas/interfaces/ICandidate.interface';
 import NotFoundException from '../exceptions/NotFoundException';
@@ -10,7 +11,6 @@ import BadRequestException from '../exceptions/BadRequestException';
 import InternalServerException from '../exceptions/InternalServerError';
 import RequestExtended from '../interfaces/RequestExtended.interface';
 import * as candidateService from '../services/Candidate.Service';
-import { decodeToken } from '../lib/jwt';
 
 const unlinkFile = promisify(unlink);
 
