@@ -28,7 +28,11 @@ router.post(
   userController.signUp,
 );
 
-router.post('/token/refresh', userController.refreshToken);
+router.post(
+  '/token/refresh',
+  authJwt.verifyRefreshJwt,
+  userController.refreshToken,
+);
 
 router.put(
   '/role/change/:_id',
