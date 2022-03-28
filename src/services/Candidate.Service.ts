@@ -85,7 +85,7 @@ export const GenerateUrl = async (
 ): Promise<TokenData | undefined> => {
   try {
     const newUrl = await VideoRecordingUrl.create({});
-    const token = createToken(candidate, newUrl.short_url);
+    const token = createToken(candidate, '1d', 'access', newUrl.short_url);
     await Candidate.findByIdAndUpdate(candidate._id, {
       video_recording_url: newUrl._id,
     });

@@ -58,7 +58,7 @@ export const signIn = async (
       role: userFound.role,
     };
 
-    const acessToken = createToken(userFound, '10s', 'access');
+    const acessToken = createToken(userFound, '1d', 'access');
     const refreshToken = createToken(userFound, '7d', 'refresh');
 
     return res.status(200).send({
@@ -93,7 +93,7 @@ export const signUp = async (
       );
     }
 
-    const accessToken = createToken(user, '10', 'access');
+    const accessToken = createToken(user, '1d', 'access');
     const refreshToken = createToken(user, '7d', 'refresh');
 
     return res.status(201).send({
