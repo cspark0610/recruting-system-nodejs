@@ -75,8 +75,6 @@ export const SignIn = async (email: string, next: NextFunction) => {
   }
 };
 
-export const RefreshToken = (next: NextFunction) => {};
-
 export const ChangeRole = async (
   _id: string,
   newRole: Types.ObjectId,
