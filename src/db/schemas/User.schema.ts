@@ -35,4 +35,11 @@ UserSchema.static(
   },
 );
 
+UserSchema.static(
+  'comparePassword',
+  function comparePassword(originalPassword, hashedPassword) {
+    return bcrypt.compare(originalPassword, hashedPassword);
+  },
+);
+
 export default model<IUser, UserModel>('user', UserSchema);

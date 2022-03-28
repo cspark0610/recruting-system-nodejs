@@ -1,12 +1,10 @@
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable no-unused-vars */
-import bcrypt from 'bcrypt';
 import { NextFunction, Request, Response } from 'express';
 import { IUser } from '../db/schemas/interfaces/User';
 import { createToken } from '../lib/jwt';
 import envConfig from '../config/env';
 import InternalServerException from '../exceptions/InternalServerError';
-import InvalidCredentialsException from '../exceptions/InvalidCredentialsException';
 import RequestExtended from '../interfaces/RequestExtended.interface';
 import * as userService from '../services/User.service';
 
@@ -38,40 +36,13 @@ export const signIn = async (
   const userInfo: IUser = req.body;
 
   try {
-    const userFound = await userService.SignIn(userInfo.email, next);
-
-    if (!userFound) {
-      return next(new InvalidCredentialsException());
-    }
-
-    const passwordMatch = await bcrypt.compare(
-      userInfo.password,
-      userFound.password,
-    );
-
-    if (!passwordMatch) {
-      return next(new InvalidCredentialsException());
-    }
-
-    const userWithoutPassword = {
-      _id: userFound._id,
-      name: userFound.name,
-      email: userFound.email,
-      role: userFound.role,
-    };
-
-    const acessToken = createToken(userFound, JWT_ACCESS_TOKEN_EXP, 'access');
-    const refreshToken = createToken(
-      userFound,
-      JWT_REFRESH_TOKEN_EXP,
-      'refresh',
-    );
+    const data = await userService.SignIn(userInfo, next);
 
     return res.status(200).send({
       status: 200,
-      userWithoutPassword,
-      access_token: acessToken.token,
-      refresh_token: refreshToken.token,
+      access_token: data!.accessToken.token,
+      refresh_token: data!.refreshToken.token,
+      user: data!.userWithouthPassword,
     });
   } catch (e: any) {
     return next(
@@ -89,24 +60,13 @@ export const signUp = async (
 ) => {
   try {
     const userInfo: IUser = req.body;
-    const user = await userService.SignUp(userInfo, next);
-
-    if (!user) {
-      return next(
-        new InternalServerException(
-          'There was an error creating a new user. Please try again',
-        ),
-      );
-    }
-
-    const accessToken = createToken(user, JWT_ACCESS_TOKEN_EXP, 'access');
-    const refreshToken = createToken(user, JWT_REFRESH_TOKEN_EXP, 'refresh');
+    const data = await userService.SignUp(userInfo, next);
 
     return res.status(201).send({
       status: 201,
-      access_token: accessToken.token,
-      refresh_token: refreshToken.token,
-      user,
+      access_token: data!.accessToken.token,
+      refresh_token: data!.refreshToken.token,
+      user: data!.userWithouthPassword,
     });
   } catch (e: any) {
     return next(
