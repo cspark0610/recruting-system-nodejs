@@ -28,6 +28,8 @@ router.post(
   userController.signUp,
 );
 
+router.post('/token/refresh', userController.refreshToken);
+
 router.put(
   '/role/change/:_id',
   [
