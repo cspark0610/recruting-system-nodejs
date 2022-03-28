@@ -16,7 +16,8 @@ import VideoRecordingUrl from '../db/schemas/VideoRecordingUrl.schema';
 import InternalServerException from '../exceptions/InternalServerError';
 import TokenData from '../interfaces/TokenData.interface';
 
-const { AWS_VIDEO_BUCKET_NAME, AWS_CV_BUCKET_NAME } = envConfig;
+const { AWS_VIDEO_BUCKET_NAME, AWS_CV_BUCKET_NAME, JWT_ACCESS_TOKEN_EXP } =
+  envConfig;
 
 export const GetAllCandidates = async (next: NextFunction) => {
   try {
@@ -85,7 +86,12 @@ export const GenerateUrl = async (
 ): Promise<TokenData | undefined> => {
   try {
     const newUrl = await VideoRecordingUrl.create({});
-    const token = createToken(candidate, '1d', 'access', newUrl.short_url);
+    const token = createToken(
+      candidate,
+      JWT_ACCESS_TOKEN_EXP,
+      'access',
+      newUrl.short_url,
+    );
     await Candidate.findByIdAndUpdate(candidate._id, {
       video_recording_url: newUrl._id,
     });
