@@ -118,7 +118,7 @@ export const refreshToken = async (
   try {
     const { user } = req;
 
-    const accessToken = createToken(user!, '1h', 'access');
+    const accessToken = createToken(user!, '1d', 'access');
     const refreshToken = createToken(user!, '7d', 'refresh');
 
     return res.status(200).send({
