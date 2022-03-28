@@ -4,10 +4,13 @@ import bcrypt from 'bcrypt';
 import { NextFunction, Request, Response } from 'express';
 import { IUser } from '../db/schemas/interfaces/User';
 import { createToken } from '../lib/jwt';
+import envConfig from '../config/env';
 import InternalServerException from '../exceptions/InternalServerError';
 import InvalidCredentialsException from '../exceptions/InvalidCredentialsException';
 import RequestExtended from '../interfaces/RequestExtended.interface';
 import * as userService from '../services/User.service';
+
+const { JWT_ACCESS_TOKEN_EXP, JWT_REFRESH_TOKEN_EXP } = envConfig;
 
 export const getAllUsers = async (
   _req: Request,
@@ -57,8 +60,12 @@ export const signIn = async (
       role: userFound.role,
     };
 
-    const acessToken = createToken(userFound, '1d', 'access');
-    const refreshToken = createToken(userFound, '7d', 'refresh');
+    const acessToken = createToken(userFound, JWT_ACCESS_TOKEN_EXP, 'access');
+    const refreshToken = createToken(
+      userFound,
+      JWT_REFRESH_TOKEN_EXP,
+      'refresh',
+    );
 
     return res.status(200).send({
       status: 200,
@@ -92,8 +99,8 @@ export const signUp = async (
       );
     }
 
-    const accessToken = createToken(user, '1d', 'access');
-    const refreshToken = createToken(user, '7d', 'refresh');
+    const accessToken = createToken(user, JWT_ACCESS_TOKEN_EXP, 'access');
+    const refreshToken = createToken(user, JWT_REFRESH_TOKEN_EXP, 'refresh');
 
     return res.status(201).send({
       status: 201,
@@ -118,8 +125,8 @@ export const refreshToken = async (
   try {
     const { user } = req;
 
-    const accessToken = createToken(user!, '1d', 'access');
-    const refreshToken = createToken(user!, '7d', 'refresh');
+    const accessToken = createToken(user!, JWT_ACCESS_TOKEN_EXP, 'access');
+    const refreshToken = createToken(user!, JWT_REFRESH_TOKEN_EXP, 'refresh');
 
     return res.status(200).send({
       access_token: accessToken.token,
