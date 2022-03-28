@@ -6,7 +6,7 @@ import { decodeToken } from '../lib/jwt';
 import User from '../db/schemas/User.schema';
 import Role from '../db/schemas/Role.schema';
 import InvalidAccessToken from '../exceptions/InvalidAccessToken';
-import AcessTokenMissingException from '../exceptions/AcessTokenMissingException';
+import InvalidRefreshToken from '../exceptions/InvalidRefreshToken';
 import RequestExtended from '../interfaces/RequestExtended.interface';
 import ForbiddenException from '../exceptions/ForbiddenException';
 import BadRequestException from '../exceptions/BadRequestException';
@@ -21,7 +21,7 @@ export async function verifyJwt(
   const accessToken = req.headers.authorization?.split(' ').pop();
 
   if (!accessToken || accessToken === 'Bearer') {
-    return next(new AcessTokenMissingException());
+    return next(new BadRequestException('No access token provided'));
   }
 
   try {
@@ -57,7 +57,7 @@ export async function verifyRefreshJwt(
     const user = await User.findById(decodedRefreshToken._id);
 
     if (!user) {
-      return next(new InvalidAccessToken());
+      return next(new InvalidRefreshToken());
     }
 
     req.user = user;

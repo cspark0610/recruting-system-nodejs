@@ -3,12 +3,11 @@
 import bcrypt from 'bcrypt';
 import { NextFunction, Request, Response } from 'express';
 import { IUser } from '../db/schemas/interfaces/User';
-import { createToken, decodeToken } from '../lib/jwt';
+import { createToken } from '../lib/jwt';
 import InternalServerException from '../exceptions/InternalServerError';
 import InvalidCredentialsException from '../exceptions/InvalidCredentialsException';
 import RequestExtended from '../interfaces/RequestExtended.interface';
 import * as userService from '../services/User.service';
-import InvalidAccessToken from '../exceptions/InvalidAccessToken';
 
 export const getAllUsers = async (
   _req: Request,
