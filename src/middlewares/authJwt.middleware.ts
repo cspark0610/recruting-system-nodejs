@@ -23,7 +23,7 @@ export async function verifyJwt(
   }
 
   try {
-    const decoded = decodeToken(accessToken);
+    const decoded = decodeToken(accessToken, 'access');
 
     const userFound = await User.findById(decoded._id, { password: 0 });
 

@@ -57,12 +57,14 @@ export const signIn = async (
       role: userFound.role,
     };
 
-    const { token } = createToken(userFound);
+    const acessToken = createToken(userFound, '10s', 'access');
+    const refreshToken = createToken(userFound, '7d', 'refresh');
 
     return res.status(200).send({
       status: 200,
-      access_token: token,
       userWithoutPassword,
+      access_token: acessToken.token,
+      refresh_token: refreshToken.token,
     });
   } catch (e: any) {
     return next(
@@ -90,9 +92,15 @@ export const signUp = async (
       );
     }
 
-    const { token } = createToken(user);
+    const accessToken = createToken(user, '10', 'access');
+    const refreshToken = createToken(user, '7d', 'refresh');
 
-    return res.status(201).send({ status: 201, access_token: token, user });
+    return res.status(201).send({
+      status: 201,
+      access_token: accessToken.token,
+      refresh_token: refreshToken.token,
+      user,
+    });
   } catch (e: any) {
     return next(
       new InternalServerException(

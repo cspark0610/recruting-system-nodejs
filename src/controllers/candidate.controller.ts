@@ -289,7 +289,7 @@ export const validateUrl = (
   try {
     const token = req.query.token as string;
 
-    const decoded = decodeToken(token);
+    const decoded = decodeToken(token, 'access');
 
     return res.status(200).send({
       status: 200,
