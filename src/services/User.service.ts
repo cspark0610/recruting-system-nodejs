@@ -2,10 +2,15 @@
 import { NextFunction } from 'express';
 import { Types } from 'mongoose';
 import { IUser } from '../db/schemas/interfaces/User';
+import { createToken } from '../lib/jwt';
+import envConfig from '../config/env';
 import User from '../db/schemas/User.schema';
 import Role from '../db/schemas/Role.schema';
 import InternalServerException from '../exceptions/InternalServerError';
+import InvalidCredentialsException from '../exceptions/InvalidCredentialsException';
 import BadRequestException from '../exceptions/BadRequestException';
+
+const { JWT_ACCESS_TOKEN_EXP, JWT_REFRESH_TOKEN_EXP } = envConfig;
 
 export const GetAllUsers = async (next: NextFunction) => {
   try {
@@ -46,12 +51,17 @@ export const SignUp = async (userInfo: IUser, next: NextFunction) => {
       role: foundRoles?.map((role) => role._id),
     });
 
-    const newUserInfo = await User.findOne(
-      { email: newUser.email },
-      { password: 0 },
-    );
+    const userWithouthPassword = {
+      _id: newUser._id,
+      name: newUser.name,
+      email: newUser.email,
+      role: newUser.role,
+    };
 
-    return newUserInfo;
+    const accessToken = createToken(newUser, JWT_ACCESS_TOKEN_EXP, 'access');
+    const refreshToken = createToken(newUser, JWT_REFRESH_TOKEN_EXP, 'refresh');
+
+    return { accessToken, refreshToken, userWithouthPassword };
   } catch (e: any) {
     next(
       new InternalServerException(
@@ -61,11 +71,38 @@ export const SignUp = async (userInfo: IUser, next: NextFunction) => {
   }
 };
 
-export const SignIn = async (email: string, next: NextFunction) => {
+export const SignIn = async (userInfo: IUser, next: NextFunction) => {
   try {
-    const userFound = await User.findOne({ email });
+    const userFound = await User.findOne({ email: userInfo.email });
 
-    return userFound;
+    if (!userFound) {
+      return next(new InvalidCredentialsException());
+    }
+
+    const passwordsMatch = await User.comparePassword(
+      userInfo.password,
+      userFound.password,
+    );
+
+    if (!passwordsMatch) {
+      return next(new InvalidCredentialsException());
+    }
+
+    const userWithouthPassword = {
+      _id: userFound._id,
+      name: userFound.name,
+      email: userFound.email,
+      role: userFound.role,
+    };
+
+    const accessToken = createToken(userFound, JWT_ACCESS_TOKEN_EXP, 'access');
+    const refreshToken = createToken(
+      userFound,
+      JWT_REFRESH_TOKEN_EXP,
+      'refresh',
+    );
+
+    return { userWithouthPassword, accessToken, refreshToken };
   } catch (e: any) {
     return next(
       new InternalServerException(
