@@ -112,25 +112,15 @@ export const signUp = async (
 };
 
 export const refreshToken = async (
-  req: Request,
+  req: RequestExtended,
   res: Response,
   next: NextFunction,
 ) => {
-  const { refresh_token } = req.body;
-
   try {
-    const refreshTokenValid = decodeToken(refresh_token, 'refresh');
-    const userFound = await userService.GetUniqueUser(
-      refreshTokenValid._id,
-      next,
-    );
+    const { user } = req;
 
-    if (!userFound) {
-      return next(new InvalidAccessToken());
-    }
-
-    const accessToken = createToken(userFound, '1h', 'access');
-    const refreshToken = createToken(userFound, '7d', 'refresh');
+    const accessToken = createToken(user!, '1h', 'access');
+    const refreshToken = createToken(user!, '7d', 'refresh');
 
     return res.status(200).send({
       access_token: accessToken.token,
