@@ -43,10 +43,7 @@ export const GetOneCandidate = async (_id: string, next: NextFunction) => {
   }
 };
 
-export const CreateCandidate = async (
-  candidateInfo: ICandidate,
-  next: NextFunction,
-) => {
+export const Create = async (candidateInfo: ICandidate, next: NextFunction) => {
   try {
     const job = await Job.findById(candidateInfo.job);
     const newCandidate = await Candidate.create({
@@ -64,7 +61,7 @@ export const CreateCandidate = async (
   }
 };
 
-export const UpdateCandidateInfo = async (
+export const UpdateInfo = async (
   _id: string,
   newCandidateInfo: UpdateCandidateInfoDto,
   next: NextFunction,
@@ -143,7 +140,7 @@ export const UploadVideoToS3 = async (file: File, next: NextFunction) => {
   }
 };
 
-export const SaveVideoKeyToCandidate = async (
+export const SaveVideoKey = async (
   question_id: number,
   id: string,
   next: NextFunction,
@@ -197,22 +194,6 @@ export const UploadCV = async (cv: File, next: NextFunction) => {
     next(
       new InternalServerException(
         `There was an unexpected error with the cv upload service. ${e.message}`,
-      ),
-    );
-  }
-};
-
-export const SaveCVKeysIntoUser = async (
-  id: string,
-  next: NextFunction,
-  key?: string,
-) => {
-  try {
-    await Candidate.findOneAndUpdate({ id }, { cv: key });
-  } catch (e: any) {
-    return next(
-      new InternalServerException(
-        `There was an unexpected error with the candidate cv key setting service. ${e.message}`,
       ),
     );
   }
