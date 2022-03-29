@@ -33,7 +33,7 @@ router.post(
     candidateAuth.verifyCandidateExistsBeforeSignUp,
     candidateAuth.validateCV,
   ],
-  candidateController.createCandidate,
+  candidateController.create,
 );
 
 router.post(
@@ -67,7 +67,7 @@ router.put(
     requestParamsValidation(ValidateUrlParamsDto),
     requestBodyValidation(UpdateCandidateInfoDto),
   ],
-  candidateController.updateCandidateInfo,
+  candidateController.updateInfo,
 );
 
 router.delete(
