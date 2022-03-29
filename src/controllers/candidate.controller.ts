@@ -93,7 +93,7 @@ export const getCV = async (
   }
 };
 
-export const createCandidate = async (
+export const create = async (
   req: Request,
   res: Response,
   next: NextFunction,
@@ -109,7 +109,7 @@ export const createCandidate = async (
 
     const cvKey = result?.Key;
 
-    const data = await candidateService.CreateCandidate(
+    const data = await candidateService.Create(
       {
         name,
         email,
@@ -140,7 +140,7 @@ export const createCandidate = async (
   }
 };
 
-export const updateCandidateInfo = async (
+export const updateInfo = async (
   req: Request,
   res: Response,
   next: NextFunction,
@@ -167,7 +167,7 @@ export const updateCandidateInfo = async (
   };
 
   try {
-    await candidateService.UpdateCandidateInfo(_id, newCandidateInfo, next);
+    await candidateService.UpdateInfo(_id, newCandidateInfo, next);
 
     return res
       .status(200)
@@ -261,7 +261,7 @@ export const uploadVideoToS3 = async (
     await unlinkFile(newCandidateVideo.path);
 
     // sets the video_key property in candidate schema after video is uploaded to S3
-    await candidateService.SaveVideoKeyToCandidate(
+    await candidateService.SaveVideoKey(
       question_id,
       candidate_id,
       next,

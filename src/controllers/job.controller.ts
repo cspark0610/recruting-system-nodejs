@@ -8,7 +8,7 @@ import RequestExtended from '../interfaces/RequestExtended.interface';
 import BadRequestException from '../exceptions/BadRequestException';
 import * as jobService from '../services/Job.service';
 
-export const createJob = async (
+export const create = async (
   req: RequestExtended,
   res: Response,
   next: NextFunction,
@@ -17,7 +17,7 @@ export const createJob = async (
     req.body;
 
   try {
-    const newJob = await jobService.CreateJob(
+    const newJob = await jobService.Create(
       { title, designated, skills_required, video_questions_list },
       next,
       req,
@@ -53,7 +53,7 @@ export const deleteJob = async (
   }
 
   try {
-    await jobService.DeleteJob(_id, next);
+    await jobService.Delete(_id, next);
   } catch (e: any) {
     return next(
       new InternalServerException(

@@ -10,7 +10,7 @@ import RequestExtended from '../interfaces/RequestExtended.interface';
 const { NODE_ENV, REDIRECT_URL_DEVELOPMENT, REDIRECT_URL_PRODUCTION } =
   envConfig;
 
-export const CreateJob = async (
+export const Create = async (
   jobInfo: IJob,
   next: NextFunction,
   req: RequestExtended,
@@ -43,7 +43,7 @@ export const CreateJob = async (
   }
 };
 
-export const DeleteJob = async (_id: string, next: NextFunction) => {
+export const Delete = async (_id: string, next: NextFunction) => {
   try {
     await Job.findOneAndRemove({ _id });
   } catch (e: any) {

@@ -15,7 +15,7 @@ router.post(
     requestBodyValidation(CreateJobDto),
     jobAuth.validateJobExists,
   ],
-  jobController.createJob,
+  jobController.create,
 );
 
 router.delete(
