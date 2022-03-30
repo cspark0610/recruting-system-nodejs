@@ -14,7 +14,9 @@ export function requestBodyValidation<T>(type: any): express.RequestHandler {
     validate(plainToClass(type, req.body)).then(
       async (errors: ValidationError[]) => {
         if (errors.length > 0) {
-          await unlinkFile(cv.path);
+          if (cv) {
+            await unlinkFile(cv.path);
+          }
           const message = errors
             .map((error: ValidationError) =>
               Object.values(error.constraints as { [type: string]: string }),
