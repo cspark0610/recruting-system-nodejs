@@ -6,6 +6,13 @@ import IJob from './interfaces/IJob.interface';
 const JobSchema = new Schema<IJob>(
   {
     title: { type: String, required: true },
+
+    client_name: { type: String, required: true },
+
+    rie_link: { type: String, required: true },
+
+    recruiter_guidance: { type: String, required: true },
+
     designated: [
       {
         type: Schema.Types.ObjectId,

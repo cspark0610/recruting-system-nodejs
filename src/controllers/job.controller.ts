@@ -13,12 +13,27 @@ export const create = async (
   res: Response,
   next: NextFunction,
 ) => {
-  const { title, designated, skills_required, video_questions_list }: IJob =
-    req.body;
+  const {
+    title,
+    designated,
+    client_name,
+    rie_link,
+    recruiter_guidance,
+    skills_required,
+    video_questions_list,
+  }: IJob = req.body;
 
   try {
     const newJob = await jobService.Create(
-      { title, designated, skills_required, video_questions_list },
+      {
+        title,
+        designated,
+        client_name,
+        rie_link,
+        recruiter_guidance,
+        skills_required,
+        video_questions_list,
+      },
       next,
       req,
     );
