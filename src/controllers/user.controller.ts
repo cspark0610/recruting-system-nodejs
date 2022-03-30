@@ -135,3 +135,18 @@ export const changeRole = async (
     .status(200)
     .send({ status: 200, message: 'User role updated successfully' });
 };
+
+export const resetPassword = async (
+  req: RequestExtended,
+  res: Response,
+  next: NextFunction,
+) => {
+  const { _id } = req.params;
+  const { new_password } = req.body;
+
+  await userService.ResetPassword(_id, new_password, next);
+
+  return res
+    .status(200)
+    .send({ status: 200, message: 'User password updated successfully' });
+};

@@ -2,6 +2,7 @@ import { Router } from 'express';
 import {
   CreateUserDto,
   UpdateUserInfoDto,
+  UpdatePasswordDto,
   UserSignInParamsDto,
 } from '../db/schemas/dtos/User';
 import {
@@ -40,7 +41,7 @@ router.post(
 
 router.put(
   '/info/update/:_id',
-  [requestBodyValidation(UpdateUserInfoDto)],
+  [authJwt.verifyJwt, requestBodyValidation(UpdateUserInfoDto)],
   userController.updateInfo,
 );
 
@@ -53,6 +54,16 @@ router.put(
     userAuth.validateNewRole,
   ],
   userController.changeRole,
+);
+
+router.put(
+  '/password/change/:_id',
+  [
+    authJwt.verifyJwt,
+    requestBodyValidation(UpdatePasswordDto),
+    userAuth.validateNewPassword,
+  ],
+  userController.resetPassword,
 );
 
 export default router;
