@@ -38,11 +38,19 @@ export const signIn = async (
   try {
     const data = await userService.SignIn(userInfo, next);
 
+    if (!data) {
+      return next(
+        new InternalServerException(
+          'There was an error signing in. Please try again.',
+        ),
+      );
+    }
+
     return res.status(200).send({
       status: 200,
-      access_token: data!.accessToken.token,
-      refresh_token: data!.refreshToken.token,
-      user: data!.userWithouthPassword,
+      access_token: data.accessToken.token,
+      refresh_token: data.refreshToken.token,
+      user: data.userWithouthPassword,
     });
   } catch (e: any) {
     return next(
