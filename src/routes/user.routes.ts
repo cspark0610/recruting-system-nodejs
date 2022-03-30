@@ -1,5 +1,9 @@
 import { Router } from 'express';
-import { CreateUserDto, UserSignInParamsDto } from '../db/schemas/dtos/User';
+import {
+  CreateUserDto,
+  UpdateUserInfoDto,
+  UserSignInParamsDto,
+} from '../db/schemas/dtos/User';
 import {
   requestBodyValidation,
   requestParamsValidation,
@@ -32,6 +36,12 @@ router.post(
   '/token/refresh',
   authJwt.verifyRefreshJwt,
   userController.refreshToken,
+);
+
+router.put(
+  '/info/update/:_id',
+  [requestBodyValidation(UpdateUserInfoDto)],
+  userController.updateInfo,
 );
 
 router.put(
