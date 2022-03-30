@@ -9,6 +9,7 @@ import Role from '../db/schemas/Role.schema';
 import InternalServerException from '../exceptions/InternalServerError';
 import InvalidCredentialsException from '../exceptions/InvalidCredentialsException';
 import BadRequestException from '../exceptions/BadRequestException';
+import { UpdateUserInfoDto } from '../db/schemas/dtos/User';
 
 const { JWT_ACCESS_TOKEN_EXP, JWT_REFRESH_TOKEN_EXP } = envConfig;
 
@@ -107,6 +108,22 @@ export const SignIn = async (userInfo: IUser, next: NextFunction) => {
     return next(
       new InternalServerException(
         `There was an error with the signIn service. ${e.message}`,
+      ),
+    );
+  }
+};
+
+export const UpdateInfo = async (
+  _id: string,
+  newInfo: UpdateUserInfoDto,
+  next: NextFunction,
+) => {
+  try {
+    await User.findByIdAndUpdate(_id, newInfo);
+  } catch (e: any) {
+    return next(
+      new InternalServerException(
+        `There was an error in the update user info service. ${e.message}`,
       ),
     );
   }

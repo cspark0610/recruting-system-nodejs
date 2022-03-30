@@ -77,6 +77,30 @@ export const signUp = async (
   }
 };
 
+export const updateInfo = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  const newInfo: IUser = req.body;
+  const { _id } = req.params;
+
+  try {
+    await userService.UpdateInfo(_id, newInfo, next);
+
+    return res.status(200).send({
+      status: 200,
+      message: 'User updated successfully',
+    });
+  } catch (e: any) {
+    return next(
+      new InternalServerException(
+        `There was an unexpected error with the update user info controller. ${e.message}`,
+      ),
+    );
+  }
+};
+
 export const refreshToken = async (
   req: RequestExtended,
   res: Response,
