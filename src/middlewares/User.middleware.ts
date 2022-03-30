@@ -84,3 +84,36 @@ export async function validateNewRole(
     );
   }
 }
+
+export async function validateNewPassword(
+  req: RequestExtended,
+  _res: Response,
+  next: NextFunction,
+) {
+  const { _id } = req.params;
+  const { new_password, old_password } = req.body;
+
+  try {
+    const user = await User.findById(_id);
+
+    if (!user) {
+      return next(new BadRequestException('Invalid user id'));
+    }
+
+    if (new_password === old_password) {
+      return next(
+        new BadRequestException(
+          'The new password must be different from the old one',
+        ),
+      );
+    }
+
+    next();
+  } catch (e: any) {
+    return next(
+      new InternalServerException(
+        `There was an unexpected error with the new password validation. ${e.message}`,
+      ),
+    );
+  }
+}
