@@ -10,6 +10,7 @@ import {
   CreateCandidateDto,
   JwtValidationDto,
   UpdateCandidateInfoDto,
+  UpdateStatusDto,
 } from '../db/schemas/dtos/Candidate';
 import * as candidateController from '../controllers/candidate.controller';
 import * as candidateAuth from '../middlewares/Candidate.middleware';
@@ -68,6 +69,12 @@ router.put(
     requestBodyValidation(UpdateCandidateInfoDto),
   ],
   candidateController.updateInfo,
+);
+
+router.put(
+  '/status/update/:_id',
+  [authJwt.verifyJwt, requestBodyValidation(UpdateStatusDto)],
+  candidateController.updateStatus,
 );
 
 router.delete(
