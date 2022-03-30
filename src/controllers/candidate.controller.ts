@@ -181,6 +181,33 @@ export const updateInfo = async (
   }
 };
 
+export const updateStatus = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  const { _id } = req.params;
+  const { main_status, secondary_status } = req.body;
+
+  try {
+    await candidateService.UpdateStatus(
+      _id,
+      { main_status, secondary_status },
+      next,
+    );
+
+    return res
+      .status(200)
+      .send({ status: 200, message: 'Candidate status updated successfully' });
+  } catch (e: any) {
+    return next(
+      new InternalServerException(
+        `There was an error with the candidate status update controller. ${e.message}`,
+      ),
+    );
+  }
+};
+
 export const generateUniqueUrl = async (
   req: RequestExtended,
   res: Response,

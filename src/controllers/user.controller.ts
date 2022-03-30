@@ -38,11 +38,19 @@ export const signIn = async (
   try {
     const data = await userService.SignIn(userInfo, next);
 
+    if (!data) {
+      return next(
+        new InternalServerException(
+          'There was an error signing in. Please try again.',
+        ),
+      );
+    }
+
     return res.status(200).send({
       status: 200,
-      access_token: data!.accessToken.token,
-      refresh_token: data!.refreshToken.token,
-      user: data!.userWithouthPassword,
+      access_token: data.accessToken.token,
+      refresh_token: data.refreshToken.token,
+      user: data.userWithouthPassword,
     });
   } catch (e: any) {
     return next(
@@ -134,4 +142,19 @@ export const changeRole = async (
   return res
     .status(200)
     .send({ status: 200, message: 'User role updated successfully' });
+};
+
+export const resetPassword = async (
+  req: RequestExtended,
+  res: Response,
+  next: NextFunction,
+) => {
+  const { _id } = req.params;
+  const { new_password } = req.body;
+
+  await userService.ResetPassword(_id, new_password, next);
+
+  return res
+    .status(200)
+    .send({ status: 200, message: 'User password updated successfully' });
 };

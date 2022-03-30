@@ -27,6 +27,18 @@ const CandidateSchema = new Schema<ICandidate>(
 
     working_reason: { type: String, required: false },
 
+    main_status: {
+      type: String,
+      enum: ['interested', 'applying', 'meeting', 'chosen'],
+      required: true,
+    },
+
+    secondary_status: {
+      type: String,
+      enum: ['new entry', 'doubting', 'dismissed', 'aproved'],
+      required: true,
+    },
+
     job: { type: Schema.Types.ObjectId, ref: 'job', autopopulate: true },
 
     video_recording_url: {

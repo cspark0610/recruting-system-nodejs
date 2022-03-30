@@ -144,3 +144,20 @@ export const ChangeRole = async (
     );
   }
 };
+
+export const ResetPassword = async (
+  _id: string,
+  new_password: string,
+  next: NextFunction,
+) => {
+  try {
+    const hashedPassword = await User.hashPassword(new_password, 12);
+    await User.findByIdAndUpdate(_id, { password: hashedPassword });
+  } catch (e: any) {
+    return next(
+      new InternalServerException(
+        `There was an unexpected error in the reset password service. ${e.message}`,
+      ),
+    );
+  }
+};
