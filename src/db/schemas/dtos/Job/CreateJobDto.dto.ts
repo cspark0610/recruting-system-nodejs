@@ -5,6 +5,7 @@ import {
   IsNotEmpty,
   IsArray,
   IsObject,
+  IsUrl,
   ArrayNotEmpty,
 } from 'class-validator';
 import IQuestion from '../../../../interfaces/IQuestion.interface';
@@ -20,6 +21,18 @@ export class CreateJobDto implements IJob {
   @IsArray()
   @IsString({ each: true })
   designated: Array<string> | undefined;
+
+  @IsNotEmpty()
+  @IsString()
+  client_name!: string;
+
+  @IsNotEmpty()
+  @IsUrl()
+  rie_link!: string;
+
+  @IsNotEmpty()
+  @IsString()
+  recruiter_guidance!: string;
 
   @IsNotEmpty()
   @IsArray()
