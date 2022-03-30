@@ -4,7 +4,10 @@
 import { NextFunction } from 'express';
 import { createReadStream } from 'fs';
 import { createToken } from '../lib/jwt';
-import { UpdateCandidateInfoDto } from '../db/schemas/dtos/Candidate';
+import {
+  UpdateCandidateInfoDto,
+  UpdateStatusDto,
+} from '../db/schemas/dtos/Candidate';
 import envConfig from '../config/env';
 import s3 from '../config/aws';
 import File from '../interfaces/File.interface';
@@ -48,6 +51,8 @@ export const Create = async (candidateInfo: ICandidate, next: NextFunction) => {
     const job = await Job.findById(candidateInfo.job);
     const newCandidate = await Candidate.create({
       ...candidateInfo,
+      main_status: 'interested',
+      secondary_status: 'new entry',
       videos_question_list: job?.video_questions_list,
     });
 
@@ -72,6 +77,22 @@ export const UpdateInfo = async (
     return next(
       new InternalServerException(
         `There was an unexpected error with the candidate info update service. ${e.message}`,
+      ),
+    );
+  }
+};
+
+export const UpdateStatus = async (
+  _id: string,
+  newStatus: UpdateStatusDto,
+  next: NextFunction,
+) => {
+  try {
+    await Candidate.findByIdAndUpdate(_id, newStatus);
+  } catch (e: any) {
+    return next(
+      new InternalServerException(
+        `There was an unexpected error with the candidate status update service. ${e.message}`,
       ),
     );
   }
