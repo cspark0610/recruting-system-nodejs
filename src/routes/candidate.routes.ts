@@ -73,7 +73,7 @@ router.put(
 
 router.put(
   '/status/update/:_id',
-  requestBodyValidation(UpdateStatusDto),
+  [authJwt.verifyJwt, requestBodyValidation(UpdateStatusDto)],
   candidateController.updateStatus,
 );
 
