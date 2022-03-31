@@ -48,9 +48,9 @@ router.put(
 router.put(
   '/role/change/:_id',
   [
-    requestParamsValidation(ValidateUrlParamsDto),
     authJwt.verifyJwt,
     authJwt.authRole({ CEO: 'CEO' }),
+    requestParamsValidation(ValidateUrlParamsDto),
     userAuth.validateNewRole,
   ],
   userController.changeRole,
