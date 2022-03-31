@@ -16,8 +16,8 @@ export default async function createRoles() {
       new Role({ name: 'COMMON' }).save(),
     ]);
   } catch (e: any) {
-    return new InternalServerException(
-      `There was an unexpected error with the roles creation. ${e.message}`,
+    console.error(
+      new InternalServerException(`Error creating roles: ${e.message}`),
     );
   }
 }
