@@ -4,6 +4,12 @@ import { Request, Response, NextFunction } from 'express';
 import { unlink } from 'fs';
 import { promisify } from 'util';
 import { decodeToken } from '../lib/jwt';
+import {
+  CreateCandidateDto,
+  UpdateConclusionsDto,
+  UpdateStatusDto,
+  UpdateCandidateInfoDto,
+} from '../db/schemas/dtos/Candidate';
 import envConfig from '../config/env';
 import ICandidate from '../db/schemas/interfaces/ICandidate.interface';
 import NotFoundException from '../exceptions/NotFoundException';
@@ -154,14 +160,14 @@ export const updateInfo = async (
     linkedin,
     portfolio,
     working_reason,
-  }: ICandidate = req.body;
+  }: UpdateCandidateInfoDto = req.body;
 
   const newCandidateInfo = {
-    academic_training: academic_training!,
-    salary_expectations: salary_expectations!,
+    academic_training: academic_training,
+    salary_expectations: salary_expectations,
     available_from,
-    skills: skills!,
-    linkedin: linkedin!,
+    skills: skills,
+    linkedin: linkedin,
     portfolio,
     working_reason,
   };
@@ -203,6 +209,30 @@ export const updateStatus = async (
     return next(
       new InternalServerException(
         `There was an error with the candidate status update controller. ${e.message}`,
+      ),
+    );
+  }
+};
+
+export const updateConclusions = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  const { _id } = req.params;
+  const { conclusions } = req.body;
+
+  try {
+    await candidateService.UpdateConclusions(_id, conclusions, next);
+
+    return res.status(200).send({
+      status: 200,
+      message: 'Candidate conclusions updated successfully',
+    });
+  } catch (e: any) {
+    return next(
+      new InternalServerException(
+        `There was an error with the candidate conclusions update controller. ${e.message}`,
       ),
     );
   }

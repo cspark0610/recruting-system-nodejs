@@ -7,6 +7,7 @@ import { createToken } from '../lib/jwt';
 import {
   UpdateCandidateInfoDto,
   UpdateStatusDto,
+  UpdateConclusionsDto,
 } from '../db/schemas/dtos/Candidate';
 import envConfig from '../config/env';
 import s3 from '../config/aws';
@@ -93,6 +94,22 @@ export const UpdateStatus = async (
     return next(
       new InternalServerException(
         `There was an unexpected error with the candidate status update service. ${e.message}`,
+      ),
+    );
+  }
+};
+
+export const UpdateConclusions = async (
+  _id: string,
+  newConclusions: UpdateConclusionsDto,
+  next: NextFunction,
+) => {
+  try {
+    await Candidate.findByIdAndUpdate(_id, { conclusions: newConclusions });
+  } catch (e: any) {
+    return next(
+      new InternalServerException(
+        `There was an unexpected error with the candidate conclusions update service. ${e.message}`,
       ),
     );
   }
