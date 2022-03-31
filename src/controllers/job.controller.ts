@@ -56,6 +56,49 @@ export const create = async (
   }
 };
 
+export const updateInfo = async (
+  req: RequestExtended,
+  res: Response,
+  next: NextFunction,
+) => {
+  const { _id } = req.params;
+  const {
+    title,
+    designated,
+    client_name,
+    rie_link,
+    recruiter_guidance,
+    skills_required,
+    video_questions_list,
+  }: IJob = req.body;
+
+  try {
+    await jobService.UpdateInfo(
+      _id,
+      {
+        title,
+        designated,
+        client_name,
+        rie_link,
+        recruiter_guidance,
+        skills_required,
+        video_questions_list,
+      },
+      next,
+    );
+
+    return res
+      .status(200)
+      .send({ status: 200, message: 'Job updated successfully' });
+  } catch (e: any) {
+    return next(
+      new InternalServerException(
+        `There was an unexpected error with the job update controller. ${e.message}`,
+      ),
+    );
+  }
+};
+
 export const deleteJob = async (
   req: Request,
   res: Response,

@@ -15,6 +15,7 @@ export default interface ICandidate {
   linkedin?: string;
   portfolio?: string;
   working_reason?: string;
+  conclusions?: object;
   main_status?: string;
   secondary_status?: string;
   job: Types.ObjectId;

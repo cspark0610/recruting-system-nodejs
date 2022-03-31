@@ -43,6 +43,22 @@ export const Create = async (
   }
 };
 
+export const UpdateInfo = async (
+  _id: string,
+  newInfo: IJob,
+  next: NextFunction,
+) => {
+  try {
+    await Job.findByIdAndUpdate(_id, newInfo);
+  } catch (e: any) {
+    return next(
+      new InternalServerException(
+        `There was an unexpected error with the job update service. ${e.message}`,
+      ),
+    );
+  }
+};
+
 export const Delete = async (_id: string, next: NextFunction) => {
   try {
     await Job.findOneAndRemove({ _id });
