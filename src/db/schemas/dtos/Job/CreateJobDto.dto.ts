@@ -32,7 +32,7 @@ export class CreateJobDto implements IJob {
 
   @IsNotEmpty()
   @IsString()
-  recruiter_guidance!: string;
+  recruiter_filter!: string;
 
   @IsNotEmpty()
   @IsArray()
