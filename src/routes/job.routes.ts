@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { CreateJobDto } from '../db/schemas/dtos/Job';
+import { CreateJobDto, UpdateJobDto } from '../db/schemas/dtos/Job';
 import { requestBodyValidation } from '../middlewares/validators/requests';
 import * as jobController from '../controllers/job.controller';
 import * as authJwt from '../middlewares/authJwt.middleware';
@@ -16,6 +16,16 @@ router.post(
     jobAuth.validateJobExists,
   ],
   jobController.create,
+);
+
+router.put(
+  '/update/:_id',
+  [
+    authJwt.verifyJwt,
+    authJwt.authRole({ CEO: 'CEO', 'RRHH ADMIN': 'RRHH ADMIN' }),
+    requestBodyValidation(UpdateJobDto),
+  ],
+  jobController.updateInfo,
 );
 
 router.delete(
