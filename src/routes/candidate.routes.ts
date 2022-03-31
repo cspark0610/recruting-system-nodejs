@@ -79,7 +79,7 @@ router.put(
 );
 
 router.put(
-  '/conclusions/update/:_id',
+  '/conclusions/set/:_id',
   [authJwt.verifyJwt, requestBodyValidation(UpdateConclusionsDto)],
   candidateController.updateConclusions,
 );
