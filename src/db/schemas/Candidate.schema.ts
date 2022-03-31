@@ -67,7 +67,7 @@ const CandidateSchema = new Schema<ICandidate>(
     },
   },
 
-  { versionKey: false },
+  { versionKey: false, timestamps: true },
 );
 
 CandidateSchema.plugin(require('mongoose-autopopulate'));
