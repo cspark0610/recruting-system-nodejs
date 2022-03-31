@@ -5,8 +5,6 @@ import { unlink } from 'fs';
 import { promisify } from 'util';
 import { decodeToken } from '../lib/jwt';
 import {
-  CreateCandidateDto,
-  UpdateConclusionsDto,
   UpdateStatusDto,
   UpdateCandidateInfoDto,
 } from '../db/schemas/dtos/Candidate';
@@ -193,7 +191,7 @@ export const updateStatus = async (
   next: NextFunction,
 ) => {
   const { _id } = req.params;
-  const { main_status, secondary_status } = req.body;
+  const { main_status, secondary_status }: UpdateStatusDto = req.body;
 
   try {
     await candidateService.UpdateStatus(
