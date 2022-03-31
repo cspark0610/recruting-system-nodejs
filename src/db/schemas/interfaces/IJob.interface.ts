@@ -5,7 +5,7 @@ export default interface IJob {
   designated?: Array<string>;
   client_name: string;
   rie_link: string;
-  recruiter_guidance: string;
+  recruiter_filter: string;
   url?: string;
   skills_required: Array<string>;
   video_questions_list: Array<IQuestion>;

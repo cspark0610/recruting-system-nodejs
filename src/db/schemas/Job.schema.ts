@@ -11,7 +11,7 @@ const JobSchema = new Schema<IJob>(
 
     rie_link: { type: String, required: true },
 
-    recruiter_guidance: { type: String, required: true },
+    recruiter_filter: { type: String, required: true },
 
     designated: [
       {
