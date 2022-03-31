@@ -27,6 +27,12 @@ const CandidateSchema = new Schema<ICandidate>(
 
     working_reason: { type: String, required: false },
 
+    conclusions: {
+      good: { type: [String], required: false },
+
+      bad: { type: [String], required: false },
+    },
+
     main_status: {
       type: String,
       enum: ['interested', 'applying', 'meeting', 'chosen'],
