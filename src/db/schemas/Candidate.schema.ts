@@ -65,6 +65,8 @@ const CandidateSchema = new Schema<ICandidate>(
       type: String,
       required: true,
     },
+
+    isRejected: { type: Boolean, required: true, default: false },
   },
 
   { versionKey: false, timestamps: true },

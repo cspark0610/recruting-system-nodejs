@@ -237,6 +237,18 @@ export const UploadCV = async (cv: File, next: NextFunction) => {
   }
 };
 
+export const SetIsRejected = async (_id: string, next: NextFunction) => {
+  try {
+    await Candidate.findByIdAndUpdate(_id, { isRejected: true });
+  } catch (e: any) {
+    return next(
+      new InternalServerException(
+        `There was an unexpected error with the candidate rejection setting service. ${e.message}`,
+      ),
+    );
+  }
+};
+
 export const DeleteUrl = async (
   short_url: string,
   next: NextFunction,

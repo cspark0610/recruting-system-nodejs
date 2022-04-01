@@ -27,15 +27,6 @@ export async function verifyCandidateExistsBeforeSignUp(
   try {
     const candidateExists = await Candidate.findOne({ email });
 
-    if (candidateExists) {
-      await unlinkFile(cv.path);
-      return next(
-        new BadRequestException(
-          `There is already a candidate registered with the email ${email}`,
-        ),
-      );
-    }
-
     // checks that the job a candidate is applying for exists
     const jobExists = await Job.findById(job);
 
@@ -43,6 +34,27 @@ export async function verifyCandidateExistsBeforeSignUp(
       await unlinkFile(cv.path);
       return next(
         new BadRequestException(`No job has been found with the id ${job}`),
+      );
+    }
+
+    if (candidateExists && candidateExists.job.equals(job)) {
+      await unlinkFile(cv.path);
+      return next(
+        new BadRequestException(
+          `There is already a candidate registered with the email ${email} for the job ${
+            jobExists!.title
+          }`,
+        ),
+      );
+    }
+
+    // checks that the candidate has not been rejected in a passed postulation
+    if (candidateExists?.isRejected) {
+      await unlinkFile(cv.path);
+      return next(
+        new BadRequestException(
+          `The candidate with the email ${email} has been rejected. Please contact the admin`,
+        ),
       );
     }
 

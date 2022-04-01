@@ -359,6 +359,29 @@ export const validateUrl = (
   }
 };
 
+export const setIsRejected = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const { _id } = req.params;
+
+    await candidateService.SetIsRejected(_id, next);
+
+    return res.status(200).send({
+      status: 200,
+      message: 'Candidate status updated successfully',
+    });
+  } catch (e: any) {
+    return next(
+      new InternalServerException(
+        `There was an error with the candidate status update controller. ${e.message}`,
+      ),
+    );
+  }
+};
+
 export const deleteUrl = async (
   req: Request,
   res: Response,
