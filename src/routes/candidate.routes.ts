@@ -86,7 +86,15 @@ router.put(
 
 router.put(
   '/reject/:_id',
-  authJwt.verifyJwt,
+  [
+    authJwt.verifyJwt,
+    authJwt.authRole({
+      CEO: 'CEO',
+      CTO: 'CTO',
+      'RRHH ADMIN': 'RRHH ADMIN',
+      RRHH: 'RRHH',
+    }),
+  ],
   candidateController.setIsRejected,
 );
 
