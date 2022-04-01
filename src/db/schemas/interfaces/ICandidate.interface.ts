@@ -22,4 +22,5 @@ export default interface ICandidate {
   video_recording_url?: Types.ObjectId;
   videos_question_list?: Array<IQuestion>;
   cv?: string;
+  isRejected?: boolean;
 }

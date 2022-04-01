@@ -84,6 +84,12 @@ router.put(
   candidateController.updateConclusions,
 );
 
+router.put(
+  '/reject/:_id',
+  authJwt.verifyJwt,
+  candidateController.setIsRejected,
+);
+
 router.delete(
   '/url/delete/:url_id',
   candidateAuth.verifyCandidateVideoUrlExistsBeforeDeletion,
