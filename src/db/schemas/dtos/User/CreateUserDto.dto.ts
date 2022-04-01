@@ -27,10 +27,12 @@ export class CreateUserDto implements IUser {
   @MinLength(8)
   password!: string;
 
+  @IsOptional()
   @IsNotEmpty()
   @IsString()
   position_name!: string;
 
+  @IsOptional()
   @IsNotEmpty()
   @IsString()
   phone!: string;
