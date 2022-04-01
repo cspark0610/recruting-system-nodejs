@@ -47,6 +47,18 @@ export const GetOneCandidate = async (_id: string, next: NextFunction) => {
   }
 };
 
+export const GetCandidateByName = async (name: string, next: NextFunction) => {
+  try {
+    return await Candidate.find({ name });
+  } catch (e: any) {
+    return next(
+      new InternalServerException(
+        `There was an unexpected error with the GetCandidateByName service. ${e.message}`,
+      ),
+    );
+  }
+};
+
 export const Create = async (candidateInfo: ICandidate, next: NextFunction) => {
   try {
     const job = await Job.findById(candidateInfo.job);

@@ -22,11 +22,23 @@ const { NODE_ENV, REDIRECT_URL_DEVELOPMENT, REDIRECT_URL_PRODUCTION } =
   envConfig;
 
 export const getAllCandidates = async (
-  _req: Request,
+  req: Request,
   res: Response,
   next: NextFunction,
 ) => {
   try {
+    const name = req.query.name as string;
+
+    if (name) {
+      const candidates = await candidateService.GetCandidateByName(name, next);
+
+      if (!candidates || candidates.length === 0) {
+        return next(new NotFoundException('No candidates were found'));
+      }
+
+      return res.status(200).send({ status: 200, candidates });
+    }
+
     const allCandidates = await candidateService.GetAllCandidates(next);
 
     if (!allCandidates || allCandidates.length === 0) {
