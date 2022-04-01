@@ -21,6 +21,16 @@ const UserSchema = new Schema<IUser, UserModel>(
       required: true,
     },
 
+    position_name: {
+      type: String,
+      required: false,
+    },
+
+    phone: {
+      type: String,
+      required: false,
+    },
+
     role: { type: Schema.Types.ObjectId, ref: 'role', autopopulate: true },
   },
   { versionKey: false },

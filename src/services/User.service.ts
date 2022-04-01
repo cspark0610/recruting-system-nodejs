@@ -56,6 +56,8 @@ export const SignUp = async (userInfo: IUser, next: NextFunction) => {
       _id: newUser._id,
       name: newUser.name,
       email: newUser.email,
+      position_name: newUser.position_name,
+      phone: newUser.phone,
       role: newUser.role,
     };
 
@@ -93,6 +95,8 @@ export const SignIn = async (userInfo: IUser, next: NextFunction) => {
       _id: userFound._id,
       name: userFound.name,
       email: userFound.email,
+      position_name: userFound.position_name,
+      phone: userFound.phone,
       role: userFound.role,
     };
 

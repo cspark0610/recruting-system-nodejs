@@ -30,6 +30,16 @@ export class CreateUserDto implements IUser {
   @IsOptional()
   @IsNotEmpty()
   @IsString()
+  position_name!: string;
+
+  @IsOptional()
+  @IsNotEmpty()
+  @IsString()
+  phone!: string;
+
+  @IsOptional()
+  @IsNotEmpty()
+  @IsString()
   @IsUppercase()
   role?: Types.ObjectId;
 }
