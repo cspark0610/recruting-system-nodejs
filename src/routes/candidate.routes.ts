@@ -84,6 +84,20 @@ router.put(
   candidateController.updateConclusions,
 );
 
+router.put(
+  '/reject/:_id',
+  [
+    authJwt.verifyJwt,
+    authJwt.authRole({
+      CEO: 'CEO',
+      CTO: 'CTO',
+      'RRHH ADMIN': 'RRHH ADMIN',
+      RRHH: 'RRHH',
+    }),
+  ],
+  candidateController.setIsRejected,
+);
+
 router.delete(
   '/url/delete/:url_id',
   candidateAuth.verifyCandidateVideoUrlExistsBeforeDeletion,
