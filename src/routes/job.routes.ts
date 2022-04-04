@@ -30,7 +30,12 @@ router.put(
   jobController.updateInfo,
 );
 
-router.put('/status/update/:_id', jobController.setIsActive);
+router.put(
+  '/status/update/:_id',
+  authJwt.verifyJwt,
+  authJwt.authRole({ CEO: 'CEO', CTO: 'CTO', 'RRHH ADMIN': 'RRHH ADMIN' }),
+  jobController.setIsActive,
+);
 
 router.delete(
   '/delete/:_id',
