@@ -2,7 +2,7 @@ import { IsString, IsNotEmpty, IsOptional, IsIn } from 'class-validator';
 import {
   valid_main_status,
   valid_secondary_status,
-} from '../../../../config/validEnums';
+} from '../../../../config/constants';
 
 export class UpdateStatusDto {
   @IsOptional()
