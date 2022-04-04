@@ -10,6 +10,18 @@ import RequestExtended from '../interfaces/RequestExtended.interface';
 const { NODE_ENV, REDIRECT_URL_DEVELOPMENT, REDIRECT_URL_PRODUCTION } =
   envConfig;
 
+export const GetAllJobs = async (next: NextFunction) => {
+  try {
+    return await Job.find();
+  } catch (e: any) {
+    next(
+      new InternalServerException(
+        `There was an unexpected error: ${e.message}`,
+      ),
+    );
+  }
+};
+
 export const Create = async (
   jobInfo: IJob,
   next: NextFunction,
@@ -54,6 +66,19 @@ export const UpdateInfo = async (
     return next(
       new InternalServerException(
         `There was an unexpected error with the job update service. ${e.message}`,
+      ),
+    );
+  }
+};
+
+export const SetIsActive = async (_id: string, next: NextFunction) => {
+  try {
+    const currentJobStatus = await Job.findById(_id);
+    await Job.findByIdAndUpdate(_id, { isActive: !currentJobStatus!.isActive });
+  } catch (e: any) {
+    return next(
+      new InternalServerException(
+        `There was an unexpected error with the job status update service. ${e.message}`,
       ),
     );
   }

@@ -7,6 +7,8 @@ import * as jobAuth from '../middlewares/Job.middleware';
 
 const router = Router();
 
+router.get('/', authJwt.verifyJwt, jobController.getAllJobs);
+
 router.post(
   '/create',
   [
@@ -27,6 +29,8 @@ router.put(
   ],
   jobController.updateInfo,
 );
+
+router.put('/status/update/:_id', jobController.setIsActive);
 
 router.delete(
   '/delete/:_id',

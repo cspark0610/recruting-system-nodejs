@@ -7,6 +7,25 @@ import InternalServerException from '../exceptions/InternalServerError';
 import RequestExtended from '../interfaces/RequestExtended.interface';
 import BadRequestException from '../exceptions/BadRequestException';
 import * as jobService from '../services/Job.service';
+import NotFoundException from '../exceptions/NotFoundException';
+
+export const getAllJobs = async (
+  _req: RequestExtended,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const jobs = await jobService.GetAllJobs(next);
+
+    if (!jobs) {
+      return next(new NotFoundException('No jobs found'));
+    }
+
+    res.status(200).send({ status: 200, jobs });
+  } catch (e: any) {
+    next(new InternalServerException(e));
+  }
+};
 
 export const create = async (
   req: RequestExtended,
@@ -94,6 +113,28 @@ export const updateInfo = async (
     return next(
       new InternalServerException(
         `There was an unexpected error with the job update controller. ${e.message}`,
+      ),
+    );
+  }
+};
+
+export const setIsActive = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  const { _id } = req.params;
+
+  try {
+    await jobService.SetIsActive(_id, next);
+
+    return res
+      .status(200)
+      .send({ status: 200, message: 'Job status updated successfully' });
+  } catch (e: any) {
+    return next(
+      new InternalServerException(
+        `There was an unexpected error with the job status update controller. ${e.message}`,
       ),
     );
   }

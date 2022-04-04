@@ -275,7 +275,10 @@ export const UploadCV = async (cv: File, next: NextFunction) => {
 
 export const SetIsRejected = async (_id: string, next: NextFunction) => {
   try {
-    await Candidate.findByIdAndUpdate(_id, { isRejected: true });
+    const currentCandidateStatus = await Candidate.findById(_id);
+    await Candidate.findByIdAndUpdate(_id, {
+      isRejected: !currentCandidateStatus!.isRejected,
+    });
   } catch (e: any) {
     return next(
       new InternalServerException(
