@@ -9,6 +9,10 @@ import {
   UpdateStatusDto,
   UpdateConclusionsDto,
 } from '../db/schemas/dtos/Candidate';
+import {
+  valid_main_status,
+  valid_secondary_status,
+} from '../config/validEnums';
 import envConfig from '../config/env';
 import s3 from '../config/aws';
 import File from '../interfaces/File.interface';
@@ -101,6 +105,29 @@ export const UpdateStatus = async (
   next: NextFunction,
 ) => {
   try {
+    if (
+      newStatus.secondary_status ===
+      valid_secondary_status[valid_secondary_status.length - 1]
+    ) {
+      const currentCandidate = await Candidate.findById(_id);
+      const newMainStatus =
+        valid_main_status.indexOf(currentCandidate!.main_status!) + 1;
+
+      if (
+        currentCandidate?.main_status! !==
+        valid_main_status[valid_main_status.length - 1]
+      ) {
+        return await Candidate.findByIdAndUpdate(_id, {
+          main_status: valid_main_status[newMainStatus],
+          secondary_status: valid_secondary_status[0],
+        });
+      }
+
+      return await Candidate.findByIdAndUpdate(_id, {
+        secondary_status: newStatus.secondary_status,
+      });
+    }
+
     await Candidate.findByIdAndUpdate(_id, newStatus);
   } catch (e: any) {
     return next(
