@@ -17,7 +17,7 @@ export const getAllJobs = async (
   try {
     const jobs = await jobService.GetAllJobs(next);
 
-    if (!jobs) {
+    if (!jobs || jobs.length === 0) {
       return next(new NotFoundException('No jobs found'));
     }
 
