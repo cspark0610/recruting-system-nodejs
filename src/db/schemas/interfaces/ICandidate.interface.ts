@@ -1,5 +1,6 @@
 import { Types } from 'mongoose';
 import IQuestion from '../../../interfaces/IQuestion.interface';
+import IConclusions from '../../../interfaces/IConclusions.interface';
 
 export default interface ICandidate {
   _id?: string;
@@ -15,7 +16,7 @@ export default interface ICandidate {
   linkedin?: string;
   portfolio?: string;
   working_reason?: string;
-  conclusions?: object;
+  conclusions?: IConclusions;
   main_status?: string;
   secondary_status?: string;
   job: Types.ObjectId;
