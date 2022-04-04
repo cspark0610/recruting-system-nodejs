@@ -7,6 +7,7 @@ import {
   MinLength,
   IsOptional,
   IsUppercase,
+  IsIn,
 } from 'class-validator';
 import { Types } from 'mongoose';
 import { IUser } from '../../interfaces/User';
@@ -41,5 +42,6 @@ export class CreateUserDto implements IUser {
   @IsNotEmpty()
   @IsString()
   @IsUppercase()
+  @IsIn(['CEO', 'CTO', 'RRHH ADMIN', 'RRHH', 'COMMON'])
   role?: Types.ObjectId;
 }
