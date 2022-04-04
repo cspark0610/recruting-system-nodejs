@@ -135,9 +135,8 @@ export const changeRole = async (
   next: NextFunction,
 ) => {
   const { _id } = req.params;
-  const newRole = req.role?._id;
 
-  await userService.ChangeRole(_id, newRole!, next);
+  await userService.ChangeRole(_id, req.role!, next);
 
   return res
     .status(200)

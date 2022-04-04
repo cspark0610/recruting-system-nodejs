@@ -9,10 +9,7 @@ import {
   UpdateStatusDto,
   UpdateConclusionsDto,
 } from '../db/schemas/dtos/Candidate';
-import {
-  valid_main_status,
-  valid_secondary_status,
-} from '../config/validEnums';
+import { valid_main_status, valid_secondary_status } from '../config/constants';
 import envConfig from '../config/env';
 import s3 from '../config/aws';
 import File from '../interfaces/File.interface';
