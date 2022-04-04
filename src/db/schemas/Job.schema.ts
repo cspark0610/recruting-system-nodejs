@@ -37,6 +37,12 @@ const JobSchema = new Schema<IJob>(
     url: {
       type: String,
     },
+
+    isActive: {
+      type: Boolean,
+      required: true,
+      default: true,
+    },
   },
   { versionKey: false },
 );

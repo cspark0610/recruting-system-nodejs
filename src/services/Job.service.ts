@@ -71,6 +71,19 @@ export const UpdateInfo = async (
   }
 };
 
+export const SetIsActive = async (_id: string, next: NextFunction) => {
+  try {
+    const currentJobStatus = await Job.findById(_id);
+    await Job.findByIdAndUpdate(_id, { isActive: !currentJobStatus!.isActive });
+  } catch (e: any) {
+    return next(
+      new InternalServerException(
+        `There was an unexpected error with the job status update service. ${e.message}`,
+      ),
+    );
+  }
+};
+
 export const Delete = async (_id: string, next: NextFunction) => {
   try {
     await Job.findOneAndRemove({ _id });
