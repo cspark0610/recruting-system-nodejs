@@ -1,4 +1,8 @@
 import { Schema, model } from 'mongoose';
+import {
+  valid_main_status,
+  valid_secondary_status,
+} from '../../config/constants';
 import ICandidate from './interfaces/ICandidate.interface';
 
 const CandidateSchema = new Schema<ICandidate>(
@@ -35,13 +39,13 @@ const CandidateSchema = new Schema<ICandidate>(
 
     main_status: {
       type: String,
-      enum: ['interested', 'applying', 'meeting', 'chosen'],
+      enum: valid_main_status,
       required: true,
     },
 
     secondary_status: {
       type: String,
-      enum: ['new entry', 'doubting', 'dismissed', 'aproved'],
+      enum: valid_secondary_status,
       required: true,
     },
 
