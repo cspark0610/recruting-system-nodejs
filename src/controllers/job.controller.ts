@@ -118,6 +118,28 @@ export const updateInfo = async (
   }
 };
 
+export const setIsActive = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  const { _id } = req.params;
+
+  try {
+    await jobService.SetIsActive(_id, next);
+
+    return res
+      .status(200)
+      .send({ status: 200, message: 'Job status updated successfully' });
+  } catch (e: any) {
+    return next(
+      new InternalServerException(
+        `There was an unexpected error with the job status update controller. ${e.message}`,
+      ),
+    );
+  }
+};
+
 export const deleteJob = async (
   req: Request,
   res: Response,

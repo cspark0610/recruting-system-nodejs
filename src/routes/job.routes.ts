@@ -30,6 +30,8 @@ router.put(
   jobController.updateInfo,
 );
 
+router.put('/status/update/:_id', jobController.setIsActive);
+
 router.delete(
   '/delete/:_id',
   [
