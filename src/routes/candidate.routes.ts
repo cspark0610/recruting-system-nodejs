@@ -23,6 +23,7 @@ const router = Router();
 const upload = multer({ storage });
 
 router.get('/', authJwt.verifyJwt, candidateController.getAllCandidates);
+router.get('/filter', candidateController.getCandidatesFiltered);
 router.get('/:_id', authJwt.verifyJwt, candidateController.getOneCandidate);
 router.get('/cv/:key', candidateController.getCV);
 router.get('/video/:key', candidateController.getVideoFromS3);

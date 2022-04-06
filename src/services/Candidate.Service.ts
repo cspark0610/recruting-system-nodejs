@@ -17,6 +17,7 @@ import UploadParams from '../interfaces/UploadParams.interface';
 import Candidate from '../db/schemas/Candidate.schema';
 import ICandidate from '../db/schemas/interfaces/ICandidate.interface';
 import Job from '../db/schemas/Job.schema';
+import User from '../db/schemas/User.schema';
 import VideoRecordingUrl from '../db/schemas/VideoRecordingUrl.schema';
 import InternalServerException from '../exceptions/InternalServerError';
 import TokenData from '../interfaces/TokenData.interface';
@@ -26,11 +27,65 @@ const { AWS_VIDEO_BUCKET_NAME, AWS_CV_BUCKET_NAME, JWT_ACCESS_TOKEN_EXP } =
 
 export const GetAllCandidates = async (next: NextFunction) => {
   try {
-    return await Candidate.find();
+    return await Candidate.aggregate([
+      {
+        $lookup: {
+          from: 'jobs',
+          localField: 'job',
+          foreignField: '_id',
+          as: 'job',
+        },
+      },
+      {
+        $unwind: {
+          path: '$job',
+        },
+      },
+      {
+        $project: {
+          _id: 1,
+          name: 1,
+          job: '$job.title',
+          createdAt: 1,
+          updatedAt: 1,
+        },
+      },
+    ]);
   } catch (e: any) {
     return next(
       new InternalServerException(
         `There was an unexpected error with the GetAllCandidates service. ${e.message}`,
+      ),
+    );
+  }
+};
+
+export const GetCandidatesFiltered = async (
+  next: NextFunction,
+  position: Array<string>,
+  status: Array<string>,
+) => {
+  try {
+    let positions = await Job.find(
+      {
+        title: { $in: position },
+      },
+      { _id: 1, designated: 0 },
+    );
+    positions = positions.map((pos: any) => pos._id);
+    return await Candidate.find(
+      {
+        $or: [
+          { job: { $in: positions } },
+          { secondary_status: { $in: status } },
+        ],
+      },
+      { name: 1, job: 1 },
+    );
+  } catch (e: any) {
+    return next(
+      new InternalServerException(
+        `There was an unexpected error with the GetCandidatesFiltered service. ${e.message}`,
       ),
     );
   }
@@ -48,9 +103,21 @@ export const GetOneCandidate = async (_id: string, next: NextFunction) => {
   }
 };
 
-export const GetCandidateByName = async (name: string, next: NextFunction) => {
+export const GetCandidateByQuery = async (
+  query: string,
+  next: NextFunction,
+) => {
   try {
-    return await Candidate.find({ name });
+    return await Candidate.find({
+      $or: [
+        { name: { $regex: query, $options: 'i' } },
+        { skills: { $regex: query, $options: 'i' } },
+        { academic_training: { $regex: query, $options: 'i' } },
+        { english_level: { $regex: query, $options: 'i' } },
+        { country: { $regex: query, $options: 'i' } },
+        { designated_users: { $regex: query, $options: 'i' } },
+      ],
+    });
   } catch (e: any) {
     return next(
       new InternalServerException(
@@ -62,12 +129,17 @@ export const GetCandidateByName = async (name: string, next: NextFunction) => {
 
 export const Create = async (candidateInfo: ICandidate, next: NextFunction) => {
   try {
-    const job = await Job.findById(candidateInfo.job);
+    let job = await Job.findById(candidateInfo.job);
+    const designatedUsers = await User.find({ _id: { $in: job?.designated } });
+
+    const userNames = designatedUsers.map((user) => user.name);
+
     const newCandidate = await Candidate.create({
       ...candidateInfo,
       main_status: 'interested',
       secondary_status: 'new entry',
       videos_question_list: job?.video_questions_list,
+      designated_users: userNames,
     });
 
     return newCandidate;

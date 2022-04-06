@@ -27,10 +27,13 @@ export const getAllCandidates = async (
   next: NextFunction,
 ) => {
   try {
-    const name = req.query.name as string;
+    const { query } = req.body;
 
-    if (name) {
-      const candidates = await candidateService.GetCandidateByName(name, next);
+    if (query) {
+      const candidates = await candidateService.GetCandidateByQuery(
+        query,
+        next,
+      );
 
       if (!candidates || candidates.length === 0) {
         return next(new NotFoundException('No candidates were found'));
@@ -50,6 +53,34 @@ export const getAllCandidates = async (
     return next(
       new InternalServerException(
         `There was an unexpected error with the getAllCandidates controller. ${e.message}`,
+      ),
+    );
+  }
+};
+
+export const getCandidatesFiltered = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  const { position, secondary_status } = req.body;
+
+  try {
+    const candidatesFiltered = await candidateService.GetCandidatesFiltered(
+      next,
+      position,
+      secondary_status,
+    );
+
+    if (!candidatesFiltered || candidatesFiltered.length === 0) {
+      return next(new NotFoundException('No candidates were found'));
+    }
+
+    return res.status(200).send({ status: 200, candidatesFiltered });
+  } catch (e: any) {
+    return next(
+      new InternalServerException(
+        `There was an unexpected error with the getCandidatesFiltered controller. ${e.message}`,
       ),
     );
   }

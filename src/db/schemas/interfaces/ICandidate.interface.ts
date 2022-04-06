@@ -20,6 +20,7 @@ export default interface ICandidate {
   main_status?: string;
   secondary_status?: string;
   job: Types.ObjectId;
+  designated_users?: Array<string>;
   video_recording_url?: Types.ObjectId;
   videos_question_list?: Array<IQuestion>;
   cv?: string;
