@@ -51,6 +51,8 @@ const CandidateSchema = new Schema<ICandidate>(
 
     job: { type: Schema.Types.ObjectId, ref: 'job', autopopulate: true },
 
+    designated_users: { type: [String], required: false },
+
     video_recording_url: {
       type: Schema.Types.ObjectId,
       ref: 'video_recording_url',
