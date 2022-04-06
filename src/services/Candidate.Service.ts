@@ -48,9 +48,20 @@ export const GetOneCandidate = async (_id: string, next: NextFunction) => {
   }
 };
 
-export const GetCandidateByName = async (name: string, next: NextFunction) => {
+export const GetCandidateByQuery = async (
+  query: string,
+  next: NextFunction,
+) => {
   try {
-    return await Candidate.find({ name });
+    return await Candidate.find({
+      $or: [
+        { name: { $regex: query, $options: 'i' } },
+        { skills: { $regex: query, $options: 'i' } },
+        { academic_training: { $regex: query, $options: 'i' } },
+        { english_level: { $regex: query, $options: 'i' } },
+        { country: { $regex: query, $options: 'i' } },
+      ],
+    });
   } catch (e: any) {
     return next(
       new InternalServerException(

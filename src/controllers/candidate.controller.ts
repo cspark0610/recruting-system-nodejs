@@ -27,10 +27,13 @@ export const getAllCandidates = async (
   next: NextFunction,
 ) => {
   try {
-    const name = req.query.name as string;
+    const { query } = req.body;
 
-    if (name) {
-      const candidates = await candidateService.GetCandidateByName(name, next);
+    if (query) {
+      const candidates = await candidateService.GetCandidateByQuery(
+        query,
+        next,
+      );
 
       if (!candidates || candidates.length === 0) {
         return next(new NotFoundException('No candidates were found'));
