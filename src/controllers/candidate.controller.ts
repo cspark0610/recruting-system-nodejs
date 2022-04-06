@@ -58,6 +58,34 @@ export const getAllCandidates = async (
   }
 };
 
+export const getCandidatesFiltered = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  const { position, secondary_status } = req.body;
+
+  try {
+    const candidatesFiltered = await candidateService.GetCandidatesFiltered(
+      next,
+      position,
+      secondary_status,
+    );
+
+    if (!candidatesFiltered || candidatesFiltered.length === 0) {
+      return next(new NotFoundException('No candidates were found'));
+    }
+
+    return res.status(200).send({ status: 200, candidatesFiltered });
+  } catch (e: any) {
+    return next(
+      new InternalServerException(
+        `There was an unexpected error with the getCandidatesFiltered controller. ${e.message}`,
+      ),
+    );
+  }
+};
+
 export const getOneCandidate = async (
   req: Request,
   res: Response,
