@@ -22,6 +22,18 @@ export const GetAllJobs = async (next: NextFunction) => {
   }
 };
 
+export const GetJobInfo = async (_id: string, next: NextFunction) => {
+  try {
+    return await Job.findById(_id, { title: 1, designated: 0 });
+  } catch (e: any) {
+    next(
+      new InternalServerException(
+        `There was an unexpected error with the GetJobInfo service: ${e.message}`,
+      ),
+    );
+  }
+};
+
 export const Create = async (
   jobInfo: IJob,
   next: NextFunction,
