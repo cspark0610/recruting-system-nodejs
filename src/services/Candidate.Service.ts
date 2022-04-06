@@ -26,11 +26,65 @@ const { AWS_VIDEO_BUCKET_NAME, AWS_CV_BUCKET_NAME, JWT_ACCESS_TOKEN_EXP } =
 
 export const GetAllCandidates = async (next: NextFunction) => {
   try {
-    return await Candidate.find();
+    return await Candidate.aggregate([
+      {
+        $lookup: {
+          from: 'jobs',
+          localField: 'job',
+          foreignField: '_id',
+          as: 'job',
+        },
+      },
+      {
+        $unwind: {
+          path: '$job',
+        },
+      },
+      {
+        $project: {
+          _id: 1,
+          name: 1,
+          job: '$job.title',
+          createdAt: 1,
+          updatedAt: 1,
+        },
+      },
+    ]);
   } catch (e: any) {
     return next(
       new InternalServerException(
         `There was an unexpected error with the GetAllCandidates service. ${e.message}`,
+      ),
+    );
+  }
+};
+
+export const GetCandidatesFiltered = async (
+  next: NextFunction,
+  position: Array<string>,
+  status: Array<string>,
+) => {
+  try {
+    let positions = await Job.find(
+      {
+        title: { $in: position },
+      },
+      { _id: 1, designated: 0 },
+    );
+    positions = positions.map((pos: any) => pos._id);
+    return await Candidate.find(
+      {
+        $or: [
+          { job: { $in: positions } },
+          { secondary_status: { $in: status } },
+        ],
+      },
+      { name: 1, job: 1 },
+    );
+  } catch (e: any) {
+    return next(
+      new InternalServerException(
+        `There was an unexpected error with the GetCandidatesFiltered service. ${e.message}`,
       ),
     );
   }
