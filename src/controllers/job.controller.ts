@@ -27,6 +27,30 @@ export const getAllJobs = async (
   }
 };
 
+export const getJobInfo = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  const { _id } = req.params;
+
+  try {
+    const jobInfo = await jobService.GetJobInfo(_id, next);
+
+    if (!jobInfo) {
+      return next(new NotFoundException('Job not found'));
+    }
+
+    return res.status(200).send({ status: 200, jobInfo });
+  } catch (e: any) {
+    return next(
+      new InternalServerException(
+        `There was an unexpected error with the getJobInfo controller. ${e.message}`,
+      ),
+    );
+  }
+};
+
 export const create = async (
   req: RequestExtended,
   res: Response,
