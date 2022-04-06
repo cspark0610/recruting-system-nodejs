@@ -9,6 +9,8 @@ const router = Router();
 
 router.get('/', authJwt.verifyJwt, jobController.getAllJobs);
 
+router.get('/:_id', jobController.getJobInfo);
+
 router.post(
   '/create',
   [
