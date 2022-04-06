@@ -17,6 +17,7 @@ import UploadParams from '../interfaces/UploadParams.interface';
 import Candidate from '../db/schemas/Candidate.schema';
 import ICandidate from '../db/schemas/interfaces/ICandidate.interface';
 import Job from '../db/schemas/Job.schema';
+import User from '../db/schemas/User.schema';
 import VideoRecordingUrl from '../db/schemas/VideoRecordingUrl.schema';
 import InternalServerException from '../exceptions/InternalServerError';
 import TokenData from '../interfaces/TokenData.interface';
@@ -60,6 +61,7 @@ export const GetCandidateByQuery = async (
         { academic_training: { $regex: query, $options: 'i' } },
         { english_level: { $regex: query, $options: 'i' } },
         { country: { $regex: query, $options: 'i' } },
+        { designated_users: { $regex: query, $options: 'i' } },
       ],
     });
   } catch (e: any) {
@@ -73,12 +75,18 @@ export const GetCandidateByQuery = async (
 
 export const Create = async (candidateInfo: ICandidate, next: NextFunction) => {
   try {
-    const job = await Job.findById(candidateInfo.job);
+    let job = await Job.findById(candidateInfo.job);
+    const designatedUsers = await User.find({ _id: { $in: job?.designated } });
+
+    const userNames = designatedUsers.map((user) => user.name);
+    console.log(userNames);
+
     const newCandidate = await Candidate.create({
       ...candidateInfo,
       main_status: 'interested',
       secondary_status: 'new entry',
       videos_question_list: job?.video_questions_list,
+      designated_users: userNames,
     });
 
     return newCandidate;
