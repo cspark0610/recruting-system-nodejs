@@ -79,7 +79,6 @@ export const Create = async (candidateInfo: ICandidate, next: NextFunction) => {
     const designatedUsers = await User.find({ _id: { $in: job?.designated } });
 
     const userNames = designatedUsers.map((user) => user.name);
-    console.log(userNames);
 
     const newCandidate = await Candidate.create({
       ...candidateInfo,
