@@ -1,4 +1,4 @@
-import express, { Application } from 'express';
+import express, { Express } from 'express';
 import helmet from 'helmet';
 import cors from 'cors';
 import corsOptions from './config/cors';
@@ -6,8 +6,9 @@ import envConfig from './config/env';
 import errorMiddleware from './middlewares/error.middleware';
 import createRoles from './lib/createRoles';
 import routes from './routes/index.routes';
+import swaggerDocs from './config/swagger';
 
-const app: Application = express();
+const app: Express = express();
 
 if (envConfig.NODE_ENV === 'development') {
   const morgan = require('morgan');
@@ -20,6 +21,7 @@ app.use(cors(corsOptions));
 app.use(helmet());
 
 createRoles();
+swaggerDocs(app, 3001);
 
 app.use('/', routes);
 app.use(errorMiddleware);
