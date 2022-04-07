@@ -9,6 +9,27 @@ import ICandidate from './interfaces/ICandidate.interface';
  * @openapi
  * "components": {
  *  "schemas": {
+ *   "Create candidate URL response": {
+ *    "type": "object",
+ *    "properties": {
+ *     "status": {
+ *      "type": "number",
+ *      "default": 201
+ *     },
+ *     "client_url": {
+ *      "type": "string",
+ *      "example": "http://localhost:3001/info/upload?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjRiNDRjNGQyZTI4ZWRlZGY2OWRlZDIiLCJ1cmxfaWQiOiJpZ2ZYd2VoQVIiLCJpYXQiOjE2NDkxMDAwNTksImV4cCI6MTY0OTE4NjQ1OX0.lnaPUoakOfEfxqkl9zdzmqZN_DY1_cOY9GYyEpruAU4"
+ *     },
+ *    },
+ *   },
+ *  },
+ * }
+ * */
+
+/**
+ * @openapi
+ * "components": {
+ *  "schemas": {
  *   "Candidate get info by id": {
  *    "type": "object",
  *    "properties": {

@@ -91,6 +91,40 @@ router.post(
   candidateController.uploadVideoToS3,
 );
 
+/**
+ * @openapi
+ * "/candidate/url/create/{_id}": {
+ *  "post": {
+ *   "tags": ["Candidate"],
+ *   "summary": "Create an url for the candidate to complete application",
+ *   "security": [
+ *    {
+ *     "bearerAuth": [],
+ *    },
+ *   ],
+ *   "parameters": [{
+ *    "name": "_id",
+ *    "in": "path",
+ *    "description": "Candidate Id",
+ *    "required": true,
+ *    "type": "ObjectId",
+ *    "format": "ObjectId",
+ *   }],
+ *   "responses": {
+ *    "201": {
+ *     "description": "Returns created url",
+ *     "content": {
+ *      "application/json": {
+ *       "schema": {
+ *        "$ref": "#/components/schemas/Create candidate URL response",
+ *       },
+ *      },
+ *     },
+ *    },
+ *   },
+ *  },
+ * }
+ * */
 router.post(
   '/url/create/:_id',
   [
