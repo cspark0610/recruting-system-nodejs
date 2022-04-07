@@ -49,7 +49,7 @@ router.get('/video/:key', candidateController.getVideoFromS3);
  *   "requestBody": {
  *    "required": true,
  *    "content": {
- *    "application/json": {
+ *    "multipart/form-data": {
  *     "schema": {
  *      "$ref": "#/components/schemas/Candidate creation model",
  *     },
@@ -68,7 +68,7 @@ router.get('/video/:key', candidateController.getVideoFromS3);
  *    },
  *   },
  *   "400": {
- *    "description": "Bad request when the request body is not valid, alongide error messages related to request body validation",
+ *    "description": "Bad request when the request body is not valid, alongide error messages related to request body validation. Or when there is already a candidate registered with the same email",
  *   },
  *  },
  * },

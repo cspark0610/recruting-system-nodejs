@@ -149,6 +149,7 @@ import ICandidate from './interfaces/ICandidate.interface';
 	    "Juan Hotz"
 	  ],
 	  "isRejected": false,
+          "cv": "CV John Doe-1649273738125.pdf",
 	  "_id": "624deb8c25f27662ee49d5cb",
 	  "createdAt": "2022-04-06T19:35:40.412Z",
 	  "updatedAt": "2022-04-06T19:35:40.412Z"
@@ -251,7 +252,7 @@ import ICandidate from './interfaces/ICandidate.interface';
  *      },
  *      "cv": {
  *       "type": "file",
- *       "description": "Candidate cv",
+ *       "description": "Candidate cv - pdf file",
  *      },
  *      "country": {
  *       "type": "string",
