@@ -67,6 +67,9 @@ router.get('/video/:key', candidateController.getVideoFromS3);
  *     },
  *    },
  *   },
+ *   "400": {
+ *    "description": "Bad request when the request body is not valid, alongide error messages related to request body validation",
+ *   },
  *  },
  * },
  * }
