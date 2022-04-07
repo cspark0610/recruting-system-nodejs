@@ -5,6 +5,253 @@ import {
 } from '../../config/constants';
 import ICandidate from './interfaces/ICandidate.interface';
 
+/**
+ * @openapi
+ * "components": {
+ *  "schemas": {
+ *   "Candidate get info by id": {
+ *    "type": "object",
+ *    "properties": {
+ *     "status": {
+ *      "type": "number",
+ *      "default": 200,
+ *     },
+ *     "candidate": {
+ *      "type": "object",
+ *      "example": {
+ *       "name": "John Doe",
+	 "email": "John.Doe@fulltimeforce.com",
+	 "phone": +514567890,
+	 "country": "USA",
+	 "english_level": "Advanced",
+         "skills": [
+          "ReactJS Advance",
+          "CSS intermediate"
+         ],
+	 "conclusions": {
+	    "good": ["Good", "Very good"],
+	    "bad": ["Bad because of..."]
+	  },
+	 "main_status": "interested",
+	 "secondary_status": "new entry",
+         "job": {
+	    "_id": "624b5a38abecb4d60d19447c",
+	    "title": "FullStack",
+	    "client_name": "fcds",
+	    "rie_link": "https://www.example.com",
+	    "recruiter_filter": "https://www.example.com",
+	    "designated": [
+	      {
+		"_id": "624b5a2dabecb4d60d194472",
+		"name": "Juan Hotz",
+		"email": "juan@fulltimeforce.com",
+		"password": "$2b$12$Sd75df2wXe6x6KYMql1vrehZejj/n56wVHjidHSYoRXbYak2SUxsO",
+		"position_name": "CEO",
+		"phone": "5158421618",
+		"role": {
+		  "_id": "622fe86732bd45e3226324ad",
+		  "name": "CEO"
+		}
+	      }
+	    ],
+	    "skills_required": [
+	      "NodeJS",
+	      "MongoDB"
+	    ],
+	    "video_questions_list": [
+	      {
+		"question_id": 1,
+		"question_title": "Tell us about yourself briefly",
+		"_id": "624b5a38abecb4d60d19447d"
+	      },
+	      {
+		"question_id": 2,
+		"question_title": "Tell us about your experience with react",
+		"_id": "624b5a38abecb4d60d19447e"
+	      }
+	    ],
+	   "isActive": true,
+	   "url": "http://localhost:3001/info-upload?job_id=624b5a38abecb4d60d19447c"
+         },
+	 "designated_users": [
+	    "Juan Hotz"
+	  ],
+	  "videos_question_list": [
+	    {
+	      "question_id": 1,
+	      "question_title": "Tell us about yourself briefly",
+	      "_id": "624d9f4dfa2ef058e5d84724"
+	    },
+	    {
+	      "question_id": 2,
+	      "question_title": "Tell us about your experience with react",
+	      "_id": "624d9f4dfa2ef058e5d84725"
+	    }
+	  ],
+	  "cv": "CV Juan Hotz-1649273738125.pdf",
+	  "isRejected": false,
+	  "_id": "624deb8c25f27662ee49d5cb",
+	  "createdAt": "2022-04-06T19:35:40.412Z",
+	  "updatedAt": "2022-04-06T19:35:40.412Z",
+          "academic_training": "Bachelor",
+          "linkedin": "https://www.linkedin.com/in/john-doe/",
+          "portfolio": "https://github.com/john-doe",
+          "salary_expectations": "$1500",
+          "working_reason": "I want to work with FullTimeForce to build a great product"
+ *      },
+ *     },
+ *    },
+ *   },
+ *  },
+ * }
+ * */
+
+/**
+ * @openapi
+ * "components": {
+ *  "schemas": {
+ *   "Candidate creation model response": {
+ *    "type": "object",
+ *    "properties": {
+ *     "status": {
+ *      "type": "number",
+ *      "default": 201,
+ *     },
+ *     "data": {
+ *      "type": "object",
+ *      "example": {
+ *       "name": "John Doe",
+	 "main_status": "interested",
+	 "secondary_status": "new entry",
+	 "job": "615848912358949",
+	 "designated_users": [
+	    "Juan Hotz"
+	  ],
+	  "isRejected": false,
+	  "_id": "624deb8c25f27662ee49d5cb",
+	  "createdAt": "2022-04-06T19:35:40.412Z",
+	  "updatedAt": "2022-04-06T19:35:40.412Z"
+ *      },
+ *     },
+ *    },
+ *   },
+ *  },
+ * }
+ * */
+
+/**
+ * @openapi
+ * "components": {
+ *  "schemas": {
+ *   "Candidate update model": {
+ *    "type": "object",
+ *    "required": [
+ *     "academic_training",
+ *     "salary_expectations",
+ *     "linkedin",
+ *     "skills",
+ *    ],
+ *    "properties": {
+ *     "academic_training": {
+ *      "type": "string",
+ *      "description": "Candidate academic training",
+ *      "example": "Bachelor",
+ *     },
+ *     "salary_expectations": {
+ *      "type": "string",
+ *      "description": "Candidate salary expectations",
+ *      "example": "$1500",
+ *     },
+ *     "linkedin": {
+ *      "type": "string",
+ *      "description": "Candidate linkedin",
+ *      "example": "https://www.linkedin.com/in/john-doe/",
+ *     },
+ *     "skills": {
+ *      "type": "array",
+ *      "description": "Candidate skills",
+ *      "example": [
+ *       "React",
+ *       "Angular",
+ *       "NodeJS",
+ *      ],
+ *     },
+ *     "portfolio": {
+ *      "type": "string",
+ *      "description": "Candidate portfolio",
+ *      "example": https://github.com/john-doe"
+ *     },
+ *     "working_reason": {
+ *      "type": "string",
+ *      "description": "Candidate working reason",
+ *      "example": "I want to work with FullTimeForce to build a great product"
+ *     },
+ *     "available_from": {
+ *      "type": "Date string",
+ *      "description": "Date when candidate is available to meet",
+ *      "example": "2020-04-06T19:35:40.412Z"
+ *      },
+ *     },
+ *    },
+ *   },
+ * }
+ * */
+
+/**
+ * @openapi
+ * "components": {
+ *  "schemas": {
+ *   "Candidate creation model": {
+ *    "type": "object",
+ *    "required": [
+ *     "name",
+ *     "email",
+ *     "phone",
+ *     "cv",
+ *     "country",
+ *     "job",
+ *     "english_level",
+ *    ],
+ *    "properties": {
+ *      "name": {
+ *       "type": "string",
+ *       "description": "Candidate name",
+ *       "example": "John Doe",
+ *      },
+ *      "email": {
+ *       "type": "string",
+ *       "description": "Candidate email",
+ *       "example": John.Doe@fulltimeforce.com"
+ *      },
+ *      "phone": {
+ *       "type": "string",
+ *       "description": "Candidate phone number",
+ *       "example": "+514567890",
+ *      },
+ *      "cv": {
+ *       "type": "file",
+ *       "description": "Candidate cv",
+ *      },
+ *      "country": {
+ *       "type": "string",
+ *       "description": "Candidate country",
+ *       "example": "USA",
+ *      },
+ *      "job": {
+ *       "type": "mongodb ObjectId",
+ *       "description": "Candidate job",
+ *       "example": "615848912358949",
+ *      },
+ *      "english_level": {
+ *       "type": "string",
+ *       "description": "Candidate english level",
+ *       "example": "Advanced",
+ *      },
+ *    },
+ *   },
+ *  },
+ * }
+ * */
 const CandidateSchema = new Schema<ICandidate>(
   {
     name: { type: String, required: true },
