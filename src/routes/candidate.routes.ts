@@ -22,12 +22,58 @@ const router = Router();
 
 const upload = multer({ storage });
 
+/**
+ * @openapi
+ * "tags": [
+ *  {
+ *   "name": "Candidate",
+ *   "description": "Candidate routes"
+ *  },
+ * ]
+ * */
+
 router.get('/', authJwt.verifyJwt, candidateController.getAllCandidates);
+
 router.get('/filter', candidateController.getCandidatesFiltered);
+
 router.get('/:_id', authJwt.verifyJwt, candidateController.getOneCandidate);
 router.get('/cv/:key', candidateController.getCV);
 router.get('/video/:key', candidateController.getVideoFromS3);
 
+/**
+ * @openapi
+ * "/candidate/create": {
+ *  "post": {
+ *   "tags": ["Candidate"],
+ *   "summary": "Create a new candidate",
+ *   "requestBody": {
+ *    "required": true,
+ *    "content": {
+ *    "application/json": {
+ *     "schema": {
+ *      "$ref": "#/components/schemas/Candidate creation model",
+ *     },
+ *    },
+ *   },
+ *  },
+ *  "responses": {
+ *   "201": {
+ *    "description": "Returns created candidate",
+ *    "content": {
+ *     "application/json": {
+ *      "schema": {
+ *       "$ref": "#/components/schemas/Candidate creation model response",
+ *      },
+ *     },
+ *    },
+ *   },
+ *   "400": {
+ *    "description": "Bad request when the request body is not valid, alongide error messages related to request body validation",
+ *   },
+ *  },
+ * },
+ * }
+ * */
 router.post(
   '/create',
   [
@@ -45,6 +91,40 @@ router.post(
   candidateController.uploadVideoToS3,
 );
 
+/**
+ * @openapi
+ * "/candidate/url/create/{_id}": {
+ *  "post": {
+ *   "tags": ["Candidate"],
+ *   "summary": "Create an url for the candidate to complete application",
+ *   "security": [
+ *    {
+ *     "bearerAuth": [],
+ *    },
+ *   ],
+ *   "parameters": [{
+ *    "name": "_id",
+ *    "in": "path",
+ *    "description": "Candidate Id",
+ *    "required": true,
+ *    "type": "ObjectId",
+ *    "format": "ObjectId",
+ *   }],
+ *   "responses": {
+ *    "201": {
+ *     "description": "Returns created url",
+ *     "content": {
+ *      "application/json": {
+ *       "schema": {
+ *        "$ref": "#/components/schemas/Create candidate URL response",
+ *       },
+ *      },
+ *     },
+ *    },
+ *   },
+ *  },
+ * }
+ * */
 router.post(
   '/url/create/:_id',
   [
@@ -64,6 +144,43 @@ router.post(
   candidateController.validateUrl,
 );
 
+/**
+ * @openapi
+ * "/candidate/info/update/{_id}": {
+ *  "put": {
+ *   "tags": ["Candidate"],
+ *   "summary": "Update candidate information via link 2",
+ *   "parameters": [
+ *    {
+ *     "name": "_id",
+ *     "in": "path",
+ *     "required": true,
+ *     "type": "mongodb ObjectId",
+ *     "format": "mongodb id",
+ *     "description": "Candidate id",
+ *    },
+ *   ],
+ *   "requestBody": {
+ *    "required": true,
+ *    "content": {
+ *     "application/json": {
+ *      "schema": {
+ *       "$ref": "#/components/schemas/Candidate update model",
+ *      },
+ *     },
+ *    },
+ *   },
+ *   "responses": {
+ *    "200": {
+ *     "description": "Candidate updated successfully",
+ *    },
+ *    "400": {
+ *     "description": "Bad request when required fields are not provided. Or when they have invalid information. Or when _id is not valid",
+ *    },
+ *   },
+ *  },
+ * }
+ * */
 router.put(
   '/info/update/:_id',
   [
