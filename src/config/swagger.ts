@@ -18,7 +18,7 @@ const options: swaggerJsdoc.Options = {
         url:
           NODE_ENV === 'development'
             ? `http://localhost:3001`
-            : 'https://workat.com',
+            : 'https://workart-release.vercel.app/',
       },
     ],
     components: {
