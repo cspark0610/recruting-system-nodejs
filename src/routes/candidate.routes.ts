@@ -49,9 +49,9 @@ router.get('/video/:key', candidateController.getVideoFromS3);
  *   "requestBody": {
  *    "required": true,
  *    "content": {
- *    "application/json": {
+ *    "multipart/form-data": {
  *     "schema": {
- *      "$ref": "#/components/schemas/Candidate creation model",
+ *      "$ref": "#/components/schemas/Candidate creation",
  *     },
  *    },
  *   },
@@ -62,13 +62,13 @@ router.get('/video/:key', candidateController.getVideoFromS3);
  *    "content": {
  *     "application/json": {
  *      "schema": {
- *       "$ref": "#/components/schemas/Candidate creation model response",
+ *       "$ref": "#/components/schemas/Candidate creation response",
  *      },
  *     },
  *    },
  *   },
  *   "400": {
- *    "description": "Bad request when the request body is not valid, alongide error messages related to request body validation",
+ *    "description": "Bad request when the request body is not valid, alongide error messages related to request body validation. Or when there is already a candidate registered with the same email",
  *   },
  *  },
  * },
@@ -165,7 +165,7 @@ router.post(
  *    "content": {
  *     "application/json": {
  *      "schema": {
- *       "$ref": "#/components/schemas/Candidate update model",
+ *       "$ref": "#/components/schemas/Candidate update",
  *      },
  *     },
  *    },
