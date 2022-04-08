@@ -51,7 +51,7 @@ router.get(
  *   },
  *   "responses": {
  *    "200": {
- *     "description": "User sing in successfull",
+ *     "description": "User sing in successfull, alongside access and refresh tokens",
  *     "content": {
  *      "application/json": {
  *       "schema": {
@@ -95,7 +95,7 @@ router.post(
  *   },
  *   "responses": {
  *    "201": {
- *     "description": "User created successfully",
+ *     "description": "User registered successfully, alongside access and refresh tokens",
  *     "content": {
  *      "application/json": {
  *       "schema": {

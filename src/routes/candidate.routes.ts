@@ -45,7 +45,7 @@ router.get('/video/:key', candidateController.getVideoFromS3);
  * "/candidate/create": {
  *  "post": {
  *   "tags": ["Candidate"],
- *   "summary": "Create a new candidate",
+ *   "summary": "Registers a new candidate. This corresponds to the LINK 1 flow",
  *   "requestBody": {
  *    "required": true,
  *    "content": {
@@ -158,7 +158,7 @@ router.post(
  * "/candidate/info/update/{_id}": {
  *  "put": {
  *   "tags": ["Candidate"],
- *   "summary": "Update candidate information via link 2",
+ *   "summary": "Update candidate information via LINK 2 form",
  *   "parameters": [
  *    {
  *     "name": "_id",
