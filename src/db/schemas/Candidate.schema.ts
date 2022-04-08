@@ -39,92 +39,157 @@ import ICandidate from './interfaces/ICandidate.interface';
  *     },
  *     "candidate": {
  *      "type": "object",
- *      "example": {
- *       "name": "John Doe",
-	 "email": "John.Doe@fulltimeforce.com",
-	 "phone": +514567890,
-	 "country": "USA",
-	 "english_level": "Advanced",
-         "skills": [
-          "ReactJS Advance",
-          "CSS intermediate"
-         ],
-	 "conclusions": {
-	    "good": ["Good", "Very good"],
-	    "bad": ["Bad because of..."]
-	  },
-	 "main_status": "interested",
-	 "secondary_status": "new entry",
-         "job": {
-	    "_id": "624b5a38abecb4d60d19447c",
-	    "title": "FullStack",
-	    "client_name": "fcds",
-	    "rie_link": "https://www.example.com",
-	    "recruiter_filter": "https://www.example.com",
-	    "designated": [
-	      {
-		"_id": "624b5a2dabecb4d60d194472",
-		"name": "Juan Hotz",
-		"email": "juan@fulltimeforce.com",
-		"password": "$2b$12$Sd75df2wXe6x6KYMql1vrehZejj/n56wVHjidHSYoRXbYak2SUxsO",
-		"position_name": "CEO",
-		"phone": "5158421618",
-		"role": {
-		  "_id": "622fe86732bd45e3226324ad",
-		  "name": "CEO"
-		}
-	      }
-	    ],
-	    "skills_required": [
-	      "NodeJS",
-	      "MongoDB"
-	    ],
-	    "video_questions_list": [
-	      {
-		"question_id": 1,
-		"question_title": "Tell us about yourself briefly",
-		"_id": "624b5a38abecb4d60d19447d"
-	      },
-	      {
-		"question_id": 2,
-		"question_title": "Tell us about your experience with react",
-		"_id": "624b5a38abecb4d60d19447e"
-	      }
-	    ],
-	   "isActive": true,
-	   "url": "http://localhost:3001/info-upload?job_id=624b5a38abecb4d60d19447c"
-         },
-	 "designated_users": [
-	    "Juan Hotz"
-	  ],
-	  "videos_question_list": [
-	    {
-	      "question_id": 1,
-	      "question_title": "Tell us about yourself briefly",
-	      "_id": "624d9f4dfa2ef058e5d84724"
-	    },
-	    {
-	      "question_id": 2,
-	      "question_title": "Tell us about your experience with react",
-	      "_id": "624d9f4dfa2ef058e5d84725"
-	    }
-	  ],
-	  "cv": "CV Juan Hotz-1649273738125.pdf",
-	  "isRejected": false,
-	  "_id": "624deb8c25f27662ee49d5cb",
-	  "createdAt": "2022-04-06T19:35:40.412Z",
-	  "updatedAt": "2022-04-06T19:35:40.412Z",
-          "academic_training": "Bachelor",
-          "linkedin": "https://www.linkedin.com/in/john-doe/",
-          "portfolio": "https://github.com/john-doe",
-          "salary_expectations": "$1500",
-          "working_reason": "I want to work with FullTimeForce to build a great product"
+ *      "properties": {
+ *       "name": {
+ *        "type": "string",
+ *        "example": "John Doe"
+ *       },
+ *       "email": {
+ *        "type": "string",
+ *        "example": "John.Doe@google.com"
+ *       },
+ *       "phone": {
+ *        "type": "string",
+ *        "example": "+5158421618"
+ *       },
+ *       "country": {
+ *        "type": "string",
+ *        "example": "US"
+ *       },
+ *       "english_level": {
+ *        "type": "string",
+ *        "example": "Advanced"
+ *       },
+ *       "skills": {
+ *        "type": "array",
+ *        "items": {
+ *         "type": "string",
+ *         "example": "JavaScript"
+ *         },
+ *         "example": [
+ *          "ReactJS Advanced",
+ *          "CSS intermediate"
+ *         ]
+ *        },
+ *        "conclusions": {
+ *         "type": "object",
+ *         "properties": {
+ *          "good": {
+ *           "type": "array",
+ *           "items": {
+ *            "type": "string",
+ *           },
+ *           "example": [
+ *            "Good",
+ *            "Very good"
+ *           ],
+ *          },
+ *          "bad": {
+ *           "type": "array",
+ *           "items": {
+ *            "type": "string",
+ *           },
+ *           "example": [
+ *            "Bad because of..."
+ *           ],
+ *          },
+ *         },
+ *        },
+ *        "main_status": {
+ *         "type": "string",
+ *         "example": "interested"
+ *        },
+ *        "secondary_status": {
+ *         "type": "string",
+ *         "example": "new entry"
+ *        },
+ *        "job": {
+ *         "type": "object",
+ *         "properties": {
+ *          "_id": {
+ *           "type": "mongodb ObjectId",
+ *           "example": "624b5a38abecb4d60d19447c"
+ *          },
+ *          "title": {
+ *           "type": "string",
+ *           "example": "Frontend developer"
+ *          },
+ *          "client_name": {
+ *           "type": "string",
+ *           "example": "Fulltime"
+ *          },
+ *          "rie_link": {
+ *           "type": "string",
+ *           "example": "https://www.rie.com/job/frontend-developer"
+ *          },
+ *          "recruiter_filter": {
+ *           "type": "string",
+ *           "example": "https://www.filter.com/job/frontend-developer"
+ *          },
+ *          "designated_recruiters": {
+ *            "type": "array",
+ *            "items": {
+ *             "type": "object",
+ *             "properties": {
+ *              "_id": {
+ *               "type": "mongodb ObjectId",
+ *               "example": "624b5a38abecb4d60d19447c"
+ *              },
+ *              "name": {
+ *               "type": "string",
+ *               "example": "Harumi"
+ *              },
+ *              "email": {
+ *               "type": "string",
+ *               "example": "harumi@fulltimeforce.com"
+ *              },
+ *              "phone": {
+ *               "type": "string",
+ *               "example": "+5158421618"
+ *              },
+ *              "position_name": {
+ *               "type": "string",
+ *               "example": "RRHH"
+ *              },
+ *              "password": {
+ *               "type": "string",
+ *               "example": "$2b$12$Sd75df2wXe6x6KYMql1vrehZejj/n56wVHjidHSYoRXbYak2SUxsO"
+ *              },
+ *              "role": {
+ *               "type": "object",
+ *               "properties": {
+ *                "_id": {
+ *                 "type": "mongodb ObjectId",
+ *                 "example": "622fe86732bd45e3226324ad"
+ *                },
+ *                "name": {
+ *                 "type": "string",
+ *                 "example": "RRHH"
+ *                },
+ *               },
+ *              },
+ *             },
+ *             "skills_required": {
+ *              "type": "array",
+ *              "items": {
+ *               "type": "string",
+ *               "example": "JavaScript"
+ *              },
+ *              "example": [
+ *               "ReactJS Advanced",
+ *               "CSS intermediate"
+ *              ]
+ *             },
+ *           },
+ *          },
+ *         },
+ *        },
+ *       },
  *      },
  *     },
  *    },
  *   },
- *  },
- * }
+ *  }
  * */
 
 /**
@@ -159,6 +224,9 @@ import ICandidate from './interfaces/ICandidate.interface';
  *      },
  *      "designated_recruiters": {
  *       "type": "array",
+ *       "items": {
+ *        "type": "string",
+ *       },
  *       "example": [
  *        "Harumi",
  *        "Gabriela"
@@ -215,6 +283,9 @@ import ICandidate from './interfaces/ICandidate.interface';
  *     "skills": {
  *      "type": "array",
  *      "description": "Candidate skills",
+ *      "items": {
+ *       "type": "string",
+ *      },
  *      "example": [
  *       "React",
  *       "Angular",
