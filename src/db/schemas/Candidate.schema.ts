@@ -30,7 +30,7 @@ import ICandidate from './interfaces/ICandidate.interface';
  * @openapi
  * "components": {
  *  "schemas": {
- *   "Candidate get info by id": {
+ *   "Candidate get info by id response": {
  *    "type": "object",
  *    "properties": {
  *     "status": {
@@ -131,7 +131,7 @@ import ICandidate from './interfaces/ICandidate.interface';
  * @openapi
  * "components": {
  *  "schemas": {
- *   "Candidate creation model response": {
+ *   "Candidate creation response": {
  *    "type": "object",
  *    "properties": {
  *     "status": {
@@ -140,18 +140,42 @@ import ICandidate from './interfaces/ICandidate.interface';
  *     },
  *     "data": {
  *      "type": "object",
- *      "example": {
- *       "name": "John Doe",
-	 "main_status": "interested",
-	 "secondary_status": "new entry",
-	 "job": "615848912358949",
-	 "designated_users": [
-	    "Juan Hotz"
-	  ],
-	  "isRejected": false,
-	  "_id": "624deb8c25f27662ee49d5cb",
-	  "createdAt": "2022-04-06T19:35:40.412Z",
-	  "updatedAt": "2022-04-06T19:35:40.412Z"
+ *      "properties": {
+ *      "name": {
+ *       "type": "string",
+ *       "example": "John Doe"
+ *      },
+ *      "main_status": {
+ *       "type": "string",
+ *       "example": "interested"
+ *      },
+ *      "secondary_status": {
+ *       "type": "string",
+ *       "example": "new entry"
+ *      },
+ *      "job": {
+ *       "type": "string",
+ *       "example": "Fullstack"
+ *      },
+ *      "designated_recruiters": {
+ *       "type": "array",
+ *       "example": [
+ *        "Harumi",
+ *        "Gabriela"
+ *       ],
+ *      },
+ *      "_id": {
+ *       "type": "mongodb object id",
+ *       "example": "624deb8c25f27662ee49d5cb"
+ *      },
+ *      "createdAt": {
+ *       "type": "date",
+ *       "example": "2022-04-06T19:35:40.412Z"
+ *      },
+ *      "updatedAt": {
+ *       "type": "date",
+ *       "example": "2022-04-06T19:35:40.412Z"
+ *      },
  *      },
  *     },
  *    },
@@ -164,7 +188,7 @@ import ICandidate from './interfaces/ICandidate.interface';
  * @openapi
  * "components": {
  *  "schemas": {
- *   "Candidate update model": {
+ *   "Candidate update": {
  *    "type": "object",
  *    "required": [
  *     "academic_training",
@@ -222,7 +246,7 @@ import ICandidate from './interfaces/ICandidate.interface';
  * @openapi
  * "components": {
  *  "schemas": {
- *   "Candidate creation model": {
+ *   "Candidate creation": {
  *    "type": "object",
  *    "required": [
  *     "name",
@@ -242,7 +266,7 @@ import ICandidate from './interfaces/ICandidate.interface';
  *      "email": {
  *       "type": "string",
  *       "description": "Candidate email",
- *       "example": John.Doe@fulltimeforce.com"
+ *       "example": "John.Doe@fulltimeforce.com"
  *      },
  *      "phone": {
  *       "type": "string",
@@ -251,7 +275,7 @@ import ICandidate from './interfaces/ICandidate.interface';
  *      },
  *      "cv": {
  *       "type": "file",
- *       "description": "Candidate cv",
+ *       "description": "Candidate cv - pdf file",
  *      },
  *      "country": {
  *       "type": "string",
@@ -260,8 +284,8 @@ import ICandidate from './interfaces/ICandidate.interface';
  *      },
  *      "job": {
  *       "type": "mongodb ObjectId",
- *       "description": "Candidate job",
- *       "example": "615848912358949",
+ *       "description": "Candidate job id to which they are applying for",
+ *       "example": "624d9f4dfa2ef058e5d84723",
  *      },
  *      "english_level": {
  *       "type": "string",
@@ -319,7 +343,7 @@ const CandidateSchema = new Schema<ICandidate>(
 
     job: { type: Schema.Types.ObjectId, ref: 'job', autopopulate: true },
 
-    designated_users: { type: [String], required: false },
+    designated_recruiters: { type: [String], required: false },
 
     video_recording_url: {
       type: Schema.Types.ObjectId,
