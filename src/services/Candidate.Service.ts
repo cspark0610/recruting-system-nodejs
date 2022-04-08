@@ -45,7 +45,10 @@ export const GetAllCandidates = async (next: NextFunction) => {
         $project: {
           _id: 1,
           name: 1,
+          main_status: 1,
+          secondary_status: 1,
           job: '$job.title',
+          designated_recruiters: 1,
           createdAt: 1,
           updatedAt: 1,
         },
