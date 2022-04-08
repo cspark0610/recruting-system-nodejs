@@ -301,7 +301,7 @@ export const generateUniqueUrl = async (
       client_url:
         NODE_ENV === 'development'
           ? `${REDIRECT_URL_DEVELOPMENT}/url/validate?token=${token.token}`
-          : `${REDIRECT_URL_PRODUCTION}/url/validate?token=${token.token}`,
+          : `${REDIRECT_URL_PRODUCTION}?token=${token.token}`,
     });
   } catch (e: any) {
     return next(
