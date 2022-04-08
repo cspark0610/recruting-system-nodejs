@@ -30,7 +30,7 @@ import ICandidate from './interfaces/ICandidate.interface';
  * @openapi
  * "components": {
  *  "schemas": {
- *   "Candidate get info by id": {
+ *   "Candidate get info by id response": {
  *    "type": "object",
  *    "properties": {
  *     "status": {
@@ -131,7 +131,7 @@ import ICandidate from './interfaces/ICandidate.interface';
  * @openapi
  * "components": {
  *  "schemas": {
- *   "Candidate creation model response": {
+ *   "Candidate creation response": {
  *    "type": "object",
  *    "properties": {
  *     "status": {
@@ -188,7 +188,7 @@ import ICandidate from './interfaces/ICandidate.interface';
  * @openapi
  * "components": {
  *  "schemas": {
- *   "Candidate update model": {
+ *   "Candidate update": {
  *    "type": "object",
  *    "required": [
  *     "academic_training",
@@ -246,7 +246,7 @@ import ICandidate from './interfaces/ICandidate.interface';
  * @openapi
  * "components": {
  *  "schemas": {
- *   "Candidate creation model": {
+ *   "Candidate creation": {
  *    "type": "object",
  *    "required": [
  *     "name",
@@ -266,7 +266,7 @@ import ICandidate from './interfaces/ICandidate.interface';
  *      "email": {
  *       "type": "string",
  *       "description": "Candidate email",
- *       "example": John.Doe@fulltimeforce.com"
+ *       "example": "John.Doe@fulltimeforce.com"
  *      },
  *      "phone": {
  *       "type": "string",
@@ -284,8 +284,8 @@ import ICandidate from './interfaces/ICandidate.interface';
  *      },
  *      "job": {
  *       "type": "mongodb ObjectId",
- *       "description": "Candidate job",
- *       "example": "615848912358949",
+ *       "description": "Candidate job id to which they are applying for",
+ *       "example": "624d9f4dfa2ef058e5d84723",
  *      },
  *      "english_level": {
  *       "type": "string",

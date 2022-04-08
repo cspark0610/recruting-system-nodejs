@@ -51,7 +51,7 @@ router.get('/video/:key', candidateController.getVideoFromS3);
  *    "content": {
  *    "multipart/form-data": {
  *     "schema": {
- *      "$ref": "#/components/schemas/Candidate creation model",
+ *      "$ref": "#/components/schemas/Candidate creation",
  *     },
  *    },
  *   },
@@ -62,7 +62,7 @@ router.get('/video/:key', candidateController.getVideoFromS3);
  *    "content": {
  *     "application/json": {
  *      "schema": {
- *       "$ref": "#/components/schemas/Candidate creation model response",
+ *       "$ref": "#/components/schemas/Candidate creation response",
  *      },
  *     },
  *    },
@@ -165,7 +165,7 @@ router.post(
  *    "content": {
  *     "application/json": {
  *      "schema": {
- *       "$ref": "#/components/schemas/Candidate update model",
+ *       "$ref": "#/components/schemas/Candidate update",
  *      },
  *     },
  *    },
