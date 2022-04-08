@@ -63,6 +63,9 @@ router.get(
  *    "400": {
  *     "description": "Bad request when email or password is not provided or is invalid",
  *    },
+ *    "500": {
+ *     "description": "Internal server error",
+ *    },
  *   },
  *  },
  * }
@@ -103,6 +106,9 @@ router.post(
  *    },
  *    "400": {
  *     "description": "Bad request when the form is invalid, or when the user already exists",
+ *    },
+ *    "500": {
+ *     "description": "Internal server error",
  *    },
  *   },
  *  },

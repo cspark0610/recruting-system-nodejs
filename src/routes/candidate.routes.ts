@@ -70,6 +70,9 @@ router.get('/video/:key', candidateController.getVideoFromS3);
  *   "400": {
  *    "description": "Bad request when the request body is not valid, alongide error messages related to request body validation. Or when there is already a candidate registered with the same email",
  *   },
+ *   "500": {
+ *    "description": "Internal server error",
+ *   },
  *  },
  * },
  * }
@@ -96,7 +99,7 @@ router.post(
  * "/candidate/url/create/{_id}": {
  *  "post": {
  *   "tags": ["Candidate"],
- *   "summary": "Create an url for the candidate to complete application",
+ *   "summary": "Create an url for the candidate to complete their application",
  *   "security": [
  *    {
  *     "bearerAuth": [],
@@ -120,6 +123,12 @@ router.post(
  *       },
  *      },
  *     },
+ *    },
+ *    "401": {
+ *     "description": "Unauthorized when the user is not logged in or when the access token or refresh token has expired",
+ *    },
+ *    "500": {
+ *     "description": "Internal server error",
  *    },
  *   },
  *  },
@@ -176,6 +185,9 @@ router.post(
  *    },
  *    "400": {
  *     "description": "Bad request when required fields are not provided. Or when they have invalid information. Or when _id is not valid",
+ *    },
+ *    "500": {
+ *     "description": "Internal server error",
  *    },
  *   },
  *  },
