@@ -16,17 +16,99 @@ import ValidateUrlParamsDto from '../db/schemas/dtos/ValidateUrlParams.dto';
 
 const router = Router();
 
+/**
+ * @openapi
+ * "tags": [
+ *  {
+ *   "name": "User",
+ *   "description": "User related endpoints"
+ *  },
+ * ]
+ * */
+
 router.get(
   '/',
   [authJwt.verifyJwt, authJwt.authRole({ CEO: 'CEO' })],
   userController.getAllUsers,
 );
 
+/**
+ * @openapi
+ * "/users/signIn": {
+ *  "post": {
+ *   "summary": "Sign in user",
+ *   "description": "Sign in user",
+ *   "tags": ["User"],
+ *   "requestBody": {
+ *   "required": true,
+ *    "content": {
+ *     "application/json": {
+ *      "schema": {
+ *       "$ref": "#/components/schemas/User signin schema"
+ *      },
+ *     },
+ *    },
+ *   },
+ *   "responses": {
+ *    "200": {
+ *     "description": "User sing in successfull",
+ *     "content": {
+ *      "application/json": {
+ *       "schema": {
+ *        "$ref": "#/components/schemas/User sign up response schema"
+ *       },
+ *      },
+ *     },
+ *    },
+ *    "400": {
+ *     "description": "Bad request when email or password is not provided or is invalid",
+ *    },
+ *   },
+ *  },
+ * }
+ * */
 router.post(
   '/signIn',
   [requestBodyValidation(UserSignInParamsDto)],
   userController.signIn,
 );
+
+/**
+ * @openapi
+ * "/users/signUp": {
+ *  "post": {
+ *   "tags": ["User"],
+ *   "summary": "Register a new User",
+ *   "description": "Register a new User",
+ *   "requestBody": {
+ *    "required": true,
+ *    "content": {
+ *     "application/json": {
+ *      "schema": {
+ *       "$ref": "#/components/schemas/User signup schema"
+ *      },
+ *     },
+ *    },
+ *   },
+ *   "responses": {
+ *    "201": {
+ *     "description": "User created successfully",
+ *     "content": {
+ *      "application/json": {
+ *       "schema": {
+ *        "$ref": "#/components/schemas/User sign up response schema"
+ *       },
+ *      },
+ *     },
+ *    },
+ *    "400": {
+ *     "description": "Bad request when the form is invalid, or when the user already exists",
+ *    },
+ *   },
+ *  },
+ * }
+ *
+ * */
 router.post(
   '/signUp',
   [requestBodyValidation(CreateUserDto), userAuth.validateSignUp],

@@ -140,19 +140,42 @@ import ICandidate from './interfaces/ICandidate.interface';
  *     },
  *     "data": {
  *      "type": "object",
- *      "example": {
- *       "name": "John Doe",
-	 "main_status": "interested",
-	 "secondary_status": "new entry",
-	 "job": "615848912358949",
-	 "designated_users": [
-	    "Juan Hotz"
-	  ],
-	  "isRejected": false,
-          "cv": "CV John Doe-1649273738125.pdf",
-	  "_id": "624deb8c25f27662ee49d5cb",
-	  "createdAt": "2022-04-06T19:35:40.412Z",
-	  "updatedAt": "2022-04-06T19:35:40.412Z"
+ *      "properties": {
+ *      "name": {
+ *       "type": "string",
+ *       "example": "John Doe"
+ *      },
+ *      "main_status": {
+ *       "type": "string",
+ *       "example": "interested"
+ *      },
+ *      "secondary_status": {
+ *       "type": "string",
+ *       "example": "new entry"
+ *      },
+ *      "job": {
+ *       "type": "string",
+ *       "example": "Fullstack"
+ *      },
+ *      "designated_recruiters": {
+ *       "type": "array",
+ *       "example": [
+ *        "Harumi",
+ *        "Gabriela"
+ *       ],
+ *      },
+ *      "_id": {
+ *       "type": "mongodb object id",
+ *       "example": "624deb8c25f27662ee49d5cb"
+ *      },
+ *      "createdAt": {
+ *       "type": "date",
+ *       "example": "2022-04-06T19:35:40.412Z"
+ *      },
+ *      "updatedAt": {
+ *       "type": "date",
+ *       "example": "2022-04-06T19:35:40.412Z"
+ *      },
  *      },
  *     },
  *    },
