@@ -27,7 +27,7 @@ export const getAllCandidates = async (
   next: NextFunction,
 ) => {
   try {
-    const { query } = req.body;
+    const query = req.query.query as string;
 
     if (query) {
       const candidates = await candidateService.GetCandidateByQuery(
@@ -36,7 +36,11 @@ export const getAllCandidates = async (
       );
 
       if (!candidates || candidates.length === 0) {
-        return next(new NotFoundException('No candidates were found'));
+        return next(
+          new NotFoundException(
+            'No candidates were found with the provided query',
+          ),
+        );
       }
 
       return res.status(200).send({ status: 200, candidates });
@@ -63,9 +67,26 @@ export const getCandidatesFiltered = async (
   res: Response,
   next: NextFunction,
 ) => {
-  const { position, secondary_status } = req.body;
+  const { position, secondary_status, query } = req.body;
 
   try {
+    if (query) {
+      const candidates = await candidateService.GetCandidateByQuery(
+        query,
+        next,
+      );
+
+      if (!candidates || candidates.length === 0) {
+        return next(
+          new NotFoundException(
+            'No candidates were found with the provided query',
+          ),
+        );
+      }
+
+      return res.status(200).send({ status: 200, candidates });
+    }
+
     const candidatesFiltered = await candidateService.GetCandidatesFiltered(
       next,
       position,
@@ -73,7 +94,11 @@ export const getCandidatesFiltered = async (
     );
 
     if (!candidatesFiltered || candidatesFiltered.length === 0) {
-      return next(new NotFoundException('No candidates were found'));
+      return next(
+        new NotFoundException(
+          'No candidates were found with the provided filters',
+        ),
+      );
     }
 
     return res.status(200).send({ status: 200, candidatesFiltered });
@@ -81,6 +106,39 @@ export const getCandidatesFiltered = async (
     return next(
       new InternalServerException(
         `There was an unexpected error with the getCandidatesFiltered controller. ${e.message}`,
+      ),
+    );
+  }
+};
+
+export const applyNextFilter = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  const { position, secondary_status, previousQuery, query } = req.body;
+
+  try {
+    const candidatesFiltered = await candidateService.ApplyNextFilter(
+      previousQuery,
+      position,
+      secondary_status,
+      query,
+    );
+
+    if (!candidatesFiltered || candidatesFiltered.length === 0) {
+      return next(
+        new NotFoundException(
+          'No candidates were found with the provided filters',
+        ),
+      );
+    }
+
+    return res.status(200).send({ status: 200, candidatesFiltered });
+  } catch (e: any) {
+    return next(
+      new InternalServerException(
+        `There was an unexpected error with the applySecondFilter controller. ${e.message}`,
       ),
     );
   }

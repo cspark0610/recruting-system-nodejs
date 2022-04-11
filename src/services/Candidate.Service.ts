@@ -90,6 +90,10 @@ export const GetCandidatesFiltered = async (
         main_status: 1,
         secondary_status: 1,
         designated_recruiters: 1,
+        country: 1,
+        skills: 1,
+        academic_training: 1,
+        english_level: 1,
         createdAt: 1,
         updatedAt: 1,
       },
@@ -100,6 +104,45 @@ export const GetCandidatesFiltered = async (
         `There was an unexpected error with the GetCandidatesFiltered service. ${e.message}`,
       ),
     );
+  }
+};
+
+export const ApplyNextFilter = async (
+  previousQuery: Array<ICandidate>,
+  position: Array<string>,
+  status: Array<string>,
+  query: string,
+) => {
+  if (position.length === 0 && status.length === 0 && !query) {
+    return previousQuery;
+  }
+
+  if (position.length === 0 && !query) {
+    return previousQuery.filter((candidate: ICandidate) =>
+      status.includes(candidate.secondary_status!),
+    );
+  }
+
+  if (position.length === 0 && status.length === 0) {
+    // I set the skills and designated_recruiters of every candidate to lowercase bor better querying
+    previousQuery = previousQuery.map((candidate: ICandidate) => {
+      candidate.skills = candidate.skills!.map((skill) => skill.toLowerCase());
+      candidate.designated_recruiters = candidate.designated_recruiters!.map(
+        (recruiter) => recruiter.toLowerCase(),
+      );
+      return candidate;
+    });
+
+    return previousQuery.filter((candidate: ICandidate) => {
+      return (
+        candidate.name.toLowerCase().includes(query.toLowerCase()) ||
+        candidate.skills!.includes(query) ||
+        candidate.academic_training!.toLowerCase() === query.toLowerCase() ||
+        candidate.english_level.toLowerCase() === query.toLowerCase() ||
+        candidate.country.toLowerCase() === query.toLowerCase() ||
+        candidate.designated_recruiters!.includes(query)
+      );
+    });
   }
 };
 
@@ -127,7 +170,7 @@ export const GetCandidateByQuery = async (
         { academic_training: { $regex: query, $options: 'i' } },
         { english_level: { $regex: query, $options: 'i' } },
         { country: { $regex: query, $options: 'i' } },
-        { designated_users: { $regex: query, $options: 'i' } },
+        { designated_recruiters: { $regex: query, $options: 'i' } },
       ],
     });
   } catch (e: any) {
