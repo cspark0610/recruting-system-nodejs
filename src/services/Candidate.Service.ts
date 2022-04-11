@@ -27,33 +27,7 @@ const { AWS_VIDEO_BUCKET_NAME, AWS_CV_BUCKET_NAME, JWT_ACCESS_TOKEN_EXP } =
 
 export const GetAllCandidates = async (next: NextFunction) => {
   try {
-    return await Candidate.aggregate([
-      {
-        $lookup: {
-          from: 'jobs',
-          localField: 'job',
-          foreignField: '_id',
-          as: 'job',
-        },
-      },
-      {
-        $unwind: {
-          path: '$job',
-        },
-      },
-      {
-        $project: {
-          _id: 1,
-          name: 1,
-          main_status: 1,
-          secondary_status: 1,
-          job: '$job.title',
-          designated_recruiters: 1,
-          createdAt: 1,
-          updatedAt: 1,
-        },
-      },
-    ]);
+    return await Candidate.find();
   } catch (e: any) {
     return next(
       new InternalServerException(
