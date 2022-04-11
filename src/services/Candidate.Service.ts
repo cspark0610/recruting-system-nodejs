@@ -76,28 +76,9 @@ export const GetCandidatesFiltered = async (
       { _id: 1, designated: 0 },
     );
     positions = positions.map((pos: any) => pos._id);
-    return await Candidate.find(
-      {
-        $or: [
-          { job: { $in: positions } },
-          { secondary_status: { $in: status } },
-        ],
-      },
-      {
-        _id: 1,
-        name: 1,
-        job: 1,
-        main_status: 1,
-        secondary_status: 1,
-        designated_recruiters: 1,
-        country: 1,
-        skills: 1,
-        academic_training: 1,
-        english_level: 1,
-        createdAt: 1,
-        updatedAt: 1,
-      },
-    );
+    return await Candidate.find({
+      $or: [{ job: { $in: positions } }, { secondary_status: { $in: status } }],
+    });
   } catch (e: any) {
     return next(
       new InternalServerException(
@@ -112,37 +93,59 @@ export const ApplyNextFilter = async (
   position: Array<string>,
   status: Array<string>,
   query: string,
+  next: NextFunction,
 ) => {
-  if (position.length === 0 && status.length === 0 && !query) {
-    return previousQuery;
-  }
+  try {
+    if (!position && !status && !query) {
+      return previousQuery;
+    }
 
-  if (position.length === 0 && !query) {
-    return previousQuery.filter((candidate: ICandidate) =>
-      status.includes(candidate.secondary_status!),
-    );
-  }
-
-  if (position.length === 0 && status.length === 0) {
-    // I set the skills and designated_recruiters of every candidate to lowercase bor better querying
-    previousQuery = previousQuery.map((candidate: ICandidate) => {
-      candidate.skills = candidate.skills!.map((skill) => skill.toLowerCase());
-      candidate.designated_recruiters = candidate.designated_recruiters!.map(
-        (recruiter) => recruiter.toLowerCase(),
+    if (!position && !query) {
+      return previousQuery.filter((candidate: ICandidate) =>
+        status.includes(candidate.secondary_status!),
       );
-      return candidate;
+    }
+
+    if (!position && !status) {
+      // Set the skills and designated_recruiters of every candidate to lowercase bor better querying
+      previousQuery = previousQuery.map((candidate: ICandidate) => {
+        candidate.skills = candidate.skills!.map((skill) =>
+          skill.toLowerCase(),
+        );
+        candidate.designated_recruiters = candidate.designated_recruiters!.map(
+          (recruiter) => recruiter.toLowerCase(),
+        );
+        return candidate;
+      });
+
+      return previousQuery.filter((candidate: ICandidate) => {
+        return (
+          candidate.name.toLowerCase().includes(query.toLowerCase()) ||
+          candidate.skills!.includes(query) ||
+          candidate.academic_training?.toLowerCase() === query.toLowerCase() ||
+          candidate.english_level.toLowerCase() === query.toLowerCase() ||
+          candidate.country.toLowerCase() === query.toLowerCase() ||
+          candidate.designated_recruiters!.includes(query)
+        );
+      });
+    }
+    let positions = await Job.find({
+      title: { $in: position },
     });
+
+    if (positions.length === 0) return [];
+
+    positions = positions.map((pos: any) => pos._id);
 
     return previousQuery.filter((candidate: ICandidate) => {
-      return (
-        candidate.name.toLowerCase().includes(query.toLowerCase()) ||
-        candidate.skills!.includes(query) ||
-        candidate.academic_training!.toLowerCase() === query.toLowerCase() ||
-        candidate.english_level.toLowerCase() === query.toLowerCase() ||
-        candidate.country.toLowerCase() === query.toLowerCase() ||
-        candidate.designated_recruiters!.includes(query)
-      );
+      return positions.filter((pos) => pos._id.equals(candidate.job));
     });
+  } catch (e: any) {
+    return next(
+      new InternalServerException(
+        `There was an unexpected error with the ApplyNextFilter service. ${e.message}`,
+      ),
+    );
   }
 };
 
