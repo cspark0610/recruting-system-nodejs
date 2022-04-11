@@ -27,33 +27,7 @@ const { AWS_VIDEO_BUCKET_NAME, AWS_CV_BUCKET_NAME, JWT_ACCESS_TOKEN_EXP } =
 
 export const GetAllCandidates = async (next: NextFunction) => {
   try {
-    return await Candidate.aggregate([
-      {
-        $lookup: {
-          from: 'jobs',
-          localField: 'job',
-          foreignField: '_id',
-          as: 'job',
-        },
-      },
-      {
-        $unwind: {
-          path: '$job',
-        },
-      },
-      {
-        $project: {
-          _id: 1,
-          name: 1,
-          main_status: 1,
-          secondary_status: 1,
-          job: '$job.title',
-          designated_recruiters: 1,
-          createdAt: 1,
-          updatedAt: 1,
-        },
-      },
-    ]);
+    return await Candidate.find();
   } catch (e: any) {
     return next(
       new InternalServerException(
@@ -76,28 +50,74 @@ export const GetCandidatesFiltered = async (
       { _id: 1, designated: 0 },
     );
     positions = positions.map((pos: any) => pos._id);
-    return await Candidate.find(
-      {
-        $or: [
-          { job: { $in: positions } },
-          { secondary_status: { $in: status } },
-        ],
-      },
-      {
-        _id: 1,
-        name: 1,
-        job: 1,
-        main_status: 1,
-        secondary_status: 1,
-        designated_recruiters: 1,
-        createdAt: 1,
-        updatedAt: 1,
-      },
-    );
+    return await Candidate.find({
+      $or: [{ job: { $in: positions } }, { secondary_status: { $in: status } }],
+    });
   } catch (e: any) {
     return next(
       new InternalServerException(
         `There was an unexpected error with the GetCandidatesFiltered service. ${e.message}`,
+      ),
+    );
+  }
+};
+
+export const ApplyNextFilter = async (
+  previousQuery: Array<ICandidate>,
+  position: Array<string>,
+  status: Array<string>,
+  query: string,
+  next: NextFunction,
+) => {
+  try {
+    if (!position && !status && !query) {
+      return previousQuery;
+    }
+
+    if (!position && !query) {
+      return previousQuery.filter((candidate: ICandidate) =>
+        status.includes(candidate.secondary_status!),
+      );
+    }
+
+    if (!position && !status) {
+      // Set the skills and designated_recruiters of every candidate to lowercase bor better querying
+      previousQuery = previousQuery.map((candidate: ICandidate) => {
+        candidate.skills = candidate.skills!.map((skill) =>
+          skill.toLowerCase(),
+        );
+        candidate.designated_recruiters = candidate.designated_recruiters!.map(
+          (recruiter) => recruiter.toLowerCase(),
+        );
+        return candidate;
+      });
+
+      return previousQuery.filter((candidate: ICandidate) => {
+        return (
+          candidate.name.toLowerCase().includes(query.toLowerCase()) ||
+          candidate.skills!.includes(query) ||
+          candidate.academic_training?.toLowerCase() === query.toLowerCase() ||
+          candidate.english_level.toLowerCase() === query.toLowerCase() ||
+          candidate.country.toLowerCase() === query.toLowerCase() ||
+          candidate.designated_recruiters!.includes(query)
+        );
+      });
+    }
+    let positions = await Job.find({
+      title: { $in: position },
+    });
+
+    if (positions.length === 0) return [];
+
+    positions = positions.map((pos: any) => pos._id);
+
+    return previousQuery.filter((candidate: ICandidate) => {
+      return positions.filter((pos) => pos._id.equals(candidate.job));
+    });
+  } catch (e: any) {
+    return next(
+      new InternalServerException(
+        `There was an unexpected error with the ApplyNextFilter service. ${e.message}`,
       ),
     );
   }
@@ -127,7 +147,7 @@ export const GetCandidateByQuery = async (
         { academic_training: { $regex: query, $options: 'i' } },
         { english_level: { $regex: query, $options: 'i' } },
         { country: { $regex: query, $options: 'i' } },
-        { designated_users: { $regex: query, $options: 'i' } },
+        { designated_recruiters: { $regex: query, $options: 'i' } },
       ],
     });
   } catch (e: any) {
