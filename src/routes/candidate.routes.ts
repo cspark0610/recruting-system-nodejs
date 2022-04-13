@@ -32,7 +32,7 @@ const upload = multer({ storage });
  * ]
  * */
 
-router.get('/', authJwt.verifyJwt, candidateController.getAllCandidates);
+router.get('/', candidateController.getAllCandidates);
 
 router.get('/filter', candidateController.getCandidatesFiltered);
 
