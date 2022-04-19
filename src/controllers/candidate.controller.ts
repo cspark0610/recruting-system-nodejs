@@ -14,6 +14,8 @@ import NotFoundException from '../exceptions/NotFoundException';
 import BadRequestException from '../exceptions/BadRequestException';
 import InternalServerException from '../exceptions/InternalServerError';
 import RequestExtended from '../interfaces/RequestExtended.interface';
+import checkIsEmptyObject from '../lib/checkIsEmptyObject';
+import { ResponseData } from '../lib/checkIsEmptyObject';
 import * as candidateService from '../services/Candidate.Service';
 
 const unlinkFile = promisify(unlink);
@@ -35,7 +37,7 @@ export const getAllCandidates = async (
         next,
       );
 
-      if (!candidates || candidates.length === 0) {
+      if (!candidates) {
         return next(
           new NotFoundException(
             'No candidates were found with the provided query',
@@ -43,16 +45,42 @@ export const getAllCandidates = async (
         );
       }
 
-      return res.status(200).send({ status: 200, candidates });
+      const isEmpty = checkIsEmptyObject(candidates);
+
+      if (isEmpty) {
+        return next(
+          new NotFoundException(
+            'No candidates were found with the provided query',
+          ),
+        );
+      }
+
+      return res.status(200).send({
+        status: 200,
+        candidatesFiltered: {
+          interested: candidates.interestedCandidates,
+          applying: candidates.applyingCandidates,
+          meeting: candidates.meetingCandidates,
+          chosen: candidates.chosenCandidates,
+        },
+      });
     }
 
     const allCandidates = await candidateService.GetAllCandidates(next);
 
-    if (!allCandidates || allCandidates.length === 0) {
+    if (!allCandidates) {
       return next(new NotFoundException('No candidates were found'));
     }
 
-    return res.status(200).send({ status: 200, allCandidates });
+    return res.status(200).send({
+      status: 200,
+      allCandidates: {
+        interested: allCandidates.interestedCandidates,
+        applying: allCandidates.applyingCandidates,
+        meeting: allCandidates.meetingCandidates,
+        chosen: allCandidates.chosenCandidates,
+      },
+    });
   } catch (e: any) {
     return next(
       new InternalServerException(
@@ -80,13 +108,15 @@ export const getCandidatesFiltered = async (
         next,
       );
 
-      if (!candidatesFiltered || candidatesFiltered.length === 0) {
+      if (!candidatesFiltered) {
         return next(
           new NotFoundException(
             'No candidates were found with the provided filters',
           ),
         );
       }
+
+      const isEmpty = checkIsEmptyObject(candidatesFiltered as ResponseData);
 
       return res.status(200).send({ status: 200, candidatesFiltered });
     }
@@ -97,7 +127,7 @@ export const getCandidatesFiltered = async (
         next,
       );
 
-      if (!candidates || candidates.length === 0) {
+      if (!candidates) {
         return next(
           new NotFoundException(
             'No candidates were found with the provided query',
@@ -105,7 +135,15 @@ export const getCandidatesFiltered = async (
         );
       }
 
-      return res.status(200).send({ status: 200, candidates });
+      return res.status(200).send({
+        status: 200,
+        candidatesFiltered: {
+          interested: candidates.interestedCandidates,
+          applying: candidates.applyingCandidates,
+          meeting: candidates.meetingCandidates,
+          chosen: candidates.chosenCandidates,
+        },
+      });
     }
 
     const candidatesFiltered = await candidateService.GetCandidatesFiltered(
@@ -114,7 +152,7 @@ export const getCandidatesFiltered = async (
       secondary_status,
     );
 
-    if (!candidatesFiltered || candidatesFiltered.length === 0) {
+    if (!candidatesFiltered) {
       return next(
         new NotFoundException(
           'No candidates were found with the provided filters',
@@ -122,7 +160,15 @@ export const getCandidatesFiltered = async (
       );
     }
 
-    return res.status(200).send({ status: 200, candidatesFiltered });
+    return res.status(200).send({
+      status: 200,
+      candidatesFiltered: {
+        interested: candidatesFiltered.interestedCandidates,
+        applying: candidatesFiltered.applyingCandidates,
+        meeting: candidatesFiltered.meetingCandidates,
+        chosen: candidatesFiltered.chosenCandidates,
+      },
+    });
   } catch (e: any) {
     return next(
       new InternalServerException(
