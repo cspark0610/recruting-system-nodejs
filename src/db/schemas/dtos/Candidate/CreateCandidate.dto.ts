@@ -5,7 +5,9 @@ import {
   IsNotEmpty,
   IsEmail,
   IsNumberString,
+  IsDateString,
   IsMongoId,
+  IsUrl,
 } from 'class-validator';
 import { Types } from 'mongoose';
 import ICandidate from '../../interfaces/ICandidate.interface';
@@ -32,6 +34,14 @@ export class CreateCandidateDto implements ICandidate {
   @IsNotEmpty()
   @IsString()
   english_level!: string;
+
+  @IsNotEmpty()
+  @IsUrl()
+  linkedin!: string;
+
+  @IsDateString()
+  @IsNotEmpty()
+  birth_date!: Date;
 
   @IsNotEmpty()
   @IsString()

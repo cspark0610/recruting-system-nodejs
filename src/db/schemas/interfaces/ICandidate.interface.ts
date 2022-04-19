@@ -11,13 +11,14 @@ export default interface ICandidate {
   academic_training?: string;
   english_level: string;
   salary_expectations?: string;
-  available_from?: Date;
+  available_from?: string;
   skills?: Array<string>;
   linkedin?: string;
   portfolio?: string;
   working_reason?: string;
   conclusions?: IConclusions;
   main_status?: string;
+  birth_date: Date;
   secondary_status?: string;
   job: Types.ObjectId;
   designated_recruiters?: Array<string>;
