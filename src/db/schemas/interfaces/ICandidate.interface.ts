@@ -13,7 +13,7 @@ export default interface ICandidate {
   salary_expectations?: string;
   available_from?: string;
   skills?: Array<string>;
-  linkedin?: string;
+  linkedin: string;
   portfolio?: string;
   working_reason?: string;
   conclusions?: IConclusions;

@@ -13,13 +13,13 @@ const VideoRecoringUrlSchema = new Schema<IVideoRecordingUrl>(
     expiresAt: {
       type: Date,
       default: new Date(),
-      index: { expires: '24h' },
+      index: { expires: '1month' },
     },
   },
   { versionKey: false },
 );
 
-VideoRecoringUrlSchema.index({ expiresAt: 1 }, { expires: '24h' });
+VideoRecoringUrlSchema.index({ expiresAt: 1 }, { expires: '1month' });
 
 export default model<IVideoRecordingUrl>(
   'video_recording_url',
