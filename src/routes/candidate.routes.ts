@@ -228,10 +228,10 @@ router.put(
   candidateController.setIsRejected,
 );
 
-router.delete(
-  '/url/delete/:url_id',
-  candidateAuth.verifyCandidateVideoUrlExistsBeforeDeletion,
-  candidateController.deleteUrl,
+router.put(
+  '/url/disable/:url_id',
+  candidateAuth.verifyCandidateUrlDisabled,
+  candidateController.disableUrl,
 );
 
 export default router;
