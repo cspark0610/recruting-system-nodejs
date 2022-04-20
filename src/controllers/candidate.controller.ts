@@ -15,7 +15,7 @@ import BadRequestException from '../exceptions/BadRequestException';
 import InternalServerException from '../exceptions/InternalServerError';
 import RequestExtended from '../interfaces/RequestExtended.interface';
 import checkIsEmptyObject from '../lib/checkIsEmptyObject';
-import { ResponseData } from '../lib/checkIsEmptyObject';
+import ResponseData from '../lib/getCandidatesByColumn';
 import * as candidateService from '../services/Candidate.Service';
 
 const unlinkFile = promisify(unlink);
@@ -116,9 +116,15 @@ export const getCandidatesFiltered = async (
         );
       }
 
-      const isEmpty = checkIsEmptyObject(candidatesFiltered as ResponseData);
-
-      return res.status(200).send({ status: 200, candidatesFiltered });
+      return res.status(200).send({
+        status: 200,
+        candidates: {
+          interested: candidatesFiltered.interestedCandidates,
+          applying: candidatesFiltered.applyingCandidates,
+          meeting: candidatesFiltered.meetingCandidates,
+          chosen: candidatesFiltered.chosenCandidates,
+        },
+      });
     }
 
     if (query) {
@@ -238,8 +244,16 @@ export const create = async (
   next: NextFunction,
 ) => {
   const cv = req.file as Express.Multer.File;
-  const { name, email, phone, job, english_level, country }: ICandidate =
-    req.body;
+  const {
+    name,
+    email,
+    phone,
+    job,
+    english_level,
+    country,
+    birth_date,
+    linkedin,
+  }: ICandidate = req.body;
 
   try {
     // uploads CV file to S3. Then the file is removed automatically from the server
@@ -256,6 +270,8 @@ export const create = async (
         country,
         english_level,
         job,
+        birth_date,
+        linkedin,
         cv: cvKey,
       },
       next,
@@ -290,7 +306,6 @@ export const updateInfo = async (
     salary_expectations,
     available_from,
     skills,
-    linkedin,
     portfolio,
     working_reason,
   }: UpdateCandidateInfoDto = req.body;
@@ -300,7 +315,6 @@ export const updateInfo = async (
     salary_expectations: salary_expectations,
     available_from,
     skills: skills,
-    linkedin: linkedin,
     portfolio,
     working_reason,
   };

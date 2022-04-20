@@ -74,6 +74,10 @@ export const ApplyNextFilter = async (
   next: NextFunction,
 ) => {
   try {
+    if (!position && !status && !query) {
+      return getCandidatesByColumn(previousQuery);
+    }
+
     if (!position && !query) {
       const candidates = previousQuery.filter((candidate: ICandidate) =>
         status.includes(candidate.secondary_status!),
@@ -109,8 +113,6 @@ export const ApplyNextFilter = async (
     let positions = await Job.find({
       title: { $in: position },
     });
-
-    if (positions.length === 0) return [];
 
     positions = positions.map((pos: any) => pos._id);
 
