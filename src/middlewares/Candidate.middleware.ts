@@ -102,7 +102,7 @@ export async function verifyCandidateExistsBeforeUrlGeneration(
   }
 }
 
-export async function verifyCandidateVideoUrlExistsBeforeDeletion(
+export async function verifyCandidateUrlDisabled(
   req: Request,
   _res: Response,
   next: NextFunction,
@@ -110,21 +110,25 @@ export async function verifyCandidateVideoUrlExistsBeforeDeletion(
   const { url_id } = req.params;
 
   try {
-    const url = await VideoRecordingUrlSchema.findOne({ short_url: url_id });
+    const videoUrl = await VideoRecordingUrlSchema.findOne({
+      short_url: url_id,
+    });
 
-    if (!url) {
+    if (!videoUrl) {
       return next(
-        new NotFoundException(
-          `Url with id ${url_id} not found. Probably it has already been deleted or has not been created yet`,
-        ),
+        new BadRequestException(`No video url found with id ${url_id}`),
       );
+    }
+
+    if (videoUrl.isDisabled) {
+      return next(new BadRequestException(`The video url is already disabled`));
     }
 
     next();
   } catch (e: any) {
     return next(
       new InternalServerException(
-        `There was an unexpected error while verifying the candidate video url. ${e.message}`,
+        `There was an unexpected error verifying the candidate. ${e.message}`,
       ),
     );
   }

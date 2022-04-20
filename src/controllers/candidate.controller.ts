@@ -15,7 +15,6 @@ import BadRequestException from '../exceptions/BadRequestException';
 import InternalServerException from '../exceptions/InternalServerError';
 import RequestExtended from '../interfaces/RequestExtended.interface';
 import checkIsEmptyObject from '../lib/checkIsEmptyObject';
-import ResponseData from '../lib/getCandidatesByColumn';
 import * as candidateService from '../services/Candidate.Service';
 
 const unlinkFile = promisify(unlink);
@@ -531,17 +530,17 @@ export const setIsRejected = async (
   }
 };
 
-export const deleteUrl = async (
+export const disableUrl = async (
   req: Request,
   res: Response,
   next: NextFunction,
 ) => {
   const { url_id } = req.params;
 
-  await candidateService.DeleteUrl(url_id, next);
+  await candidateService.DisableUrl(url_id, next);
 
   return res.status(200).send({
     status: 200,
-    message: 'Url deleted successfully',
+    message: 'Url disabled successfully',
   });
 };
