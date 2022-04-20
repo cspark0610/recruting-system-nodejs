@@ -279,7 +279,12 @@ export const GenerateUrl = async (
 ): Promise<TokenData | undefined> => {
   try {
     const newUrl = await VideoRecordingUrl.create({});
-    const token = createToken(candidate, '1month', 'access', newUrl.short_url);
+    const token = createToken(
+      candidate,
+      '2629746s',
+      'access',
+      newUrl.short_url,
+    );
     await Candidate.findByIdAndUpdate(candidate._id, {
       video_recording_url: newUrl._id,
     });
@@ -405,12 +410,15 @@ export const SetIsRejected = async (_id: string, next: NextFunction) => {
   }
 };
 
-export const DeleteUrl = async (
+export const DisableUrl = async (
   short_url: string,
   next: NextFunction,
 ): Promise<void> => {
   try {
-    await VideoRecordingUrl.deleteOne({ short_url });
+    await VideoRecordingUrl.findOneAndUpdate(
+      { short_url },
+      { isDisabled: true },
+    );
   } catch (e: any) {
     return next(
       new InternalServerException(
