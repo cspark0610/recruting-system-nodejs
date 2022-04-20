@@ -1,5 +1,7 @@
 import { Schema, model } from 'mongoose';
 import {
+  valid_academic_trainings,
+  valid_english_levels,
   valid_main_status,
   valid_secondary_status,
 } from '../../config/constants';
@@ -378,13 +380,17 @@ const CandidateSchema = new Schema<ICandidate>(
 
     country: { type: String, required: true },
 
-    academic_training: { type: String, required: false },
+    academic_training: {
+      type: String,
+      enum: valid_academic_trainings,
+      required: false,
+    },
 
     salary_expectations: { type: String, required: false },
 
-    available_from: { type: Date, required: false },
+    available_from: { type: String, required: false },
 
-    english_level: { type: String, required: true },
+    english_level: { type: String, enum: valid_english_levels, required: true },
 
     skills: { type: [String], required: false },
 
@@ -393,6 +399,8 @@ const CandidateSchema = new Schema<ICandidate>(
     portfolio: { type: String, required: false },
 
     working_reason: { type: String, required: false },
+
+    birth_date: { type: Date, required: true },
 
     conclusions: {
       good: { type: [String], required: false },

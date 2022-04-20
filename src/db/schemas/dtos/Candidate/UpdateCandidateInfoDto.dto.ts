@@ -5,7 +5,6 @@ import {
   IsUrl,
   IsArray,
   IsOptional,
-  IsDateString,
   ArrayNotEmpty,
   MinLength,
 } from 'class-validator';
@@ -21,9 +20,9 @@ export class UpdateCandidateInfoDto {
   salary_expectations!: string;
 
   @IsOptional()
+  @IsString()
   @IsNotEmpty()
-  @IsDateString()
-  available_from?: Date;
+  available_from?: string;
 
   @IsArray()
   @ArrayNotEmpty()
@@ -31,10 +30,6 @@ export class UpdateCandidateInfoDto {
   @IsString({ each: true })
   @MinLength(3, { each: true })
   skills!: Array<string>;
-
-  @IsNotEmpty()
-  @IsUrl()
-  linkedin!: string;
 
   @IsOptional()
   @IsNotEmpty()

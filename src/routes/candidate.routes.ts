@@ -34,8 +34,6 @@ const upload = multer({ storage });
 
 router.get('/', candidateController.getAllCandidates);
 
-router.get('/filter', candidateController.getCandidatesFiltered);
-
 router.get('/:_id', authJwt.verifyJwt, candidateController.getOneCandidate);
 router.get('/cv/:key', candidateController.getCV);
 router.get('/video/:key', candidateController.getVideoFromS3);
@@ -87,6 +85,8 @@ router.post(
   ],
   candidateController.create,
 );
+
+router.post('/filter', candidateController.getCandidatesFiltered);
 
 router.post(
   '/video/upload/:candidate_id',

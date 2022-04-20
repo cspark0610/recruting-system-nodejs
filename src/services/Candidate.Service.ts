@@ -21,13 +21,15 @@ import User from '../db/schemas/User.schema';
 import VideoRecordingUrl from '../db/schemas/VideoRecordingUrl.schema';
 import InternalServerException from '../exceptions/InternalServerError';
 import TokenData from '../interfaces/TokenData.interface';
+import getCandidatesByColumn from '../lib/getCandidatesByColumn';
 
-const { AWS_VIDEO_BUCKET_NAME, AWS_CV_BUCKET_NAME, JWT_ACCESS_TOKEN_EXP } =
-  envConfig;
+const { AWS_VIDEO_BUCKET_NAME, AWS_CV_BUCKET_NAME } = envConfig;
 
 export const GetAllCandidates = async (next: NextFunction) => {
   try {
-    return await Candidate.find().sort({ createdAt: -1 });
+    const candidates = await Candidate.find();
+
+    return getCandidatesByColumn(candidates);
   } catch (e: any) {
     return next(
       new InternalServerException(
@@ -50,9 +52,11 @@ export const GetCandidatesFiltered = async (
       { _id: 1, designated: 0 },
     );
     positions = positions.map((pos: any) => pos._id);
-    return await Candidate.find({
+    const candidates = await Candidate.find({
       $or: [{ job: { $in: positions } }, { secondary_status: { $in: status } }],
     });
+
+    return getCandidatesByColumn(candidates);
   } catch (e: any) {
     return next(
       new InternalServerException(
@@ -71,13 +75,14 @@ export const ApplyNextFilter = async (
 ) => {
   try {
     if (!position && !status && !query) {
-      return previousQuery;
+      return getCandidatesByColumn(previousQuery);
     }
 
     if (!position && !query) {
-      return previousQuery.filter((candidate: ICandidate) =>
+      const candidates = previousQuery.filter((candidate: ICandidate) =>
         status.includes(candidate.secondary_status!),
       );
+      return getCandidatesByColumn(candidates);
     }
 
     if (!position && !status) {
@@ -92,7 +97,7 @@ export const ApplyNextFilter = async (
         return candidate;
       });
 
-      return previousQuery.filter((candidate: ICandidate) => {
+      const candidates = previousQuery.filter((candidate: ICandidate) => {
         return (
           candidate.name.toLowerCase().includes(query.toLowerCase()) ||
           candidate.skills!.includes(query) ||
@@ -102,18 +107,20 @@ export const ApplyNextFilter = async (
           candidate.designated_recruiters!.includes(query)
         );
       });
+
+      return getCandidatesByColumn(candidates);
     }
     let positions = await Job.find({
       title: { $in: position },
     });
 
-    if (positions.length === 0) return [];
-
     positions = positions.map((pos: any) => pos._id);
 
-    return previousQuery.filter((candidate: ICandidate) => {
+    const candidates = previousQuery.filter((candidate: ICandidate) => {
       return positions.filter((pos) => pos._id.equals(candidate.job));
     });
+
+    return getCandidatesByColumn(candidates);
   } catch (e: any) {
     return next(
       new InternalServerException(
@@ -140,7 +147,7 @@ export const GetCandidateByQuery = async (
   next: NextFunction,
 ) => {
   try {
-    return await Candidate.find({
+    const candidates = await Candidate.find({
       $or: [
         { name: { $regex: query, $options: 'i' } },
         { skills: { $regex: query, $options: 'i' } },
@@ -150,6 +157,8 @@ export const GetCandidateByQuery = async (
         { designated_recruiters: { $regex: query, $options: 'i' } },
       ],
     });
+
+    return getCandidatesByColumn(candidates);
   } catch (e: any) {
     return next(
       new InternalServerException(
@@ -270,12 +279,7 @@ export const GenerateUrl = async (
 ): Promise<TokenData | undefined> => {
   try {
     const newUrl = await VideoRecordingUrl.create({});
-    const token = createToken(
-      candidate,
-      JWT_ACCESS_TOKEN_EXP,
-      'access',
-      newUrl.short_url,
-    );
+    const token = createToken(candidate, '1month', 'access', newUrl.short_url);
     await Candidate.findByIdAndUpdate(candidate._id, {
       video_recording_url: newUrl._id,
     });
