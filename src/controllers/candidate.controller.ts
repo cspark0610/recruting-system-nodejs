@@ -58,10 +58,10 @@ export const getCandidatesFiltered = async (
     if (apply_next && previousQuery) {
       const candidatesFiltered = await candidateService.ApplyNextFilter(
         previousQuery,
+        next,
         position,
         secondary_status,
         query,
-        next,
       );
 
       if (!candidatesFiltered || candidatesFiltered.length === 0) {

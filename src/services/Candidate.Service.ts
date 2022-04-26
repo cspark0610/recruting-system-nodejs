@@ -66,23 +66,23 @@ export const GetCandidatesFiltered = async (
 
 export const ApplyNextFilter = async (
   previousQuery: Array<ICandidate>,
-  position: Array<string>,
-  status: Array<string>,
-  query: string,
   next: NextFunction,
+  position?: Array<string>,
+  status?: Array<string>,
+  query?: string,
 ) => {
   try {
-    if (!position && !status && !query) {
+    if (position?.length === 0 && status?.length === 0 && !query) {
       return previousQuery;
     }
 
-    if (!position && !query) {
+    if (position?.length === 0 && !query) {
       return previousQuery.filter((candidate: ICandidate) =>
-        status.includes(candidate.secondary_status!),
+        status?.includes(candidate.secondary_status!),
       );
     }
 
-    if (!position && !status) {
+    if (position?.length === 0 && status?.length === 0) {
       // Set the skills and designated_recruiters of every candidate to lowercase bor better querying
       previousQuery = previousQuery.map((candidate: ICandidate) => {
         candidate.skills = candidate.skills!.map((skill) =>
@@ -96,24 +96,33 @@ export const ApplyNextFilter = async (
 
       return previousQuery.filter((candidate: ICandidate) => {
         return (
-          candidate.name.toLowerCase().includes(query.toLowerCase()) ||
-          candidate.skills!.includes(query) ||
-          candidate.academic_training?.toLowerCase() === query.toLowerCase() ||
-          candidate.english_level.toLowerCase() === query.toLowerCase() ||
-          candidate.country.toLowerCase() === query.toLowerCase() ||
-          candidate.designated_recruiters!.includes(query)
+          candidate.name
+            .toLowerCase()
+            .includes(query?.toLowerCase() as string) ||
+          candidate.skills!.includes(query as string) ||
+          candidate.academic_training?.toLowerCase() === query?.toLowerCase() ||
+          candidate.english_level.toLowerCase() === query?.toLowerCase() ||
+          candidate.country.toLowerCase() === query?.toLowerCase() ||
+          candidate.designated_recruiters!.includes(query as string)
         );
       });
     }
-    let positions = await Position.find({
-      title: { $in: position },
-    });
 
-    positions = positions.map((pos: any) => pos._id);
+    if (!query) {
+      let positions = await Position.find({
+        title: { $in: position },
+      });
 
-    return previousQuery.filter((candidate: ICandidate) => {
-      return positions.filter((pos) => pos._id!.equals(candidate.position));
-    });
+      positions = positions.map((pos: any) => pos.title);
+
+      let filtered = previousQuery.filter((candidate: any) => {
+        return positions.includes(candidate.position.title);
+      });
+
+      return filtered.filter((candidate: ICandidate) => {
+        return status?.includes(candidate.secondary_status!);
+      });
+    }
   } catch (e: any) {
     return next(
       new InternalServerException(
