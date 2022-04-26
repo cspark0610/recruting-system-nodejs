@@ -171,16 +171,7 @@ export const Create = async (candidateInfo: ICandidate, next: NextFunction) => {
       designated_recruiters: userNames,
     });
 
-    return {
-      name: newCandidate.name,
-      main_status: newCandidate.main_status,
-      secondary_status: newCandidate.secondary_status,
-      job: job?.title,
-      designated_recruiters: newCandidate.designated_recruiters,
-      _id: newCandidate._id,
-      createdAt: newCandidate.createdAt,
-      updatedAt: newCandidate.updatedAt,
-    };
+    return newCandidate;
   } catch (e: any) {
     return next(
       new InternalServerException(

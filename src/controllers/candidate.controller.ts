@@ -22,7 +22,7 @@ const { NODE_ENV, REDIRECT_URL_DEVELOPMENT, REDIRECT_URL_PRODUCTION } =
   envConfig;
 
 export const getAllCandidates = async (
-  req: Request,
+  _req: Request,
   res: Response,
   next: NextFunction,
 ) => {
