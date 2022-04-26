@@ -226,7 +226,7 @@ export const create = async (
       );
     }
 
-    return res.status(201).send({ status: 201, data });
+    return res.status(201).send({ status: 201, candidate: data });
   } catch (e: any) {
     return next(
       new InternalServerException(
