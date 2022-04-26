@@ -18,7 +18,7 @@ export default interface ICandidate {
   working_reason?: string;
   conclusions?: IConclusions;
   main_status?: string;
-  birth_date?: Date;
+  birth_date: Date;
   secondary_status?: string;
   position: Types.ObjectId;
   designated_recruiters?: Array<string>;
