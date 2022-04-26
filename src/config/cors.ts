@@ -5,7 +5,9 @@ const { NODE_ENV } = envConfig;
 
 const corsOptions: CorsOptions = {
   origin:
-    NODE_ENV === 'development' ? '*' : 'https://workart-release.vercel.app/',
+    NODE_ENV === 'development'
+      ? '*'
+      : 'https://work-lcyydj7q8-oliverfulltimeforce.vercel.app/',
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
 };
 

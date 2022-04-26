@@ -7,7 +7,7 @@ import * as jobAuth from '../middlewares/Job.middleware';
 
 const router = Router();
 
-router.get('/', authJwt.verifyJwt, jobController.getAllJobs);
+router.get('/', jobController.getAllJobs);
 
 router.get('/:_id', jobController.getJobInfo);
 

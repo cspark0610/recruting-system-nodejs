@@ -21,15 +21,12 @@ import User from '../db/schemas/User.schema';
 import VideoRecordingUrl from '../db/schemas/VideoRecordingUrl.schema';
 import InternalServerException from '../exceptions/InternalServerError';
 import TokenData from '../interfaces/TokenData.interface';
-import getCandidatesByColumn from '../lib/getCandidatesByColumn';
 
 const { AWS_VIDEO_BUCKET_NAME, AWS_CV_BUCKET_NAME } = envConfig;
 
 export const GetAllCandidates = async (next: NextFunction) => {
   try {
-    const candidates = await Candidate.find();
-
-    return getCandidatesByColumn(candidates);
+    return await Candidate.find();
   } catch (e: any) {
     return next(
       new InternalServerException(
@@ -52,11 +49,9 @@ export const GetCandidatesFiltered = async (
       { _id: 1, designated: 0 },
     );
     positions = positions.map((pos: any) => pos._id);
-    const candidates = await Candidate.find({
+    return await Candidate.find({
       $or: [{ job: { $in: positions } }, { secondary_status: { $in: status } }],
     });
-
-    return getCandidatesByColumn(candidates);
   } catch (e: any) {
     return next(
       new InternalServerException(
@@ -75,14 +70,13 @@ export const ApplyNextFilter = async (
 ) => {
   try {
     if (!position && !status && !query) {
-      return getCandidatesByColumn(previousQuery);
+      return previousQuery;
     }
 
     if (!position && !query) {
-      const candidates = previousQuery.filter((candidate: ICandidate) =>
+      return previousQuery.filter((candidate: ICandidate) =>
         status.includes(candidate.secondary_status!),
       );
-      return getCandidatesByColumn(candidates);
     }
 
     if (!position && !status) {
@@ -97,7 +91,7 @@ export const ApplyNextFilter = async (
         return candidate;
       });
 
-      const candidates = previousQuery.filter((candidate: ICandidate) => {
+      return previousQuery.filter((candidate: ICandidate) => {
         return (
           candidate.name.toLowerCase().includes(query.toLowerCase()) ||
           candidate.skills!.includes(query) ||
@@ -107,8 +101,6 @@ export const ApplyNextFilter = async (
           candidate.designated_recruiters!.includes(query)
         );
       });
-
-      return getCandidatesByColumn(candidates);
     }
     let positions = await Job.find({
       title: { $in: position },
@@ -116,11 +108,9 @@ export const ApplyNextFilter = async (
 
     positions = positions.map((pos: any) => pos._id);
 
-    const candidates = previousQuery.filter((candidate: ICandidate) => {
-      return positions.filter((pos) => pos._id.equals(candidate.job));
+    return previousQuery.filter((candidate: ICandidate) => {
+      return positions.filter((pos) => pos._id!.equals(candidate.job));
     });
-
-    return getCandidatesByColumn(candidates);
   } catch (e: any) {
     return next(
       new InternalServerException(
@@ -147,7 +137,7 @@ export const GetCandidateByQuery = async (
   next: NextFunction,
 ) => {
   try {
-    const candidates = await Candidate.find({
+    return await Candidate.find({
       $or: [
         { name: { $regex: query, $options: 'i' } },
         { skills: { $regex: query, $options: 'i' } },
@@ -157,8 +147,6 @@ export const GetCandidateByQuery = async (
         { designated_recruiters: { $regex: query, $options: 'i' } },
       ],
     });
-
-    return getCandidatesByColumn(candidates);
   } catch (e: any) {
     return next(
       new InternalServerException(
@@ -183,16 +171,7 @@ export const Create = async (candidateInfo: ICandidate, next: NextFunction) => {
       designated_recruiters: userNames,
     });
 
-    return {
-      name: newCandidate.name,
-      main_status: newCandidate.main_status,
-      secondary_status: newCandidate.secondary_status,
-      job: job?.title,
-      designated_recruiters: newCandidate.designated_recruiters,
-      _id: newCandidate._id,
-      createdAt: newCandidate.createdAt,
-      updatedAt: newCandidate.updatedAt,
-    };
+    return newCandidate;
   } catch (e: any) {
     return next(
       new InternalServerException(
