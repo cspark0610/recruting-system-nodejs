@@ -400,7 +400,7 @@ const CandidateSchema = new Schema<ICandidate>(
 
     working_reason: { type: String, required: false },
 
-    birth_date: { type: Date, required: true },
+    birth_date: { type: Date, required: false },
 
     conclusions: {
       good: { type: [String], required: false },
