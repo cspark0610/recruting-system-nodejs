@@ -1,7 +1,7 @@
 import { Types } from 'mongoose';
 import IQuestion from '../../../interfaces/IQuestion.interface';
 
-export default interface IJob {
+export default interface IPosition {
   _id?: Types.ObjectId;
   title: string;
   designated?: Array<string>;

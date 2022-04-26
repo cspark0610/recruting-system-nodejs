@@ -1,25 +1,28 @@
 import { Router } from 'express';
-import { CreateJobDto, UpdateJobDto } from '../db/schemas/dtos/Job';
+import {
+  CreatePositionDto,
+  UpdatePositionDto,
+} from '../db/schemas/dtos/Position';
 import { requestBodyValidation } from '../middlewares/validators/requests';
-import * as jobController from '../controllers/job.controller';
+import * as positionController from '../controllers/position.controller';
 import * as authJwt from '../middlewares/authJwt.middleware';
-import * as jobAuth from '../middlewares/Job.middleware';
+import * as positionAuth from '../middlewares/Position.middleware';
 
 const router = Router();
 
-router.get('/', jobController.getAllJobs);
+router.get('/', positionController.getAllPositions);
 
-router.get('/:_id', jobController.getJobInfo);
+router.get('/:_id', positionController.getPositionInfo);
 
 router.post(
   '/create',
   [
     authJwt.verifyJwt,
     authJwt.authRole({ CEO: 'CEO', CTO: 'CTO', 'RRHH ADMIN': 'RRHH ADMIN' }),
-    requestBodyValidation(CreateJobDto),
-    jobAuth.validateJobExists,
+    requestBodyValidation(CreatePositionDto),
+    positionAuth.validatePositionExists,
   ],
-  jobController.create,
+  positionController.create,
 );
 
 router.put(
@@ -27,16 +30,16 @@ router.put(
   [
     authJwt.verifyJwt,
     authJwt.authRole({ CEO: 'CEO', 'RRHH ADMIN': 'RRHH ADMIN' }),
-    requestBodyValidation(UpdateJobDto),
+    requestBodyValidation(UpdatePositionDto),
   ],
-  jobController.updateInfo,
+  positionController.updateInfo,
 );
 
 router.put(
   '/status/update/:_id',
   authJwt.verifyJwt,
   authJwt.authRole({ CEO: 'CEO', CTO: 'CTO', 'RRHH ADMIN': 'RRHH ADMIN' }),
-  jobController.setIsActive,
+  positionController.setIsActive,
 );
 
 router.delete(
@@ -44,9 +47,9 @@ router.delete(
   [
     authJwt.verifyJwt,
     authJwt.authRole({ CEO: 'CEO', CTO: 'CTO', 'RRHH ADMIN': 'RRHH ADMIN' }),
-    jobAuth.verifyJobDeleted,
+    positionAuth.verifyPositionDeleted,
   ],
-  jobController.deleteJob,
+  positionController.deletePosition,
 );
 
 export default router;

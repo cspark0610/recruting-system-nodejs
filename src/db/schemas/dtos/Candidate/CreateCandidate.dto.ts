@@ -29,7 +29,7 @@ export class CreateCandidateDto implements ICandidate {
 
   @IsNotEmpty()
   @IsMongoId()
-  job!: Types.ObjectId;
+  position!: Types.ObjectId;
 
   @IsNotEmpty()
   @IsString()

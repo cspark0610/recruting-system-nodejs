@@ -1,8 +1,8 @@
 /* eslint-disable no-underscore-dangle */
 import { NextFunction } from 'express';
 import envConfig from '../config/env';
-import Job from '../db/schemas/Job.schema';
-import IJob from '../db/schemas/interfaces/IJob.interface';
+import Position from '../db/schemas/Position.schema';
+import IPosition from '../db/schemas/interfaces/IPosition.interface';
 import InternalServerException from '../exceptions/InternalServerError';
 import RequestExtended from '../interfaces/RequestExtended.interface';
 
@@ -10,9 +10,9 @@ import RequestExtended from '../interfaces/RequestExtended.interface';
 const { NODE_ENV, REDIRECT_URL_DEVELOPMENT, REDIRECT_URL_PRODUCTION } =
   envConfig;
 
-export const GetAllJobs = async (next: NextFunction) => {
+export const GetAllPositions = async (next: NextFunction) => {
   try {
-    return await Job.find();
+    return await Position.find();
   } catch (e: any) {
     next(
       new InternalServerException(
@@ -22,9 +22,9 @@ export const GetAllJobs = async (next: NextFunction) => {
   }
 };
 
-export const GetJobInfo = async (_id: string, next: NextFunction) => {
+export const GetPositionInfo = async (_id: string, next: NextFunction) => {
   try {
-    return await Job.findById(_id, { title: 1, designated: 0 });
+    return await Position.findById(_id, { title: 1, designated: 0 });
   } catch (e: any) {
     next(
       new InternalServerException(
@@ -35,33 +35,33 @@ export const GetJobInfo = async (_id: string, next: NextFunction) => {
 };
 
 export const Create = async (
-  jobInfo: IJob,
+  positionInfo: IPosition,
   next: NextFunction,
   req: RequestExtended,
 ) => {
   try {
-    const newJob = await Job.create({
-      ...jobInfo,
+    const newPosition = await Position.create({
+      ...positionInfo,
       designated: req?.designated?.map((user) => user._id),
     });
 
     // creates the job application url once the job is created
-    const newJobWithUrl = await Job.findByIdAndUpdate(
-      newJob._id,
+    const newPositionWithUrl = await Position.findByIdAndUpdate(
+      newPosition._id,
       {
         url:
           NODE_ENV === 'development'
-            ? `${REDIRECT_URL_DEVELOPMENT}/info-upload?job_id=${newJob._id}`
-            : `${REDIRECT_URL_PRODUCTION}/info-upload?job_id=${newJob._id}`,
+            ? `${REDIRECT_URL_DEVELOPMENT}/info-upload?job_id=${newPosition._id}`
+            : `${REDIRECT_URL_PRODUCTION}/info-upload?job_id=${newPosition._id}`,
       },
       { new: true },
     );
 
-    return newJobWithUrl;
+    return newPositionWithUrl;
   } catch (e: any) {
     return next(
       new InternalServerException(
-        `There was an unexpected error with the job creation service. ${e.message}`,
+        `There was an unexpected error with the position creation service. ${e.message}`,
       ),
     );
   }
@@ -69,15 +69,15 @@ export const Create = async (
 
 export const UpdateInfo = async (
   _id: string,
-  newInfo: IJob,
+  newInfo: IPosition,
   next: NextFunction,
 ) => {
   try {
-    await Job.findByIdAndUpdate(_id, newInfo);
+    await Position.findByIdAndUpdate(_id, newInfo);
   } catch (e: any) {
     return next(
       new InternalServerException(
-        `There was an unexpected error with the job update service. ${e.message}`,
+        `There was an unexpected error with the position update service. ${e.message}`,
       ),
     );
   }
@@ -85,12 +85,14 @@ export const UpdateInfo = async (
 
 export const SetIsActive = async (_id: string, next: NextFunction) => {
   try {
-    const currentJobStatus = await Job.findById(_id);
-    await Job.findByIdAndUpdate(_id, { isActive: !currentJobStatus!.isActive });
+    const currentPositionStatus = await Position.findById(_id);
+    await Position.findByIdAndUpdate(_id, {
+      isActive: !currentPositionStatus!.isActive,
+    });
   } catch (e: any) {
     return next(
       new InternalServerException(
-        `There was an unexpected error with the job status update service. ${e.message}`,
+        `There was an unexpected error with the position status update service. ${e.message}`,
       ),
     );
   }
@@ -98,11 +100,11 @@ export const SetIsActive = async (_id: string, next: NextFunction) => {
 
 export const Delete = async (_id: string, next: NextFunction) => {
   try {
-    await Job.findOneAndRemove({ _id });
+    await Position.findOneAndRemove({ _id });
   } catch (e: any) {
     return next(
       new InternalServerException(
-        `There was an unexpected error with the job deletion service. ${e.message}`,
+        `There was an unexpected error with the position deletion service. ${e.message}`,
       ),
     );
   }

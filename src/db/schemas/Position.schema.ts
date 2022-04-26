@@ -1,9 +1,9 @@
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable indent */
 import { Schema, model } from 'mongoose';
-import IJob from './interfaces/IJob.interface';
+import IPosition from '../schemas/interfaces/IPosition.interface';
 
-const JobSchema = new Schema<IJob>(
+const PositionSchema = new Schema<IPosition>(
   {
     title: { type: String, required: true },
 
@@ -47,6 +47,6 @@ const JobSchema = new Schema<IJob>(
   { versionKey: false },
 );
 
-JobSchema.plugin(require('mongoose-autopopulate'));
+PositionSchema.plugin(require('mongoose-autopopulate'));
 
-export default model<IJob>('job', JobSchema);
+export default model<IPosition>('position', PositionSchema);

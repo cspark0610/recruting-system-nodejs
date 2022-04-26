@@ -1,27 +1,27 @@
 import { Request, Response, NextFunction } from 'express';
-import Job from '../db/schemas/Job.schema';
+import Position from '../db/schemas/Position.schema';
 import User from '../db/schemas/User.schema';
-import IJob from '../db/schemas/interfaces/IJob.interface';
+import IPosition from '../db/schemas/interfaces/IPosition.interface';
 import BadRequestException from '../exceptions/BadRequestException';
 import InternalServerException from '../exceptions/InternalServerError';
 import NotFoundException from '../exceptions/NotFoundException';
 import RequestExtended from '../interfaces/RequestExtended.interface';
 
 // checks if there is already a job created with the provided name before creation
-export async function validateJobExists(
+export async function validatePositionExists(
   req: RequestExtended,
   _res: Response,
   next: NextFunction,
 ) {
-  const { title, designated }: IJob = req.body;
+  const { title, designated }: IPosition = req.body;
 
   try {
-    const jobExists = await Job.findOne({ title });
+    const positionExists = await Position.findOne({ title });
 
-    if (jobExists) {
+    if (positionExists) {
       return next(
         new BadRequestException(
-          `There is already a job registered with the name ${title}`,
+          `There is already a position registered with the name ${title}`,
         ),
       );
     }
@@ -43,13 +43,13 @@ export async function validateJobExists(
   } catch (e: any) {
     return next(
       new InternalServerException(
-        `There was an unexpected error with the job verification. ${e.message}`,
+        `There was an unexpected error with the position verification. ${e.message}`,
       ),
     );
   }
 }
 
-export async function verifyJobDeleted(
+export async function verifyPositionDeleted(
   req: Request,
   _res: Response,
   next: NextFunction,
@@ -57,12 +57,12 @@ export async function verifyJobDeleted(
   const { _id } = req.params;
 
   try {
-    const jobDeleted = await Job.findById(_id);
+    const postionDeleted = await Position.findById(_id);
 
-    if (!jobDeleted) {
+    if (!postionDeleted) {
       return next(
         new NotFoundException(
-          `Job with id ${_id} not found. Probably it has already been deleted or has not been created yet.`,
+          `Position with id ${_id} not found. Probably it has already been deleted or has not been created yet.`,
         ),
       );
     }
@@ -71,7 +71,7 @@ export async function verifyJobDeleted(
   } catch (e: any) {
     return next(
       new InternalServerException(
-        `There was an unexpected error with the job deletion request. ${e.message}`,
+        `There was an unexpected error with the postion deletion request. ${e.message}`,
       ),
     );
   }

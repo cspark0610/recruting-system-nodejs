@@ -16,7 +16,7 @@ import File from '../interfaces/File.interface';
 import UploadParams from '../interfaces/UploadParams.interface';
 import Candidate from '../db/schemas/Candidate.schema';
 import ICandidate from '../db/schemas/interfaces/ICandidate.interface';
-import Job from '../db/schemas/Job.schema';
+import Position from '../db/schemas/Position.schema';
 import User from '../db/schemas/User.schema';
 import VideoRecordingUrl from '../db/schemas/VideoRecordingUrl.schema';
 import InternalServerException from '../exceptions/InternalServerError';
@@ -42,7 +42,7 @@ export const GetCandidatesFiltered = async (
   status: Array<string>,
 ) => {
   try {
-    let positions = await Job.find(
+    let positions = await Position.find(
       {
         title: { $in: position },
       },
@@ -50,7 +50,10 @@ export const GetCandidatesFiltered = async (
     );
     positions = positions.map((pos: any) => pos._id);
     return await Candidate.find({
-      $or: [{ job: { $in: positions } }, { secondary_status: { $in: status } }],
+      $or: [
+        { position: { $in: positions } },
+        { secondary_status: { $in: status } },
+      ],
     });
   } catch (e: any) {
     return next(
@@ -63,23 +66,23 @@ export const GetCandidatesFiltered = async (
 
 export const ApplyNextFilter = async (
   previousQuery: Array<ICandidate>,
-  position: Array<string>,
-  status: Array<string>,
-  query: string,
   next: NextFunction,
+  position?: Array<string>,
+  status?: Array<string>,
+  query?: string,
 ) => {
   try {
-    if (!position && !status && !query) {
+    if (position?.length === 0 && status?.length === 0 && !query) {
       return previousQuery;
     }
 
-    if (!position && !query) {
+    if (position?.length === 0 && !query) {
       return previousQuery.filter((candidate: ICandidate) =>
-        status.includes(candidate.secondary_status!),
+        status?.includes(candidate.secondary_status!),
       );
     }
 
-    if (!position && !status) {
+    if (position?.length === 0 && status?.length === 0) {
       // Set the skills and designated_recruiters of every candidate to lowercase bor better querying
       previousQuery = previousQuery.map((candidate: ICandidate) => {
         candidate.skills = candidate.skills!.map((skill) =>
@@ -93,24 +96,33 @@ export const ApplyNextFilter = async (
 
       return previousQuery.filter((candidate: ICandidate) => {
         return (
-          candidate.name.toLowerCase().includes(query.toLowerCase()) ||
-          candidate.skills!.includes(query) ||
-          candidate.academic_training?.toLowerCase() === query.toLowerCase() ||
-          candidate.english_level.toLowerCase() === query.toLowerCase() ||
-          candidate.country.toLowerCase() === query.toLowerCase() ||
-          candidate.designated_recruiters!.includes(query)
+          candidate.name
+            .toLowerCase()
+            .includes(query?.toLowerCase() as string) ||
+          candidate.skills!.includes(query as string) ||
+          candidate.academic_training?.toLowerCase() === query?.toLowerCase() ||
+          candidate.english_level.toLowerCase() === query?.toLowerCase() ||
+          candidate.country.toLowerCase() === query?.toLowerCase() ||
+          candidate.designated_recruiters!.includes(query as string)
         );
       });
     }
-    let positions = await Job.find({
-      title: { $in: position },
-    });
 
-    positions = positions.map((pos: any) => pos._id);
+    if (!query) {
+      let positions = await Position.find({
+        title: { $in: position },
+      });
 
-    return previousQuery.filter((candidate: ICandidate) => {
-      return positions.filter((pos) => pos._id!.equals(candidate.job));
-    });
+      positions = positions.map((pos: any) => pos.title);
+
+      let filtered = previousQuery.filter((candidate: any) => {
+        return positions.includes(candidate.position.title);
+      });
+
+      return filtered.filter((candidate: ICandidate) => {
+        return status?.includes(candidate.secondary_status!);
+      });
+    }
   } catch (e: any) {
     return next(
       new InternalServerException(
@@ -158,8 +170,10 @@ export const GetCandidateByQuery = async (
 
 export const Create = async (candidateInfo: ICandidate, next: NextFunction) => {
   try {
-    let job = await Job.findById(candidateInfo.job);
-    const designatedUsers = await User.find({ _id: { $in: job?.designated } });
+    let position = await Position.findById(candidateInfo.position);
+    const designatedUsers = await User.find({
+      _id: { $in: position?.designated },
+    });
 
     const userNames = designatedUsers.map((user) => user.name);
 
@@ -167,7 +181,7 @@ export const Create = async (candidateInfo: ICandidate, next: NextFunction) => {
       ...candidateInfo,
       main_status: 'interested',
       secondary_status: 'new entry',
-      videos_question_list: job?.video_questions_list,
+      videos_question_list: position?.video_questions_list,
       designated_recruiters: userNames,
     });
 
