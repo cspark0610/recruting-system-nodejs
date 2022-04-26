@@ -9,10 +9,10 @@ import {
   ArrayNotEmpty,
 } from 'class-validator';
 import IQuestion from '../../../../interfaces/IQuestion.interface';
-import IJob from '../../interfaces/IJob.interface';
+import IPosition from '../../interfaces/IPosition.interface';
 
 // eslint-disable-next-line import/prefer-default-export
-export class CreateJobDto implements IJob {
+export class CreatePositionDto implements IPosition {
   @IsString()
   @IsNotEmpty()
   title!: string;

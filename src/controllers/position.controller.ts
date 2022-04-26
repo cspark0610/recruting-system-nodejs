@@ -2,32 +2,32 @@
 /* eslint-disable object-curly-newline */
 /* eslint-disable no-underscore-dangle */
 import { Request, Response, NextFunction } from 'express';
-import IJob from '../db/schemas/interfaces/IJob.interface';
+import IPosition from '../db/schemas/interfaces/IPosition.interface';
 import InternalServerException from '../exceptions/InternalServerError';
 import RequestExtended from '../interfaces/RequestExtended.interface';
 import BadRequestException from '../exceptions/BadRequestException';
-import * as jobService from '../services/Job.service';
 import NotFoundException from '../exceptions/NotFoundException';
+import * as positionService from '../services/Position.service';
 
-export const getAllJobs = async (
+export const getAllPositions = async (
   _req: RequestExtended,
   res: Response,
   next: NextFunction,
 ) => {
   try {
-    const jobs = await jobService.GetAllJobs(next);
+    const positions = await positionService.GetAllPositions(next);
 
-    if (!jobs || jobs.length === 0) {
-      return next(new NotFoundException('No jobs found'));
+    if (!positions || positions.length === 0) {
+      return next(new NotFoundException('No positions found'));
     }
 
-    res.status(200).send({ status: 200, jobs });
+    res.status(200).send({ status: 200, positions });
   } catch (e: any) {
     next(new InternalServerException(e));
   }
 };
 
-export const getJobInfo = async (
+export const getPositionInfo = async (
   req: Request,
   res: Response,
   next: NextFunction,
@@ -35,17 +35,17 @@ export const getJobInfo = async (
   const { _id } = req.params;
 
   try {
-    const jobInfo = await jobService.GetJobInfo(_id, next);
+    const positionInfo = await positionService.GetPositionInfo(_id, next);
 
-    if (!jobInfo) {
-      return next(new NotFoundException('Job not found'));
+    if (!positionInfo) {
+      return next(new NotFoundException('Position not found'));
     }
 
-    return res.status(200).send({ status: 200, jobInfo });
+    return res.status(200).send({ status: 200, positionInfo });
   } catch (e: any) {
     return next(
       new InternalServerException(
-        `There was an unexpected error with the getJobInfo controller. ${e.message}`,
+        `There was an unexpected error with the getPositionInfo controller. ${e.message}`,
       ),
     );
   }
@@ -64,10 +64,10 @@ export const create = async (
     recruiter_filter,
     skills_required,
     video_questions_list,
-  }: IJob = req.body;
+  }: IPosition = req.body;
 
   try {
-    const newJob = await jobService.Create(
+    const newPosition = await positionService.Create(
       {
         title,
         designated,
@@ -81,19 +81,19 @@ export const create = async (
       req,
     );
 
-    if (!newJob) {
+    if (!newPosition) {
       return next(
         new InternalServerException(
-          'There was an error creation the job. Please try again',
+          'There was an error creation the position. Please try again',
         ),
       );
     }
 
-    return res.status(201).send({ status: 201, newJob });
+    return res.status(201).send({ status: 201, newPosition });
   } catch (e: any) {
     return next(
       new InternalServerException(
-        `There was an unexpected error with the job creation controller. ${e.message}`,
+        `There was an unexpected error with the position creation controller. ${e.message}`,
       ),
     );
   }
@@ -113,10 +113,10 @@ export const updateInfo = async (
     recruiter_filter,
     skills_required,
     video_questions_list,
-  }: IJob = req.body;
+  }: IPosition = req.body;
 
   try {
-    await jobService.UpdateInfo(
+    await positionService.UpdateInfo(
       _id,
       {
         title,
@@ -132,11 +132,11 @@ export const updateInfo = async (
 
     return res
       .status(200)
-      .send({ status: 200, message: 'Job updated successfully' });
+      .send({ status: 200, message: 'Position updated successfully' });
   } catch (e: any) {
     return next(
       new InternalServerException(
-        `There was an unexpected error with the job update controller. ${e.message}`,
+        `There was an unexpected error with the position update controller. ${e.message}`,
       ),
     );
   }
@@ -150,21 +150,21 @@ export const setIsActive = async (
   const { _id } = req.params;
 
   try {
-    await jobService.SetIsActive(_id, next);
+    await positionService.SetIsActive(_id, next);
 
     return res
       .status(200)
-      .send({ status: 200, message: 'Job status updated successfully' });
+      .send({ status: 200, message: 'Position status updated successfully' });
   } catch (e: any) {
     return next(
       new InternalServerException(
-        `There was an unexpected error with the job status update controller. ${e.message}`,
+        `There was an unexpected error with the position status update controller. ${e.message}`,
       ),
     );
   }
 };
 
-export const deleteJob = async (
+export const deletePosition = async (
   req: Request,
   res: Response,
   next: NextFunction,
@@ -172,19 +172,19 @@ export const deleteJob = async (
   const { _id } = req.params;
 
   if (!_id) {
-    return next(new BadRequestException('No job id was provided'));
+    return next(new BadRequestException('No position id was provided'));
   }
 
   try {
-    await jobService.Delete(_id, next);
+    await positionService.Delete(_id, next);
   } catch (e: any) {
     return next(
       new InternalServerException(
-        `There was an unexpected error with the job deletion controller. ${e.message}`,
+        `There was an unexpected error with the position deletion controller. ${e.message}`,
       ),
     );
   }
   return res
     .status(200)
-    .send({ status: 200, message: 'Job deleted successfully' });
+    .send({ status: 200, message: 'Position deleted successfully' });
 };

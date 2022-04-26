@@ -420,7 +420,11 @@ const CandidateSchema = new Schema<ICandidate>(
       required: true,
     },
 
-    job: { type: Schema.Types.ObjectId, ref: 'job', autopopulate: true },
+    position: {
+      type: Schema.Types.ObjectId,
+      ref: 'position',
+      autopopulate: true,
+    },
 
     designated_recruiters: { type: [String], required: false },
 

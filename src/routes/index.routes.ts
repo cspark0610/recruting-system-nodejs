@@ -1,7 +1,7 @@
 import { Router } from 'express';
 
 import candidateRoutes from './candidate.routes';
-import jobRoutes from './job.routes';
+import positionRoutes from './position.routes';
 import userRoutes from './user.routes';
 
 import NotFoundException from '../exceptions/NotFoundException';
@@ -9,7 +9,7 @@ import NotFoundException from '../exceptions/NotFoundException';
 const router = Router();
 
 router.use('/candidate', candidateRoutes);
-router.use('/job', jobRoutes);
+router.use('/position', positionRoutes);
 router.use('/users', userRoutes);
 
 router.use('*', (_req, _res, next) => {

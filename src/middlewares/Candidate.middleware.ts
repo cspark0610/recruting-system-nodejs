@@ -5,7 +5,7 @@ import { promisify } from 'util';
 import { decodeToken } from '../lib/jwt';
 import Candidate from '../db/schemas/Candidate.schema';
 import ICandidate from '../db/schemas/interfaces/ICandidate.interface';
-import Job from '../db/schemas/Job.schema';
+import Position from '../db/schemas/Position.schema';
 import VideoRecordingUrlSchema from '../db/schemas/VideoRecordingUrl.schema';
 import InternalServerException from '../exceptions/InternalServerError';
 import BadRequestException from '../exceptions/BadRequestException';
@@ -21,28 +21,30 @@ export async function verifyCandidateExistsBeforeSignUp(
   _res: Response,
   next: NextFunction,
 ) {
-  const { email, job }: ICandidate = req.body;
+  const { email, position }: ICandidate = req.body;
   const cv = req.file as Express.Multer.File;
 
   try {
     const candidateExists = await Candidate.findOne({ email });
 
     // checks that the job a candidate is applying for exists
-    const jobExists = await Job.findById(job);
+    const positionExists = await Position.findById(position);
 
-    if (!jobExists) {
-      await unlinkFile(cv.path);
-      return next(
-        new BadRequestException(`No job has been found with the id ${job}`),
-      );
-    }
-
-    if (candidateExists && candidateExists.job.equals(job)) {
+    if (!positionExists) {
       await unlinkFile(cv.path);
       return next(
         new BadRequestException(
-          `There is already a candidate registered with the email ${email} for the job ${
-            jobExists!.title
+          `No position has been found with the id ${position}`,
+        ),
+      );
+    }
+
+    if (candidateExists && candidateExists.position.equals(position)) {
+      await unlinkFile(cv.path);
+      return next(
+        new BadRequestException(
+          `There is already a candidate registered with the email ${email} for the position ${
+            positionExists!.title
           }`,
         ),
       );

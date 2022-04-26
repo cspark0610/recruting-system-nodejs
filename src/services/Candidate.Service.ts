@@ -16,7 +16,7 @@ import File from '../interfaces/File.interface';
 import UploadParams from '../interfaces/UploadParams.interface';
 import Candidate from '../db/schemas/Candidate.schema';
 import ICandidate from '../db/schemas/interfaces/ICandidate.interface';
-import Job from '../db/schemas/Job.schema';
+import Position from '../db/schemas/Position.schema';
 import User from '../db/schemas/User.schema';
 import VideoRecordingUrl from '../db/schemas/VideoRecordingUrl.schema';
 import InternalServerException from '../exceptions/InternalServerError';
@@ -42,7 +42,7 @@ export const GetCandidatesFiltered = async (
   status: Array<string>,
 ) => {
   try {
-    let positions = await Job.find(
+    let positions = await Position.find(
       {
         title: { $in: position },
       },
@@ -50,7 +50,10 @@ export const GetCandidatesFiltered = async (
     );
     positions = positions.map((pos: any) => pos._id);
     return await Candidate.find({
-      $or: [{ job: { $in: positions } }, { secondary_status: { $in: status } }],
+      $or: [
+        { position: { $in: positions } },
+        { secondary_status: { $in: status } },
+      ],
     });
   } catch (e: any) {
     return next(
@@ -102,14 +105,14 @@ export const ApplyNextFilter = async (
         );
       });
     }
-    let positions = await Job.find({
+    let positions = await Position.find({
       title: { $in: position },
     });
 
     positions = positions.map((pos: any) => pos._id);
 
     return previousQuery.filter((candidate: ICandidate) => {
-      return positions.filter((pos) => pos._id!.equals(candidate.job));
+      return positions.filter((pos) => pos._id!.equals(candidate.position));
     });
   } catch (e: any) {
     return next(
@@ -158,8 +161,10 @@ export const GetCandidateByQuery = async (
 
 export const Create = async (candidateInfo: ICandidate, next: NextFunction) => {
   try {
-    let job = await Job.findById(candidateInfo.job);
-    const designatedUsers = await User.find({ _id: { $in: job?.designated } });
+    let position = await Position.findById(candidateInfo.position);
+    const designatedUsers = await User.find({
+      _id: { $in: position?.designated },
+    });
 
     const userNames = designatedUsers.map((user) => user.name);
 
@@ -167,7 +172,7 @@ export const Create = async (candidateInfo: ICandidate, next: NextFunction) => {
       ...candidateInfo,
       main_status: 'interested',
       secondary_status: 'new entry',
-      videos_question_list: job?.video_questions_list,
+      videos_question_list: position?.video_questions_list,
       designated_recruiters: userNames,
     });
 
