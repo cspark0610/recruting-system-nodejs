@@ -77,12 +77,7 @@ router.get('/video/:key', candidateController.getVideoFromS3);
  * */
 router.post(
   '/create',
-  [
-    upload.single('cv'),
-    requestBodyValidation(CreateCandidateDto),
-    candidateAuth.verifyCandidateExistsBeforeSignUp,
-    candidateAuth.validateCV,
-  ],
+  [upload.single('cv'), requestBodyValidation(CreateCandidateDto)],
   candidateController.create,
 );
 

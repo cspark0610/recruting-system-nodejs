@@ -181,8 +181,6 @@ export const Create = async (candidateInfo: ICandidate, next: NextFunction) => {
       ...candidateInfo,
       main_status: 'interested',
       secondary_status: 'new entry',
-      /*videos_question_list: position?.video_questions_list,
-      designated_recruiters: userNames,*/
     });
 
     return newCandidate;

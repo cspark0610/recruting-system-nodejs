@@ -39,17 +39,6 @@ export async function verifyCandidateExistsBeforeSignUp(
       );
     }
 
-    if (candidateExists && candidateExists.position.equals(position)) {
-      await unlinkFile(cv.path);
-      return next(
-        new BadRequestException(
-          `There is already a candidate registered with the email ${email} for the position ${
-            positionExists!.title
-          }`,
-        ),
-      );
-    }
-
     // checks that the candidate has not been rejected in a passed postulation
     if (candidateExists?.isRejected) {
       await unlinkFile(cv.path);

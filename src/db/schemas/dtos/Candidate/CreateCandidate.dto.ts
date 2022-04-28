@@ -29,26 +29,12 @@ export class CreateCandidateDto implements ICandidate {
   phone!: number;
 
   @IsNotEmpty()
-  @IsMongoId()
-  position!: Types.ObjectId;
-
-  @IsNotEmpty()
   @IsString()
   english_level!: string;
 
-  @IsOptional()
+  @IsString()
   @IsNotEmpty()
-  @IsUrl()
-  linkedin?: string;
-
-  @IsOptional()
-  @IsNotEmpty()
-  @IsUrl()
-  portfolio?: string;
-
-  @IsDateString()
-  @IsNotEmpty()
-  birth_date!: Date;
+  birth_date!: string;
 
   @IsNotEmpty()
   @IsString()
