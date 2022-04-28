@@ -2,7 +2,6 @@
 import {
   IsNotEmpty,
   IsString,
-  IsUrl,
   IsArray,
   IsOptional,
   ArrayNotEmpty,
@@ -30,11 +29,6 @@ export class UpdateCandidateInfoDto {
   @IsString({ each: true })
   @MinLength(3, { each: true })
   skills!: Array<string>;
-
-  @IsOptional()
-  @IsNotEmpty()
-  @IsUrl()
-  portfolio?: string;
 
   @IsOptional()
   @IsString()
