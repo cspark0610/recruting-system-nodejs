@@ -40,93 +40,34 @@ export const GetCandidatesFiltered = async (
   next: NextFunction,
   position: Array<string>,
   status: Array<string>,
+  query: string,
 ) => {
   try {
-    let positions = await Position.find(
-      {
-        title: { $in: position },
-      },
-      { _id: 1, designated: 0 },
-    );
-    positions = positions.map((pos: any) => pos._id);
-    return await Candidate.find({
-      $or: [
-        { position: { $in: positions } },
-        { secondary_status: { $in: status } },
-      ],
-    });
-  } catch (e: any) {
-    return next(
-      new InternalServerException(
-        `There was an unexpected error with the GetCandidatesFiltered service. ${e.message}`,
-      ),
-    );
-  }
-};
-
-export const ApplyNextFilter = async (
-  previousQuery: Array<ICandidate>,
-  next: NextFunction,
-  position?: Array<string>,
-  status?: Array<string>,
-  query?: string,
-) => {
-  try {
-    if (position?.length === 0 && status?.length === 0 && !query) {
-      return previousQuery;
-    }
-
-    if (position?.length === 0 && !query) {
-      return previousQuery.filter((candidate: ICandidate) =>
-        status?.includes(candidate.secondary_status!),
-      );
-    }
-
-    if (position?.length === 0 && status?.length === 0) {
-      // Set the skills and designated_recruiters of every candidate to lowercase bor better querying
-      previousQuery = previousQuery.map((candidate: ICandidate) => {
-        candidate.skills = candidate.skills!.map((skill) =>
-          skill.toLowerCase(),
-        );
-        candidate.designated_recruiters = candidate.designated_recruiters!.map(
-          (recruiter) => recruiter.toLowerCase(),
-        );
-        return candidate;
+    if (query !== '') {
+      return await Candidate.find({
+        $or: [
+          { position: { $in: position } },
+          { secondary_status: { $in: status } },
+          { name: { $regex: query, $options: 'i' } },
+          { skills: { $regex: query, $options: 'i' } },
+          { academic_training: { $regex: query, $options: 'i' } },
+          { english_level: { $regex: query, $options: 'i' } },
+          { country: { $regex: query, $options: 'i' } },
+          { designated_recruiters: { $regex: query, $options: 'i' } },
+        ],
       });
-
-      return previousQuery.filter((candidate: ICandidate) => {
-        return (
-          candidate.name
-            .toLowerCase()
-            .includes(query?.toLowerCase() as string) ||
-          candidate.skills!.includes(query as string) ||
-          candidate.academic_training?.toLowerCase() === query?.toLowerCase() ||
-          candidate.english_level.toLowerCase() === query?.toLowerCase() ||
-          candidate.country.toLowerCase() === query?.toLowerCase() ||
-          candidate.designated_recruiters!.includes(query as string)
-        );
-      });
-    }
-
-    if (!query) {
-      let positions = await Position.find({
-        title: { $in: position },
-      });
-
-      positions = positions.map((pos: any) => pos.title);
-
-      let filtered = previousQuery.filter((candidate: any) => {
-        return positions.includes(candidate.position.title);
-      });
-
-      return filtered.filter((candidate: ICandidate) => {
-        return status?.includes(candidate.secondary_status!);
+    } else {
+      return await Candidate.find({
+        $or: [
+          { position: { $in: position } },
+          { secondary_status: { $in: status } },
+        ],
       });
     }
   } catch (e: any) {
     return next(
       new InternalServerException(
-        `There was an unexpected error with the ApplyNextFilter service. ${e.message}`,
+        `There was an unexpected error with the GetCandidatesFiltered service. ${e.message}`,
       ),
     );
   }
@@ -139,30 +80,6 @@ export const GetOneCandidate = async (_id: string, next: NextFunction) => {
     return next(
       new InternalServerException(
         `There was an unexpected error with the GetOneCandidate service. ${e.message}`,
-      ),
-    );
-  }
-};
-
-export const GetCandidateByQuery = async (
-  query: string,
-  next: NextFunction,
-) => {
-  try {
-    return await Candidate.find({
-      $or: [
-        { name: { $regex: query, $options: 'i' } },
-        { skills: { $regex: query, $options: 'i' } },
-        { academic_training: { $regex: query, $options: 'i' } },
-        { english_level: { $regex: query, $options: 'i' } },
-        { country: { $regex: query, $options: 'i' } },
-        { designated_recruiters: { $regex: query, $options: 'i' } },
-      ],
-    });
-  } catch (e: any) {
-    return next(
-      new InternalServerException(
-        `There was an unexpected error with the GetCandidateByName service. ${e.message}`,
       ),
     );
   }
