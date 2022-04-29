@@ -37,14 +37,6 @@ export const getPositionInfo = async (
   try {
     const positionInfo = await positionService.GetPositionInfo(_id, next);
 
-    if (positionInfo?.isActive === false) {
-      return next(
-        new NotFoundException(
-          `The position ${positionInfo?.title} is not active`,
-        ),
-      );
-    }
-
     return res.status(200).send({ status: 200, positionInfo });
   } catch (e: any) {
     return next(
