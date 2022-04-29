@@ -39,7 +39,7 @@ export async function verifyCandidateExistsBeforeSignUp(
       );
     }
 
-    if (candidateExists && candidateExists.position.equals(position)) {
+    if (candidateExists && candidateExists?.position?.equals(position!)) {
       await unlinkFile(cv.path);
       return next(
         new BadRequestException(

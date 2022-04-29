@@ -13,14 +13,14 @@ export default interface ICandidate {
   salary_expectations?: string;
   available_from?: string;
   skills?: Array<string>;
-  linkedin: string;
+  linkedin?: string;
   portfolio?: string;
   working_reason?: string;
   conclusions?: IConclusions;
   main_status?: string;
-  birth_date: Date;
+  birth_date: string;
   secondary_status?: string;
-  position: Types.ObjectId;
+  position?: Types.ObjectId;
   designated_recruiters?: Array<string>;
   video_recording_url?: Types.ObjectId;
   videos_question_list?: Array<IQuestion>;

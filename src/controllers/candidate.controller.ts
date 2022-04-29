@@ -194,6 +194,7 @@ export const create = async (
     country,
     birth_date,
     linkedin,
+    portfolio,
   }: ICandidate = req.body;
 
   try {
@@ -213,6 +214,7 @@ export const create = async (
         position,
         birth_date,
         linkedin,
+        portfolio,
         cv: cvKey,
       },
       next,
@@ -247,7 +249,6 @@ export const updateInfo = async (
     salary_expectations,
     available_from,
     skills,
-    portfolio,
     working_reason,
   }: UpdateCandidateInfoDto = req.body;
 
@@ -256,7 +257,6 @@ export const updateInfo = async (
     salary_expectations: salary_expectations,
     available_from,
     skills: skills,
-    portfolio,
     working_reason,
   };
 
