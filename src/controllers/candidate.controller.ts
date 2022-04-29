@@ -228,8 +228,6 @@ export const create = async (
       );
     }
 
-    console.log('candidate created!!!', data);
-
     return res.status(201).send({ status: 201, candidate: data });
   } catch (e: any) {
     return next(
