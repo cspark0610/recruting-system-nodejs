@@ -12,7 +12,11 @@ const router = Router();
 
 router.get('/', positionController.getAllPositions);
 
-router.get('/:_id', positionController.getPositionInfo);
+router.get(
+  '/:_id',
+  positionAuth.verifyPositionIsActive,
+  positionController.getPositionInfo,
+);
 
 router.post(
   '/create',

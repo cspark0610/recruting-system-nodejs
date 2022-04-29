@@ -76,3 +76,29 @@ export async function verifyPositionDeleted(
     );
   }
 }
+
+export async function verifyPositionIsActive(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
+  const { _id } = req.params;
+
+  try {
+    const position = await Position.findById(_id);
+
+    if (position?.isActive === false) {
+      return next(
+        new BadRequestException(`Position ${position.title} is not active`),
+      );
+    }
+
+    next();
+  } catch (e: any) {
+    return next(
+      new InternalServerException(
+        `There was an unexpected error with the postion isActive request. ${e.message}`,
+      ),
+    );
+  }
+}
