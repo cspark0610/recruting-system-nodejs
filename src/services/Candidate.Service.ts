@@ -170,17 +170,19 @@ export const GetCandidateByQuery = async (
 
 export const Create = async (candidateInfo: ICandidate, next: NextFunction) => {
   try {
-    /*let position = await Position.findById(candidateInfo.position);
+    let position = await Position.findById(candidateInfo.position);
     const designatedUsers = await User.find({
       _id: { $in: position?.designated },
     });
 
-    const userNames = designatedUsers.map((user) => user.name);*/
+    const userNames = designatedUsers.map((user) => user.name);
 
     const newCandidate = await Candidate.create({
       ...candidateInfo,
       main_status: 'interested',
       secondary_status: 'new entry',
+      videos_question_list: position?.video_questions_list,
+      designated_recruiters: userNames,
     });
 
     return newCandidate;
