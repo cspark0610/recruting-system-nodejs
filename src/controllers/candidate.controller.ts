@@ -51,13 +51,13 @@ export const getCandidatesFiltered = async (
   res: Response,
   next: NextFunction,
 ) => {
-  const { position, secondary_status, query } = req.body;
+  const { position, status, query } = req.body;
 
   try {
     const candidatesFiltered = await candidateService.GetCandidatesFiltered(
       next,
       position,
-      secondary_status,
+      status,
       query,
     );
 
