@@ -79,7 +79,7 @@ export async function verifyPositionDeleted(
 
 export async function verifyPositionIsActive(
   req: Request,
-  res: Response,
+  _res: Response,
   next: NextFunction,
 ) {
   const { _id } = req.params;
@@ -89,7 +89,9 @@ export async function verifyPositionIsActive(
 
     if (position?.isActive === false) {
       return next(
-        new BadRequestException(`Position ${position.title} is not active`),
+        new BadRequestException(
+          `The position ${position.title} is no longer receiving applications`,
+        ),
       );
     }
 
