@@ -51,8 +51,8 @@ export const Create = async (
       {
         url:
           NODE_ENV === 'development'
-            ? `${REDIRECT_URL_DEVELOPMENT}/info-upload?job_id=${newPosition._id}`
-            : `${REDIRECT_URL_PRODUCTION}/info-upload?job_id=${newPosition._id}`,
+            ? `${REDIRECT_URL_DEVELOPMENT}?job_id=${newPosition._id}`
+            : `${REDIRECT_URL_PRODUCTION}?job_id=${newPosition._id}`,
       },
       { new: true },
     );
