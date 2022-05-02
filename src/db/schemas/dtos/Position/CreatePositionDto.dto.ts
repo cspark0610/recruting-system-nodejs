@@ -1,14 +1,6 @@
 /* eslint-disable object-curly-newline */
 /* eslint-disable indent */
-import {
-  IsString,
-  IsNotEmpty,
-  IsArray,
-  IsObject,
-  IsUrl,
-  ArrayNotEmpty,
-} from 'class-validator';
-import IQuestion from '../../../../interfaces/IQuestion.interface';
+import { IsString, IsNotEmpty, IsArray, IsUrl } from 'class-validator';
 import IPosition from '../../interfaces/IPosition.interface';
 
 // eslint-disable-next-line import/prefer-default-export
@@ -20,7 +12,7 @@ export class CreatePositionDto implements IPosition {
   @IsNotEmpty()
   @IsArray()
   @IsString({ each: true })
-  designated: Array<string> | undefined;
+  designated!: Array<string>;
 
   @IsNotEmpty()
   @IsString()
@@ -34,14 +26,7 @@ export class CreatePositionDto implements IPosition {
   @IsString()
   recruiter_filter!: string;
 
+  @IsString()
   @IsNotEmpty()
-  @IsArray()
-  @IsString({ each: true })
-  skills_required!: Array<string>;
-
-  @IsNotEmpty()
-  @IsArray()
-  @ArrayNotEmpty()
-  @IsObject({ each: true })
-  video_questions_list!: Array<IQuestion>;
+  priority!: string;
 }

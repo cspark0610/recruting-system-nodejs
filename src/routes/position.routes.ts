@@ -21,8 +21,8 @@ router.get(
 router.post(
   '/create',
   [
-    authJwt.verifyJwt,
-    authJwt.authRole({ CEO: 'CEO', CTO: 'CTO', 'RRHH ADMIN': 'RRHH ADMIN' }),
+    //authJwt.verifyJwt,
+    //authJwt.authRole({ CEO: 'CEO', CTO: 'CTO', 'RRHH ADMIN': 'RRHH ADMIN' }),
     requestBodyValidation(CreatePositionDto),
     positionAuth.validatePositionExists,
   ],

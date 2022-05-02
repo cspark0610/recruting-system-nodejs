@@ -59,7 +59,7 @@ export const create = async (
     rie_link,
     recruiter_filter,
     skills_required,
-    video_questions_list,
+    priority,
   }: IPosition = req.body;
 
   try {
@@ -71,7 +71,7 @@ export const create = async (
         rie_link,
         recruiter_filter,
         skills_required,
-        video_questions_list,
+        priority,
       },
       next,
       req,
