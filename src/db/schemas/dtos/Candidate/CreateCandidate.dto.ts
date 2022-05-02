@@ -1,16 +1,6 @@
 /* eslint-disable object-curly-newline */
 /* eslint-disable indent */
-import {
-  IsString,
-  IsNotEmpty,
-  IsEmail,
-  IsNumberString,
-  IsDateString,
-  IsMongoId,
-  IsUrl,
-  IsOptional,
-} from 'class-validator';
-import { Types } from 'mongoose';
+import { IsString, IsNotEmpty, IsEmail, IsNumberString } from 'class-validator';
 import ICandidate from '../../interfaces/ICandidate.interface';
 
 // eslint-disable-next-line import/prefer-default-export

@@ -1,6 +1,7 @@
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable indent */
 import { Schema, model } from 'mongoose';
+import { valid_priorities } from '../../config/constants';
 import IPosition from '../schemas/interfaces/IPosition.interface';
 
 const PositionSchema = new Schema<IPosition>(
@@ -21,7 +22,7 @@ const PositionSchema = new Schema<IPosition>(
       },
     ],
 
-    skills_required: { type: [String], required: true },
+    skills_required: { type: [String], required: false },
 
     video_questions_list: {
       type: [
@@ -31,7 +32,7 @@ const PositionSchema = new Schema<IPosition>(
           video_key: String,
         },
       ],
-      required: true,
+      required: false,
     },
 
     url: {
@@ -43,6 +44,8 @@ const PositionSchema = new Schema<IPosition>(
       required: true,
       default: true,
     },
+
+    priority: { type: String, enum: valid_priorities, required: true },
   },
   { versionKey: false },
 );

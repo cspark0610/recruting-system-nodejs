@@ -25,4 +25,6 @@ export const valid_academic_trainings = [
   'No Studies',
 ];
 
+export const valid_priorities = ['low', 'medium', 'high', 'urgent'];
+
 export const valid_user_roles = ['CEO', 'CTO', 'RRHH ADMIN', 'RRHH', 'COMMON'];
