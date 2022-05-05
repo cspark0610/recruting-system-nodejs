@@ -41,8 +41,8 @@ router.put(
 
 router.put(
   '/status/update/:_id',
-  authJwt.verifyJwt,
-  authJwt.authRole({ CEO: 'CEO', CTO: 'CTO', 'RRHH ADMIN': 'RRHH ADMIN' }),
+  //authJwt.verifyJwt,
+  //authJwt.authRole({ CEO: 'CEO', CTO: 'CTO', 'RRHH ADMIN': 'RRHH ADMIN' }),
   positionController.setIsActive,
 );
 

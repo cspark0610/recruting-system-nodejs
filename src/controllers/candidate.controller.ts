@@ -14,7 +14,7 @@ import NotFoundException from '../exceptions/NotFoundException';
 import BadRequestException from '../exceptions/BadRequestException';
 import InternalServerException from '../exceptions/InternalServerError';
 import RequestExtended from '../interfaces/RequestExtended.interface';
-import * as candidateService from '../services/Candidate.Service';
+import * as candidateService from '../services/Candidate.service';
 
 const unlinkFile = promisify(unlink);
 

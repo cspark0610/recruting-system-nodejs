@@ -34,7 +34,7 @@ const upload = multer({ storage });
 
 router.get('/', candidateController.getAllCandidates);
 
-router.get('/:_id', authJwt.verifyJwt, candidateController.getOneCandidate);
+router.get('/:_id', candidateController.getOneCandidate);
 router.get('/cv/:key', candidateController.getCV);
 router.get('/video/:key', candidateController.getVideoFromS3);
 
@@ -204,7 +204,7 @@ router.put(
 
 router.put(
   '/status/update/:_id',
-  [authJwt.verifyJwt, requestBodyValidation(UpdateStatusDto)],
+  [requestBodyValidation(UpdateStatusDto)],
   candidateController.updateStatus,
 );
 

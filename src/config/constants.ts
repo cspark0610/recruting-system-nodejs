@@ -8,7 +8,7 @@ export const valid_secondary_status = [
   'new entry',
   'doubting',
   'dismissed',
-  'aproved',
+  'approved',
 ];
 
 export const valid_english_levels = [
