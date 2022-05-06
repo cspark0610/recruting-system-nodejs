@@ -48,11 +48,7 @@ router.put(
 
 router.delete(
   '/delete/:_id',
-  [
-    authJwt.verifyJwt,
-    authJwt.authRole({ CEO: 'CEO', CTO: 'CTO', 'RRHH ADMIN': 'RRHH ADMIN' }),
-    positionAuth.verifyPositionDeleted,
-  ],
+  [positionAuth.verifyPositionDeleted],
   positionController.deletePosition,
 );
 
