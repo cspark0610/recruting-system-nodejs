@@ -30,7 +30,6 @@ export class CreatePositionDto implements IPosition {
   rie_link!: string;
 
   @IsNotEmpty({ message: 'Recruiter filter is required' })
-  @IsString({ message: 'Recruiter filter must be a valid URL' })
   @IsUrl({ message: 'Recruiter filter must be a valid URL' })
   recruiter_filter!: string;
 
