@@ -7,10 +7,10 @@ import {
   IsUrl,
   ArrayNotEmpty,
 } from 'class-validator';
-import IPosition from '../../interfaces/IPosition.interface';
+import { IPositionNormal } from '../../interfaces/IPosition.interface';
 
 // eslint-disable-next-line import/prefer-default-export
-export class CreatePositionDto implements IPosition {
+export class CreatePositionDto implements IPositionNormal {
   @IsString()
   @IsNotEmpty({ message: 'Position name is required' })
   title!: string;
