@@ -2,7 +2,7 @@
 /* eslint-disable object-curly-newline */
 /* eslint-disable no-underscore-dangle */
 import { Request, Response, NextFunction } from 'express';
-import IPosition from '../db/schemas/interfaces/IPosition.interface';
+import { IPositionNormal } from '../db/schemas/interfaces/IPosition.interface';
 import InternalServerException from '../exceptions/InternalServerError';
 import RequestExtended from '../interfaces/RequestExtended.interface';
 import BadRequestException from '../exceptions/BadRequestException';
@@ -10,18 +10,21 @@ import NotFoundException from '../exceptions/NotFoundException';
 import * as positionService from '../services/Position.service';
 
 export const getAllPositions = async (
-  _req: RequestExtended,
+  req: RequestExtended,
   res: Response,
   next: NextFunction,
 ) => {
   try {
-    const positions = await positionService.GetAllPositions(next);
+    const { page, list } = req.query;
+    const parsedPage = parseInt(page as string, 10);
 
-    if (!positions || positions.length === 0) {
-      return next(new NotFoundException('No positions found'));
-    }
+    const positions = await positionService.GetAllPositions(
+      next,
+      list as string,
+      parsedPage,
+    );
 
-    res.status(200).send({ status: 200, positions });
+    res.status(200).send({ status: 200, data: positions });
   } catch (e: any) {
     next(new InternalServerException(e));
   }
@@ -58,9 +61,8 @@ export const create = async (
     client_name,
     rie_link,
     recruiter_filter,
-    skills_required,
     priority,
-  }: IPosition = req.body;
+  }: IPositionNormal = req.body;
 
   try {
     const newPosition = await positionService.Create(
@@ -70,7 +72,6 @@ export const create = async (
         client_name,
         rie_link,
         recruiter_filter,
-        skills_required,
         priority,
       },
       next,
@@ -109,7 +110,7 @@ export const updateInfo = async (
     recruiter_filter,
     skills_required,
     video_questions_list,
-  }: IPosition = req.body;
+  }: IPositionNormal = req.body;
 
   try {
     await positionService.UpdateInfo(

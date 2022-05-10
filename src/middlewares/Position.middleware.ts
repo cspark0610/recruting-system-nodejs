@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import Position from '../db/schemas/Position.schema';
 import User from '../db/schemas/User.schema';
-import IPosition from '../db/schemas/interfaces/IPosition.interface';
+import { IPositionNormal } from '../db/schemas/interfaces/IPosition.interface';
 import BadRequestException from '../exceptions/BadRequestException';
 import InternalServerException from '../exceptions/InternalServerError';
 import NotFoundException from '../exceptions/NotFoundException';
@@ -13,7 +13,7 @@ export async function validatePositionExists(
   _res: Response,
   next: NextFunction,
 ) {
-  const { title, designated }: IPosition = req.body;
+  const { title, designated }: IPositionNormal = req.body;
 
   try {
     const positionExists = await Position.findOne({ title });

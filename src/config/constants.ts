@@ -8,7 +8,7 @@ export const valid_secondary_status = [
   'new entry',
   'doubting',
   'dismissed',
-  'aproved',
+  'approved',
 ];
 
 export const valid_english_levels = [
@@ -25,6 +25,6 @@ export const valid_academic_trainings = [
   'No Studies',
 ];
 
-export const valid_priorities = ['low', 'medium', 'high', 'urgent'];
+export const valid_priorities = ['Low', 'Normal', 'High', 'Urgent'];
 
 export const valid_user_roles = ['CEO', 'CTO', 'RRHH ADMIN', 'RRHH', 'COMMON'];

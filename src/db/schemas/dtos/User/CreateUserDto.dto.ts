@@ -14,18 +14,18 @@ import { IUser } from '../../interfaces/User';
 
 // eslint-disable-next-line import/prefer-default-export
 export class CreateUserDto implements IUser {
-  @IsNotEmpty()
-  @IsString()
+  @IsNotEmpty({ message: 'Name is required' })
+  @IsString({ message: 'Name must be a string' })
   name!: string;
 
-  @IsNotEmpty()
-  @IsString()
-  @IsEmail()
+  @IsNotEmpty({ message: 'Email is required' })
+  @IsString({ message: 'Email must be a string' })
+  @IsEmail({ message: 'Email is not valid' })
   email!: string;
 
-  @IsNotEmpty()
+  @IsNotEmpty({ message: 'Password is required' })
   @IsString()
-  @MinLength(8)
+  @MinLength(8, { message: 'Password must be at least 8 characters long' })
   password!: string;
 
   @IsOptional()
@@ -42,6 +42,8 @@ export class CreateUserDto implements IUser {
   @IsNotEmpty()
   @IsString()
   @IsUppercase()
-  @IsIn(['CEO', 'CTO', 'RRHH ADMIN', 'RRHH', 'COMMON'])
+  @IsIn(['CEO', 'CTO', 'RRHH ADMIN', 'RRHH', 'COMMON'], {
+    message: 'Position is not valid',
+  })
   role?: Types.ObjectId;
 }

@@ -4,13 +4,13 @@
 import { IsString, IsEmail, IsNotEmpty, MinLength } from 'class-validator';
 
 export class UserSignInParamsDto {
-  @IsNotEmpty()
+  @IsNotEmpty({ message: 'Email is required' })
   @IsString()
-  @IsEmail()
+  @IsEmail({ message: 'Email not valid' })
   email!: string;
 
-  @IsNotEmpty()
+  @IsNotEmpty({ message: 'Password is required' })
   @IsString()
-  @MinLength(6)
+  @MinLength(8, { message: 'Password must be at least 6 characters long' })
   password!: string;
 }
