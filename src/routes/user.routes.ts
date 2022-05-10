@@ -28,7 +28,7 @@ const router = Router();
 
 router.get(
   '/',
-  [authJwt.verifyJwt, authJwt.authRole({ CEO: 'CEO' })],
+  /*[authJwt.verifyJwt, authJwt.authRole({ CEO: 'CEO' })],*/
   userController.getAllUsers,
 );
 
