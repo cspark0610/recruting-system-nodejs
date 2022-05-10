@@ -6,7 +6,6 @@ import { IPositionNormal } from '../db/schemas/interfaces/IPosition.interface';
 import InternalServerException from '../exceptions/InternalServerError';
 import RequestExtended from '../interfaces/RequestExtended.interface';
 import BadRequestException from '../exceptions/BadRequestException';
-import NotFoundException from '../exceptions/NotFoundException';
 import * as positionService from '../services/Position.service';
 
 export const getAllPositions = async (
@@ -15,12 +14,15 @@ export const getAllPositions = async (
   next: NextFunction,
 ) => {
   try {
-    const { page, list } = req.query;
-    const parsedPage = parseInt(page as string, 10);
+    const { page, limit, list } = req.query;
+
+    const parsedPage = parseInt(page as string, 10) || 1;
+    const parsedLimit = parseInt(limit as string, 10) || 10;
 
     const positions = await positionService.GetAllPositions(
       next,
       list as string,
+      parsedLimit,
       parsedPage,
     );
 

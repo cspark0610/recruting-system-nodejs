@@ -13,24 +13,20 @@ const { NODE_ENV, REDIRECT_URL_DEVELOPMENT, REDIRECT_URL_PRODUCTION } =
 export const GetAllPositions = async (
   next: NextFunction,
   list: string,
+  limit?: number,
   page?: number,
 ) => {
   try {
-    const paginateOptions = {
-      page: page,
-      limit: 6,
-    };
-
-    if (!page && list === 'all') {
+    if (list === 'all') {
       return await Position.paginate();
     }
 
     if (list === 'active') {
-      return await Position.paginate({ isActive: true }, paginateOptions);
+      return await Position.paginate({ isActive: true }, { page, limit });
     }
 
     if (list === 'inactive') {
-      return await Position.paginate({ isActive: false }, paginateOptions);
+      return await Position.paginate({ isActive: false }, { page, limit });
     }
   } catch (e: any) {
     next(
