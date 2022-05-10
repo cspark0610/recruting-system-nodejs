@@ -18,7 +18,7 @@ export const getAllUsers = async (
   try {
     const users = await userService.GetAllUsers(next);
 
-    return res.status(200).send({ status: 200, users });
+    return res.status(200).send({ status: 200, allUsers: users });
   } catch (e: any) {
     return next(
       new InternalServerException(
