@@ -15,14 +15,14 @@ export const getAllPositions = async (
   next: NextFunction,
 ) => {
   try {
-    const { page } = req.query;
+    const { page, list } = req.query;
     const parsedPage = parseInt(page as string, 10);
 
-    const positions = await positionService.GetAllPositions(next, parsedPage);
-
-    if (!positions || positions.length === 0) {
-      return next(new NotFoundException('No positions found'));
-    }
+    const positions = await positionService.GetAllPositions(
+      next,
+      list as string,
+      parsedPage,
+    );
 
     res.status(200).send({ status: 200, data: positions });
   } catch (e: any) {

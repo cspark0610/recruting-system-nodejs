@@ -10,18 +10,28 @@ import RequestExtended from '../interfaces/RequestExtended.interface';
 const { NODE_ENV, REDIRECT_URL_DEVELOPMENT, REDIRECT_URL_PRODUCTION } =
   envConfig;
 
-export const GetAllPositions = async (next: NextFunction, page?: number) => {
+export const GetAllPositions = async (
+  next: NextFunction,
+  list: string,
+  page?: number,
+) => {
   try {
     const paginateOptions = {
       page: page,
       limit: 6,
     };
 
-    if (!page) {
+    if (!page && list === 'all') {
       return await Position.paginate();
     }
 
-    return await Position.paginate({}, paginateOptions);
+    if (list === 'active') {
+      return await Position.paginate({ isActive: true }, paginateOptions);
+    }
+
+    if (list === 'inactive') {
+      return await Position.paginate({ isActive: false }, paginateOptions);
+    }
   } catch (e: any) {
     next(
       new InternalServerException(
