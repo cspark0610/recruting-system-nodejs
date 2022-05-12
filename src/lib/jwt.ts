@@ -1,5 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 import jwt from 'jsonwebtoken';
+import { OAuth2Client } from 'google-auth-library';
 import envConfig from '../config/env';
 import TokenData from '../interfaces/TokenData.interface';
 import DataStoredInToken from '../interfaces/DataStoredInToken.interface';
@@ -42,3 +43,13 @@ export function decodeToken(
 
   return jwt.verify(token, JWT_REFRESH_TOKEN_SECRET) as DataStoredInToken;
 }
+
+export const verifyGoogleToken = async (token: string) => {
+  const client = new OAuth2Client(envConfig.GOOGLE_CLIENT_ID);
+  const ticket = await client.verifyIdToken({
+    idToken: token,
+    audience: envConfig.GOOGLE_CLIENT_ID,
+  });
+
+  return ticket.getPayload();
+};

@@ -159,6 +159,8 @@ const UserSchema = new Schema<IUser, UserModel>(
       required: true,
     },
 
+    picture: { type: String, required: false },
+
     position_name: {
       type: String,
       required: false,

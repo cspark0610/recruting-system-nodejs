@@ -32,9 +32,9 @@ const upload = multer({ storage });
  * ]
  * */
 
-router.get('/', candidateController.getAllCandidates);
+router.get('/', authJwt.verifyJwt, candidateController.getAllCandidates);
 
-router.get('/:_id', candidateController.getOneCandidate);
+router.get('/:_id', authJwt.verifyJwt, candidateController.getOneCandidate);
 router.get('/cv/:key', candidateController.getCV);
 router.get('/video/:key', candidateController.getVideoFromS3);
 
@@ -221,8 +221,6 @@ router.put(
     authJwt.authRole({
       CEO: 'CEO',
       CTO: 'CTO',
-      'RRHH ADMIN': 'RRHH ADMIN',
-      RRHH: 'RRHH',
     }),
   ],
   candidateController.setIsRejected,
