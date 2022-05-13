@@ -47,14 +47,6 @@ export const signIn = async (
         );
       }
 
-      res.cookie('refresh', data.refreshToken.token, {
-        httpOnly: true,
-        sameSite: 'none',
-        secure: true,
-        expires: new Date(envConfig.JWT_REFRESH_TOKEN_EXP),
-        maxAge: 1000 * 60 * 60 * 24 * 2,
-      });
-
       return res.status(200).send({
         status: 200,
         access_token: data.accessToken.token,
@@ -71,14 +63,6 @@ export const signIn = async (
         ),
       );
     }
-
-    res.cookie('refresh', data.refreshToken.token, {
-      httpOnly: true,
-      sameSite: 'none',
-      secure: true,
-      expires: new Date(envConfig.JWT_REFRESH_TOKEN_EXP),
-      maxAge: 1000 * 60 * 60 * 24 * 7,
-    });
 
     return res.status(200).send({
       status: 200,
@@ -108,14 +92,6 @@ export const signUp = async (
         new InternalServerException('There was an error signing up.'),
       );
     }
-
-    res.cookie('refresh', data.refreshToken.token, {
-      httpOnly: true,
-      sameSite: 'none',
-      secure: true,
-      expires: new Date(envConfig.JWT_REFRESH_TOKEN_EXP),
-      maxAge: 1000 * 60 * 60 * 24 * 7,
-    });
 
     return res.status(201).send({
       status: 201,
@@ -183,19 +159,6 @@ export const changeRole = async (
   return res
     .status(200)
     .send({ status: 200, message: 'User role updated successfully' });
-};
-
-export const logOut = async (
-  req: RequestExtended,
-  res: Response,
-  next: NextFunction,
-) => {
-  res.clearCookie('refresh', {
-    httpOnly: true,
-    sameSite: 'none',
-    secure: true,
-  });
-  return res.sendStatus(204);
 };
 
 export const resetPassword = async (

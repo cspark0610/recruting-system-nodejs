@@ -35,7 +35,7 @@ export async function verifyJwt(
 
     req.user = userFound;
   } catch (e: any) {
-    return next(new InvalidAccessToken(e));
+    return next(new InvalidAccessToken('Invalid access token'));
   }
 
   next();

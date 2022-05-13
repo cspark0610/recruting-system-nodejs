@@ -101,15 +101,6 @@ export const SignUpGoogle = async (tokenId: string, next: NextFunction) => {
         'access',
       );
 
-      const refreshToken = createToken(
-        userExists,
-        JWT_REFRESH_TOKEN_EXP,
-        'refresh',
-      );
-
-      userExists.refresh_token = refreshToken.token;
-      userExists.save();
-
       const userWithouthPassword = {
         _id: userExists._id,
         name: userExists.name,
@@ -117,7 +108,7 @@ export const SignUpGoogle = async (tokenId: string, next: NextFunction) => {
         picture: userExists.picture,
       };
 
-      return { accessToken, refreshToken, userWithouthPassword };
+      return { accessToken, userWithouthPassword };
     }
 
     const newUser = await User.create({
@@ -135,9 +126,8 @@ export const SignUpGoogle = async (tokenId: string, next: NextFunction) => {
     };
 
     const accessToken = createToken(newUser, JWT_ACCESS_TOKEN_EXP, 'access');
-    const refreshToken = createToken(newUser, JWT_REFRESH_TOKEN_EXP, 'refresh');
 
-    return { accessToken, refreshToken, userWithouthPassword };
+    return { accessToken, userWithouthPassword };
   } catch (e: any) {
     return next(
       new InternalServerException(
@@ -177,13 +167,8 @@ export const SignIn = async (
     };
 
     const accessToken = createToken(userFound, JWT_ACCESS_TOKEN_EXP, 'access');
-    const refreshToken = createToken(
-      userFound,
-      JWT_REFRESH_TOKEN_EXP,
-      'refresh',
-    );
 
-    return { userWithouthPassword, accessToken, refreshToken };
+    return { userWithouthPassword, accessToken };
   } catch (e: any) {
     return next(
       new InternalServerException(

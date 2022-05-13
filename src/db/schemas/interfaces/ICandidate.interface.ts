@@ -24,6 +24,7 @@ export default interface ICandidate {
   designated_recruiters?: Array<string>;
   video_recording_url?: Types.ObjectId;
   videos_question_list?: Array<IQuestion>;
+  url_link_2?: string;
   cv?: string;
   isRejected?: boolean;
   createdAt?: Date;

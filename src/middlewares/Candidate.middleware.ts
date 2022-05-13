@@ -170,7 +170,7 @@ export async function validateCandidateJwt(
       short_url: decoded.url_id,
     });
 
-    if (!candidate || !url) {
+    if (!candidate || url?.isDisabled) {
       return next(new InvalidAccessToken());
     }
 

@@ -8,7 +8,6 @@ import {
   UpdateStatusDto,
   UpdateCandidateInfoDto,
 } from '../db/schemas/dtos/Candidate';
-import envConfig from '../config/env';
 import ICandidate from '../db/schemas/interfaces/ICandidate.interface';
 import NotFoundException from '../exceptions/NotFoundException';
 import BadRequestException from '../exceptions/BadRequestException';
@@ -17,9 +16,6 @@ import RequestExtended from '../interfaces/RequestExtended.interface';
 import * as candidateService from '../services/Candidate.service';
 
 const unlinkFile = promisify(unlink);
-
-const { NODE_ENV, REDIRECT_URL_DEVELOPMENT, REDIRECT_URL_PRODUCTION } =
-  envConfig;
 
 export const getAllCandidates = async (
   _req: Request,
@@ -302,10 +298,7 @@ export const generateUniqueUrl = async (
 
     return res.status(201).send({
       status: 201,
-      client_url:
-        NODE_ENV === 'development'
-          ? `${REDIRECT_URL_DEVELOPMENT}/url/validate?token=${token.token}`
-          : `${REDIRECT_URL_PRODUCTION}/welcome?token=${token.token}`,
+      message: 'Url generated successfully',
     });
   } catch (e: any) {
     return next(

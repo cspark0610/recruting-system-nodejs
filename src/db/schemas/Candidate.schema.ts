@@ -448,6 +448,8 @@ const CandidateSchema = new Schema<ICandidate>(
     },
 
     isRejected: { type: Boolean, required: true, default: false },
+
+    url_link_2: { type: String, required: false },
   },
 
   { versionKey: false, timestamps: true },
