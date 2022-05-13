@@ -32,11 +32,15 @@ const upload = multer({ storage });
  * ]
  * */
 
-router.get('/', candidateController.getAllCandidates);
+router.get('/', authJwt.verifyJwt, candidateController.getAllCandidates);
 
-router.get('/:_id', candidateController.getOneCandidate);
-router.get('/cv/:key', candidateController.getCV);
-router.get('/video/:key', candidateController.getVideoFromS3);
+router.get('/:_id', authJwt.verifyJwt, candidateController.getOneCandidate);
+router.get('/cv/:key', authJwt.verifyJwt, candidateController.getCV);
+router.get(
+  '/video/:key',
+  authJwt.verifyJwt,
+  candidateController.getVideoFromS3,
+);
 
 /**
  * @openapi
@@ -86,7 +90,11 @@ router.post(
   candidateController.create,
 );
 
-router.post('/filter', candidateController.getCandidatesFiltered);
+router.post(
+  '/filter',
+  authJwt.verifyJwt,
+  candidateController.getCandidatesFiltered,
+);
 
 router.post(
   '/video/upload/:candidate_id',
@@ -204,7 +212,7 @@ router.put(
 
 router.put(
   '/status/update/:_id',
-  [requestBodyValidation(UpdateStatusDto)],
+  [authJwt.verifyJwt, requestBodyValidation(UpdateStatusDto)],
   candidateController.updateStatus,
 );
 
@@ -216,15 +224,7 @@ router.put(
 
 router.put(
   '/reject/:_id',
-  [
-    authJwt.verifyJwt,
-    authJwt.authRole({
-      CEO: 'CEO',
-      CTO: 'CTO',
-      'RRHH ADMIN': 'RRHH ADMIN',
-      RRHH: 'RRHH',
-    }),
-  ],
+  [authJwt.verifyJwt],
   candidateController.setIsRejected,
 );
 
