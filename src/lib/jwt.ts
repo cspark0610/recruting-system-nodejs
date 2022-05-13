@@ -7,7 +7,11 @@ import DataStoredInToken from '../interfaces/DataStoredInToken.interface';
 import ICandidate from '../db/schemas/interfaces/ICandidate.interface';
 import { IUser } from '../db/schemas/interfaces/User';
 
-const { JWT_ACCESS_TOKEN_SECRET, JWT_REFRESH_TOKEN_SECRET } = envConfig;
+const {
+  JWT_ACCESS_TOKEN_SECRET,
+  JWT_REFRESH_TOKEN_SECRET,
+  JWT_VIDEO_TOKEN_SECRET,
+} = envConfig;
 
 export function createToken(
   data: IUser | ICandidate,
@@ -23,6 +27,14 @@ export function createToken(
   if (tokenType === 'access') {
     return {
       token: jwt.sign(dataStoredInToken, JWT_ACCESS_TOKEN_SECRET, {
+        expiresIn,
+      }),
+    };
+  }
+
+  if (tokenType === 'video') {
+    return {
+      token: jwt.sign(dataStoredInToken, JWT_VIDEO_TOKEN_SECRET, {
         expiresIn,
       }),
     };
