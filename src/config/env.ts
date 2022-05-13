@@ -18,6 +18,8 @@ const envConfig = {
   JWT_ACCESS_TOKEN_EXP: process.env.JWT_ACCESS_TOKEN_EXP as string,
   JWT_REFRESH_TOKEN_SECRET: process.env.JWT_REFRESH_TOKEN_SECRET as string,
   JWT_REFRESH_TOKEN_EXP: process.env.JWT_REFRESH_TOKEN_EXP as string,
+  JWT_VIDEO_TOKEN_SECRET: process.env.JWT_VIDEO_TOKEN_SECRET as string,
+  JWT_VIDEO_TOKEN_EXP: process.env.JWT_VIDEO_TOKEN_EXP as string,
   NODE_ENV: process.env.NODE_ENV as string,
 };
 
