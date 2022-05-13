@@ -384,7 +384,7 @@ export const validateUrl = async (
   try {
     const token = req.query.token as string;
 
-    const decoded = decodeToken(token, 'access');
+    const decoded = decodeToken(token, 'video');
 
     const candidateInfo = await candidateService.GetOneCandidate(
       decoded._id,

@@ -163,7 +163,7 @@ export async function validateCandidateJwt(
   const token = req.query.token as string;
 
   try {
-    const decoded = decodeToken(token, 'access');
+    const decoded = decodeToken(token, 'video');
 
     const candidate = await Candidate.findById(decoded._id);
     const url = await VideoRecordingUrlSchema.findOne({

@@ -82,7 +82,7 @@ export const SignUpGoogle = async (tokenId: string, next: NextFunction) => {
   try {
     const userPayload = await verifyGoogleToken(tokenId);
 
-    /*const emailAt = userPayload?.email?.split('@').pop();
+    const emailAt = userPayload?.email?.split('@').pop();
 
     if (emailAt !== 'fulltimeforce.com') {
       return next(
@@ -90,7 +90,7 @@ export const SignUpGoogle = async (tokenId: string, next: NextFunction) => {
           `The email ${userPayload?.email} is not from FullTimeForce`,
         ),
       );
-    }*/
+    }
 
     const userExists = await User.findOne({ email: userPayload?.email });
 

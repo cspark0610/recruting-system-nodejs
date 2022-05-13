@@ -53,6 +53,10 @@ export function decodeToken(
     return jwt.verify(token, JWT_ACCESS_TOKEN_SECRET) as DataStoredInToken;
   }
 
+  if (tokenType === 'video') {
+    return jwt.verify(token, JWT_VIDEO_TOKEN_SECRET) as DataStoredInToken;
+  }
+
   return jwt.verify(token, JWT_REFRESH_TOKEN_SECRET) as DataStoredInToken;
 }
 
