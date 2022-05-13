@@ -10,19 +10,18 @@ import * as positionAuth from '../middlewares/Position.middleware';
 
 const router = Router();
 
-router.get('/', positionController.getAllPositions);
+router.get('/', authJwt.verifyJwt, positionController.getAllPositions);
 
 router.get(
   '/:_id',
-  positionAuth.verifyPositionIsActive,
+  [authJwt.verifyJwt, positionAuth.verifyPositionIsActive],
   positionController.getPositionInfo,
 );
 
 router.post(
   '/create',
   [
-    //authJwt.verifyJwt,
-    //authJwt.authRole({ CEO: 'CEO', CTO: 'CTO', 'RRHH ADMIN': 'RRHH ADMIN' }),
+    authJwt.verifyJwt,
     requestBodyValidation(CreatePositionDto),
     positionAuth.validatePositionExists,
   ],
@@ -31,24 +30,19 @@ router.post(
 
 router.put(
   '/update/:_id',
-  [
-    authJwt.verifyJwt,
-    authJwt.authRole({ CEO: 'CEO', 'RRHH ADMIN': 'RRHH ADMIN' }),
-    requestBodyValidation(UpdatePositionDto),
-  ],
+  [authJwt.verifyJwt, requestBodyValidation(UpdatePositionDto)],
   positionController.updateInfo,
 );
 
 router.put(
   '/status/update/:_id',
-  //authJwt.verifyJwt,
-  //authJwt.authRole({ CEO: 'CEO', CTO: 'CTO', 'RRHH ADMIN': 'RRHH ADMIN' }),
+  authJwt.verifyJwt,
   positionController.setIsActive,
 );
 
 router.delete(
   '/delete/:_id',
-  [positionAuth.verifyPositionDeleted],
+  [authJwt.verifyJwt, positionAuth.verifyPositionDeleted],
   positionController.deletePosition,
 );
 

@@ -6,6 +6,8 @@ export interface IUser {
   email: string;
   password: string;
   position_name?: string;
+  picture?: string;
   phone?: string;
   role?: Types.ObjectId;
+  refresh_token?: string;
 }

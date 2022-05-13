@@ -26,11 +26,7 @@ const router = Router();
  * ]
  * */
 
-router.get(
-  '/',
-  /*[authJwt.verifyJwt, authJwt.authRole({ CEO: 'CEO' })],*/
-  userController.getAllUsers,
-);
+router.get('/', [authJwt.verifyJwt], userController.getAllUsers);
 
 /**
  * @openapi
