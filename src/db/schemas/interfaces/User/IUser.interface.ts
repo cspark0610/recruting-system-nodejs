@@ -9,4 +9,5 @@ export interface IUser {
   picture?: string;
   phone?: string;
   role?: Types.ObjectId;
+  refresh_token?: string;
 }

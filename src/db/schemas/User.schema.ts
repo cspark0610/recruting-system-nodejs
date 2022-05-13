@@ -161,6 +161,8 @@ const UserSchema = new Schema<IUser, UserModel>(
 
     picture: { type: String, required: false },
 
+    refresh_token: { type: String, required: false },
+
     position_name: {
       type: String,
       required: false,

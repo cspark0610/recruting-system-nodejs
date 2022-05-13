@@ -305,7 +305,7 @@ export const generateUniqueUrl = async (
       client_url:
         NODE_ENV === 'development'
           ? `${REDIRECT_URL_DEVELOPMENT}/url/validate?token=${token.token}`
-          : `${REDIRECT_URL_PRODUCTION}?token=${token.token}`,
+          : `${REDIRECT_URL_PRODUCTION}/welcome?token=${token.token}`,
     });
   } catch (e: any) {
     return next(
@@ -383,7 +383,7 @@ export const uploadVideoToS3 = async (
   }
 };
 
-export const validateUrl = (
+export const validateUrl = async (
   req: Request,
   res: Response,
   next: NextFunction,
@@ -393,9 +393,14 @@ export const validateUrl = (
 
     const decoded = decodeToken(token, 'access');
 
+    const candidateInfo = await candidateService.GetOneCandidate(
+      decoded._id,
+      next,
+    );
+
     return res.status(200).send({
       status: 200,
-      decoded: { _id: decoded._id, url_id: decoded.url_id },
+      decoded: { candidate: candidateInfo, url_id: decoded.url_id },
     });
   } catch (e: any) {
     return next(

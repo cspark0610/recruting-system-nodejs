@@ -8,7 +8,7 @@ import InternalServerException from '../exceptions/InternalServerError';
 import RequestExtended from '../interfaces/RequestExtended.interface';
 import * as userService from '../services/User.service';
 
-const { JWT_ACCESS_TOKEN_EXP, JWT_REFRESH_TOKEN_EXP } = envConfig;
+const { JWT_ACCESS_TOKEN_EXP } = envConfig;
 
 export const getAllUsers = async (
   _req: Request,
@@ -47,10 +47,17 @@ export const signIn = async (
         );
       }
 
+      res.cookie('refresh', data.refreshToken.token, {
+        httpOnly: true,
+        sameSite: 'none',
+        secure: true,
+        expires: new Date(envConfig.JWT_REFRESH_TOKEN_EXP),
+        maxAge: 1000 * 60 * 60 * 24 * 2,
+      });
+
       return res.status(200).send({
         status: 200,
         access_token: data.accessToken.token,
-        refresh_token: data.refreshToken.token,
         user: data.userWithouthPassword,
       });
     }
@@ -65,11 +72,17 @@ export const signIn = async (
       );
     }
 
-    res.cookie('access', data.accessToken.token);
-    res.cookie('refresh', data.refreshToken.token);
+    res.cookie('refresh', data.refreshToken.token, {
+      httpOnly: true,
+      sameSite: 'none',
+      secure: true,
+      expires: new Date(envConfig.JWT_REFRESH_TOKEN_EXP),
+      maxAge: 1000 * 60 * 60 * 24 * 7,
+    });
 
     return res.status(200).send({
       status: 200,
+      access_token: data.accessToken.token,
       user: data.userWithouthPassword,
     });
   } catch (e: any) {
@@ -96,11 +109,17 @@ export const signUp = async (
       );
     }
 
-    res.cookie('access', data.accessToken.token);
-    res.cookie('refresh', data.refreshToken.token);
+    res.cookie('refresh', data.refreshToken.token, {
+      httpOnly: true,
+      sameSite: 'none',
+      secure: true,
+      expires: new Date(envConfig.JWT_REFRESH_TOKEN_EXP),
+      maxAge: 1000 * 60 * 60 * 24 * 7,
+    });
 
     return res.status(201).send({
       status: 201,
+      access_token: data.accessToken.token,
       user: data!.userWithouthPassword,
     });
   } catch (e: any) {
@@ -145,9 +164,8 @@ export const refreshToken = async (
     const { user } = req;
 
     const accessToken = createToken(user!, JWT_ACCESS_TOKEN_EXP, 'access');
-    const refreshToken = createToken(user!, JWT_REFRESH_TOKEN_EXP, 'refresh');
 
-    return res.status(200).send({ accessToken, refreshToken });
+    return res.status(200).send({ accessToken });
   } catch (e: any) {
     return next(new InternalServerException(e));
   }
@@ -165,6 +183,19 @@ export const changeRole = async (
   return res
     .status(200)
     .send({ status: 200, message: 'User role updated successfully' });
+};
+
+export const logOut = async (
+  req: RequestExtended,
+  res: Response,
+  next: NextFunction,
+) => {
+  res.clearCookie('refresh', {
+    httpOnly: true,
+    sameSite: 'none',
+    secure: true,
+  });
+  return res.sendStatus(204);
 };
 
 export const resetPassword = async (

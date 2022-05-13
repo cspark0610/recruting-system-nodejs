@@ -52,6 +52,11 @@ export const SignUp = async (userInfo: IUser, next: NextFunction) => {
       role: foundRoles?.map((role) => role._id),
     });
 
+    const refreshToken = createToken(newUser, JWT_REFRESH_TOKEN_EXP, 'refresh');
+
+    newUser.refresh_token = refreshToken.token;
+    newUser.save();
+
     const userWithouthPassword = {
       _id: newUser._id,
       name: newUser.name,
@@ -62,7 +67,6 @@ export const SignUp = async (userInfo: IUser, next: NextFunction) => {
     };
 
     const accessToken = createToken(newUser, JWT_ACCESS_TOKEN_EXP, 'access');
-    const refreshToken = createToken(newUser, JWT_REFRESH_TOKEN_EXP, 'refresh');
 
     return { accessToken, refreshToken, userWithouthPassword };
   } catch (e: any) {
@@ -96,11 +100,15 @@ export const SignUpGoogle = async (tokenId: string, next: NextFunction) => {
         JWT_ACCESS_TOKEN_EXP,
         'access',
       );
+
       const refreshToken = createToken(
         userExists,
         JWT_REFRESH_TOKEN_EXP,
         'refresh',
       );
+
+      userExists.refresh_token = refreshToken.token;
+      userExists.save();
 
       const userWithouthPassword = {
         _id: userExists._id,
