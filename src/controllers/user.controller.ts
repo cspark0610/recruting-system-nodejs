@@ -8,7 +8,7 @@ import InternalServerException from '../exceptions/InternalServerError';
 import RequestExtended from '../interfaces/RequestExtended.interface';
 import * as userService from '../services/User.service';
 
-const { JWT_ACCESS_TOKEN_EXP } = envConfig;
+const { JWT_ACCESS_TOKEN_EXP, JWT_REFRESH_TOKEN_EXP } = envConfig;
 
 export const getAllUsers = async (
   _req: Request,
@@ -47,6 +47,14 @@ export const signIn = async (
         );
       }
 
+      res.cookie('refresh', data.refreshToken.token, {
+        httpOnly: true,
+        sameSite: 'none',
+        secure: true,
+        expires: new Date(Date.now() + JWT_REFRESH_TOKEN_EXP),
+        maxAge: 1000 * 60 * 60 * 24 * 2,
+      });
+
       return res.status(200).send({
         status: 200,
         access_token: data.accessToken.token,
@@ -63,6 +71,14 @@ export const signIn = async (
         ),
       );
     }
+
+    res.cookie('refresh', data.refreshToken.token, {
+      httpOnly: true,
+      sameSite: 'none',
+      secure: true,
+      expires: new Date(Date.now() + JWT_REFRESH_TOKEN_EXP),
+      maxAge: 1000 * 60 * 60 * 24 * 2,
+    });
 
     return res.status(200).send({
       status: 200,
@@ -93,6 +109,14 @@ export const signUp = async (
       );
     }
 
+    res.cookie('refresh', data.refreshToken.token, {
+      httpOnly: true,
+      sameSite: 'none',
+      secure: true,
+      expires: new Date(Date.now() + JWT_REFRESH_TOKEN_EXP),
+      maxAge: 1000 * 60 * 60 * 24 * 2,
+    });
+
     return res.status(201).send({
       status: 201,
       access_token: data.accessToken.token,
@@ -105,6 +129,19 @@ export const signUp = async (
       ),
     );
   }
+};
+
+export const signOut = async (
+  _req: RequestExtended,
+  res: Response,
+  _next: NextFunction,
+) => {
+  res.clearCookie('refresh', {
+    httpOnly: true,
+    sameSite: 'none',
+    secure: true,
+  });
+  return res.sendStatus(204);
 };
 
 export const updateInfo = async (

@@ -117,6 +117,8 @@ router.post(
   userController.signUp,
 );
 
+router.post('/signOut', userController.signOut);
+
 router.post(
   '/token/refresh',
   authJwt.verifyRefreshJwt,

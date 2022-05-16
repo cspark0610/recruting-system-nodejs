@@ -10,7 +10,6 @@ import InvalidRefreshToken from '../exceptions/InvalidRefreshToken';
 import RequestExtended from '../interfaces/RequestExtended.interface';
 import ForbiddenException from '../exceptions/ForbiddenException';
 import BadRequestException from '../exceptions/BadRequestException';
-import InternalServerException from '../exceptions/InternalServerError';
 
 // checks if a JWT is valid
 export async function verifyJwt(
@@ -62,7 +61,7 @@ export async function verifyRefreshJwt(
 
     req.user = user;
   } catch (e: any) {
-    return next(new InternalServerException(e));
+    return next(new InvalidRefreshToken(e));
   }
   next();
 }
