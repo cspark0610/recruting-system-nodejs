@@ -2,7 +2,7 @@
 import { NextFunction } from 'express';
 import { Types } from 'mongoose';
 import { IUser } from '../db/schemas/interfaces/User';
-import { createToken } from '../lib/jwt';
+import { createToken, verifyGoogleToken } from '../lib/jwt';
 import envConfig from '../config/env';
 import User from '../db/schemas/User.schema';
 import Role from '../db/schemas/Role.schema';
@@ -52,6 +52,11 @@ export const SignUp = async (userInfo: IUser, next: NextFunction) => {
       role: foundRoles?.map((role) => role._id),
     });
 
+    const refreshToken = createToken(newUser, JWT_REFRESH_TOKEN_EXP, 'refresh');
+
+    newUser.refresh_token = refreshToken.token;
+    newUser.save();
+
     const userWithouthPassword = {
       _id: newUser._id,
       name: newUser.name,
@@ -62,7 +67,6 @@ export const SignUp = async (userInfo: IUser, next: NextFunction) => {
     };
 
     const accessToken = createToken(newUser, JWT_ACCESS_TOKEN_EXP, 'access');
-    const refreshToken = createToken(newUser, JWT_REFRESH_TOKEN_EXP, 'refresh');
 
     return { accessToken, refreshToken, userWithouthPassword };
   } catch (e: any) {
@@ -74,7 +78,76 @@ export const SignUp = async (userInfo: IUser, next: NextFunction) => {
   }
 };
 
-export const SignIn = async (userInfo: IUser, next: NextFunction) => {
+export const SignUpGoogle = async (tokenId: string, next: NextFunction) => {
+  try {
+    const userPayload = await verifyGoogleToken(tokenId);
+
+    const emailAt = userPayload?.email?.split('@').pop();
+
+    if (emailAt !== 'fulltimeforce.com') {
+      return next(
+        new BadRequestException(
+          `The email ${userPayload?.email} is not from FullTimeForce`,
+        ),
+      );
+    }
+
+    const userExists = await User.findOne({ email: userPayload?.email });
+
+    if (userExists) {
+      const accessToken = createToken(
+        userExists,
+        JWT_ACCESS_TOKEN_EXP,
+        'access',
+      );
+
+      const refreshToken = createToken(
+        userExists,
+        JWT_REFRESH_TOKEN_EXP,
+        'refresh',
+      );
+
+      const userWithouthPassword = {
+        _id: userExists._id,
+        name: userExists.name,
+        email: userExists.email,
+        picture: userExists.picture,
+      };
+
+      return { accessToken, refreshToken, userWithouthPassword };
+    }
+
+    const newUser = await User.create({
+      name: userPayload?.name,
+      email: userPayload?.email,
+      password: 'hsdjakfhasf',
+      picture: userPayload?.picture,
+    });
+
+    const userWithouthPassword = {
+      _id: newUser._id,
+      name: newUser.name,
+      email: newUser.email,
+      picture: newUser.picture,
+    };
+
+    const accessToken = createToken(newUser, JWT_ACCESS_TOKEN_EXP, 'access');
+    const refreshToken = createToken(newUser, JWT_REFRESH_TOKEN_EXP, 'refresh');
+
+    return { accessToken, refreshToken, userWithouthPassword };
+  } catch (e: any) {
+    return next(
+      new InternalServerException(
+        `There was an error with the signUpGoogle service. ${e.message}`,
+      ),
+    );
+  }
+};
+
+export const SignIn = async (
+  userInfo: { email: string; password: string },
+  next: NextFunction,
+) => {
   try {
     const userFound = await User.findOne({ email: userInfo.email });
 

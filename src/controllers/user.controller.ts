@@ -33,10 +33,36 @@ export const signIn = async (
   res: Response,
   next: NextFunction,
 ) => {
-  const userInfo: IUser = req.body;
+  const { email, password, tokenId } = req.body;
 
   try {
-    const data = await userService.SignIn(userInfo, next);
+    if (tokenId) {
+      const data = await userService.SignUpGoogle(tokenId, next);
+
+      if (!data) {
+        return next(
+          new InternalServerException(
+            'There was an error signing in. Please try again.',
+          ),
+        );
+      }
+
+      res.cookie('refresh', data.refreshToken.token, {
+        httpOnly: true,
+        sameSite: 'none',
+        secure: true,
+        expires: new Date(Date.now() + JWT_REFRESH_TOKEN_EXP),
+        maxAge: 1000 * 60 * 60 * 24 * 2,
+      });
+
+      return res.status(200).send({
+        status: 200,
+        access_token: data.accessToken.token,
+        user: data.userWithouthPassword,
+      });
+    }
+
+    const data = await userService.SignIn({ email, password }, next);
 
     if (!data) {
       return next(
@@ -46,10 +72,17 @@ export const signIn = async (
       );
     }
 
+    res.cookie('refresh', data.refreshToken.token, {
+      httpOnly: true,
+      sameSite: 'none',
+      secure: true,
+      expires: new Date(Date.now() + JWT_REFRESH_TOKEN_EXP),
+      maxAge: 1000 * 60 * 60 * 24 * 2,
+    });
+
     return res.status(200).send({
       status: 200,
       access_token: data.accessToken.token,
-      refresh_token: data.refreshToken.token,
       user: data.userWithouthPassword,
     });
   } catch (e: any) {
@@ -70,10 +103,23 @@ export const signUp = async (
     const userInfo: IUser = req.body;
     const data = await userService.SignUp(userInfo, next);
 
+    if (!data) {
+      return next(
+        new InternalServerException('There was an error signing up.'),
+      );
+    }
+
+    res.cookie('refresh', data.refreshToken.token, {
+      httpOnly: true,
+      sameSite: 'none',
+      secure: true,
+      expires: new Date(Date.now() + JWT_REFRESH_TOKEN_EXP),
+      maxAge: 1000 * 60 * 60 * 24 * 2,
+    });
+
     return res.status(201).send({
       status: 201,
-      access_token: data!.accessToken.token,
-      refresh_token: data!.refreshToken.token,
+      access_token: data.accessToken.token,
       user: data!.userWithouthPassword,
     });
   } catch (e: any) {
@@ -83,6 +129,19 @@ export const signUp = async (
       ),
     );
   }
+};
+
+export const signOut = async (
+  _req: RequestExtended,
+  res: Response,
+  _next: NextFunction,
+) => {
+  res.clearCookie('refresh', {
+    httpOnly: true,
+    sameSite: 'none',
+    secure: true,
+  });
+  return res.sendStatus(204);
 };
 
 export const updateInfo = async (
@@ -118,12 +177,8 @@ export const refreshToken = async (
     const { user } = req;
 
     const accessToken = createToken(user!, JWT_ACCESS_TOKEN_EXP, 'access');
-    const refreshToken = createToken(user!, JWT_REFRESH_TOKEN_EXP, 'refresh');
 
-    return res.status(200).send({
-      access_token: accessToken.token,
-      refresh_token: refreshToken.token,
-    });
+    return res.status(200).send({ accessToken });
   } catch (e: any) {
     return next(new InternalServerException(e));
   }
@@ -155,5 +210,5 @@ export const resetPassword = async (
 
   return res
     .status(200)
-    .send({ status: 200, message: 'User password updated successfully' });
+    .send({ status: 200, message: 'Password updated successfully' });
 };

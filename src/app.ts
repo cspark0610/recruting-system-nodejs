@@ -1,5 +1,6 @@
 import express, { Express } from 'express';
 import helmet from 'helmet';
+import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import corsOptions from './config/cors';
 import envConfig from './config/env';
@@ -18,6 +19,7 @@ if (envConfig.NODE_ENV === 'development') {
 app.use(express.urlencoded({ extended: true, limit: '25mb' }));
 app.use(express.json({ limit: '25mb' }));
 app.use(cors(corsOptions));
+app.use(cookieParser());
 app.use(helmet());
 
 createRoles();

@@ -8,7 +8,6 @@ import {
   UpdateStatusDto,
   UpdateCandidateInfoDto,
 } from '../db/schemas/dtos/Candidate';
-import envConfig from '../config/env';
 import ICandidate from '../db/schemas/interfaces/ICandidate.interface';
 import NotFoundException from '../exceptions/NotFoundException';
 import BadRequestException from '../exceptions/BadRequestException';
@@ -17,9 +16,6 @@ import RequestExtended from '../interfaces/RequestExtended.interface';
 import * as candidateService from '../services/Candidate.service';
 
 const unlinkFile = promisify(unlink);
-
-const { NODE_ENV, REDIRECT_URL_DEVELOPMENT, REDIRECT_URL_PRODUCTION } =
-  envConfig;
 
 export const getAllCandidates = async (
   _req: Request,
@@ -302,10 +298,7 @@ export const generateUniqueUrl = async (
 
     return res.status(201).send({
       status: 201,
-      client_url:
-        NODE_ENV === 'development'
-          ? `${REDIRECT_URL_DEVELOPMENT}/url/validate?token=${token.token}`
-          : `${REDIRECT_URL_PRODUCTION}?token=${token.token}`,
+      message: 'Url generated successfully',
     });
   } catch (e: any) {
     return next(
@@ -383,7 +376,7 @@ export const uploadVideoToS3 = async (
   }
 };
 
-export const validateUrl = (
+export const validateUrl = async (
   req: Request,
   res: Response,
   next: NextFunction,
@@ -391,11 +384,16 @@ export const validateUrl = (
   try {
     const token = req.query.token as string;
 
-    const decoded = decodeToken(token, 'access');
+    const decoded = decodeToken(token, 'video');
+
+    const candidateInfo = await candidateService.GetOneCandidate(
+      decoded._id,
+      next,
+    );
 
     return res.status(200).send({
       status: 200,
-      decoded: { _id: decoded._id, url_id: decoded.url_id },
+      decoded: { candidate: candidateInfo, url_id: decoded.url_id },
     });
   } catch (e: any) {
     return next(

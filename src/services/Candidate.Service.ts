@@ -22,7 +22,14 @@ import VideoRecordingUrl from '../db/schemas/VideoRecordingUrl.schema';
 import InternalServerException from '../exceptions/InternalServerError';
 import TokenData from '../interfaces/TokenData.interface';
 
-const { AWS_VIDEO_BUCKET_NAME, AWS_CV_BUCKET_NAME } = envConfig;
+const {
+  AWS_VIDEO_BUCKET_NAME,
+  AWS_CV_BUCKET_NAME,
+  NODE_ENV,
+  REDIRECT_URL_DEVELOPMENT,
+  REDIRECT_URL_PRODUCTION,
+  JWT_VIDEO_TOKEN_EXP,
+} = envConfig;
 
 export const GetAllCandidates = async (next: NextFunction) => {
   try {
@@ -196,12 +203,19 @@ export const GenerateUrl = async (
     const newUrl = await VideoRecordingUrl.create({});
     const token = createToken(
       candidate,
-      '2629746s',
-      'access',
+      JWT_VIDEO_TOKEN_EXP,
+      'video',
       newUrl.short_url,
     );
+
+    const url =
+      NODE_ENV === 'development'
+        ? `${REDIRECT_URL_DEVELOPMENT}/welcome?token=${token.token} `
+        : `${REDIRECT_URL_PRODUCTION}/welcome?token=${token.token} `;
+
     await Candidate.findByIdAndUpdate(candidate._id, {
       video_recording_url: newUrl._id,
+      url_link_2: url,
     });
 
     return token;

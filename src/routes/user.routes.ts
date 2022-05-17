@@ -26,11 +26,7 @@ const router = Router();
  * ]
  * */
 
-router.get(
-  '/',
-  /*[authJwt.verifyJwt, authJwt.authRole({ CEO: 'CEO' })],*/
-  userController.getAllUsers,
-);
+router.get('/', [authJwt.verifyJwt], userController.getAllUsers);
 
 /**
  * @openapi
@@ -120,6 +116,8 @@ router.post(
   [requestBodyValidation(CreateUserDto), userAuth.validateSignUp],
   userController.signUp,
 );
+
+router.post('/signOut', userController.signOut);
 
 router.post(
   '/token/refresh',

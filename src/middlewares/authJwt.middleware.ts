@@ -10,7 +10,6 @@ import InvalidRefreshToken from '../exceptions/InvalidRefreshToken';
 import RequestExtended from '../interfaces/RequestExtended.interface';
 import ForbiddenException from '../exceptions/ForbiddenException';
 import BadRequestException from '../exceptions/BadRequestException';
-import InternalServerException from '../exceptions/InternalServerError';
 
 // checks if a JWT is valid
 export async function verifyJwt(
@@ -35,7 +34,7 @@ export async function verifyJwt(
 
     req.user = userFound;
   } catch (e: any) {
-    return next(new InvalidAccessToken(e));
+    return next(new InvalidAccessToken('Invalid access token'));
   }
 
   next();
@@ -46,14 +45,14 @@ export async function verifyRefreshJwt(
   _res: Response,
   next: NextFunction,
 ) {
-  const { refresh_token } = req.body;
-
-  if (!refresh_token) {
+  if (!req.cookies?.refresh) {
     return next(new BadRequestException('No refresh token provided'));
   }
 
+  const refreshToken = req.cookies?.refresh;
+
   try {
-    const decodedRefreshToken = decodeToken(refresh_token, 'refresh');
+    const decodedRefreshToken = decodeToken(refreshToken, 'refresh');
     const user = await User.findById(decodedRefreshToken._id);
 
     if (!user) {
@@ -62,7 +61,7 @@ export async function verifyRefreshJwt(
 
     req.user = user;
   } catch (e: any) {
-    return next(new InternalServerException(e));
+    return next(new InvalidRefreshToken(e));
   }
   next();
 }
