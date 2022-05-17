@@ -180,7 +180,12 @@ export const UpdateConclusions = async (
   next: NextFunction,
 ) => {
   try {
-    await Candidate.findByIdAndUpdate(_id, { conclusions: newConclusions });
+    await Candidate.findByIdAndUpdate(_id, {
+      $push: {
+        'conclusions.good': newConclusions.good,
+        'conclusions.bad': newConclusions.bad,
+      },
+    });
   } catch (e: any) {
     return next(
       new InternalServerException(

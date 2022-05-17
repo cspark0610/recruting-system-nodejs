@@ -1,8 +1,13 @@
-import { IsNotEmpty, IsObject } from 'class-validator';
-import IConclusions from '../../../../interfaces/IConclusions.interface';
+import { IsNotEmpty, IsString, IsOptional } from 'class-validator';
 
 export class UpdateConclusionsDto {
-  @IsObject()
+  @IsOptional()
+  @IsString()
   @IsNotEmpty()
-  conclusions!: IConclusions;
+  good?: string;
+
+  @IsOptional()
+  @IsString()
+  @IsNotEmpty()
+  bad?: string;
 }

@@ -261,10 +261,10 @@ export const updateConclusions = async (
   next: NextFunction,
 ) => {
   const { _id } = req.params;
-  const { conclusions } = req.body;
+  const { good, bad } = req.body;
 
   try {
-    await candidateService.UpdateConclusions(_id, conclusions, next);
+    await candidateService.UpdateConclusions(_id, { good, bad }, next);
 
     return res.status(200).send({
       status: 200,
