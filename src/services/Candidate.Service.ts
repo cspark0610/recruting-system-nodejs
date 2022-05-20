@@ -153,18 +153,30 @@ export const UpdateStatus = async (
         currentCandidate?.main_status! !==
         valid_main_status[valid_main_status.length - 1]
       ) {
-        return await Candidate.findByIdAndUpdate(_id, {
+        await Candidate.findByIdAndUpdate(_id, {
           main_status: valid_main_status[newMainStatus],
           secondary_status: valid_secondary_status[0],
         });
+
+        return {
+          main_status: valid_main_status[newMainStatus],
+          secondary_status: valid_secondary_status[0],
+        };
       }
 
-      return await Candidate.findByIdAndUpdate(_id, {
+      await Candidate.findByIdAndUpdate(_id, {
         secondary_status: newStatus.secondary_status,
       });
+
+      return {
+        main_status: currentCandidate!.main_status!,
+        secondary_status: newStatus.secondary_status,
+      };
     }
 
     await Candidate.findByIdAndUpdate(_id, newStatus);
+
+    return newStatus;
   } catch (e: any) {
     return next(
       new InternalServerException(

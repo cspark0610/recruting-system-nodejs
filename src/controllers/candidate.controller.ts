@@ -13,7 +13,7 @@ import NotFoundException from '../exceptions/NotFoundException';
 import BadRequestException from '../exceptions/BadRequestException';
 import InternalServerException from '../exceptions/InternalServerError';
 import RequestExtended from '../interfaces/RequestExtended.interface';
-import * as candidateService from '../services/Candidate.service';
+import * as candidateService from '../services/Candidate.Service';
 
 const unlinkFile = promisify(unlink);
 
@@ -237,15 +237,26 @@ export const updateStatus = async (
   const { main_status, secondary_status }: UpdateStatusDto = req.body;
 
   try {
-    await candidateService.UpdateStatus(
+    const data = await candidateService.UpdateStatus(
       _id,
       { main_status, secondary_status },
       next,
     );
 
-    return res
-      .status(200)
-      .send({ status: 200, message: 'Candidate status updated successfully' });
+    if (!data) {
+      return next(
+        new InternalServerException(
+          'There was an error updating the candidate status. Please try again',
+        ),
+      );
+    }
+
+    return res.status(200).send({
+      status: 200,
+      message: 'Candidate status updated successfully',
+      main_status: data.main_status,
+      secondary_status: data.secondary_status,
+    });
   } catch (e: any) {
     return next(
       new InternalServerException(
