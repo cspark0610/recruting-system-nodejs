@@ -1,16 +1,17 @@
 /* eslint-disable no-underscore-dangle */
 import jwt from 'jsonwebtoken';
 import { OAuth2Client } from 'google-auth-library';
+import { IUser } from '../db/schemas/interfaces/User';
 import envConfig from '../config/env';
 import TokenData from '../interfaces/TokenData.interface';
 import DataStoredInToken from '../interfaces/DataStoredInToken.interface';
 import ICandidate from '../db/schemas/interfaces/ICandidate.interface';
-import { IUser } from '../db/schemas/interfaces/User';
 
 const {
   JWT_ACCESS_TOKEN_SECRET,
   JWT_REFRESH_TOKEN_SECRET,
   JWT_VIDEO_TOKEN_SECRET,
+  GOOGLE_CLIENT_ID,
 } = envConfig;
 
 export function createToken(
@@ -61,10 +62,10 @@ export function decodeToken(
 }
 
 export const verifyGoogleToken = async (token: string) => {
-  const client = new OAuth2Client(envConfig.GOOGLE_CLIENT_ID);
+  const client = new OAuth2Client(GOOGLE_CLIENT_ID);
   const ticket = await client.verifyIdToken({
     idToken: token,
-    audience: envConfig.GOOGLE_CLIENT_ID,
+    audience: GOOGLE_CLIENT_ID,
   });
 
   return ticket.getPayload();

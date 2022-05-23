@@ -3,13 +3,13 @@ import { NextFunction } from 'express';
 import { Types } from 'mongoose';
 import { IUser } from '../db/schemas/interfaces/User';
 import { createToken, verifyGoogleToken } from '../lib/jwt';
+import { UpdateUserInfoDto } from '../db/schemas/dtos/User';
 import envConfig from '../config/env';
 import User from '../db/schemas/User.schema';
 import Role from '../db/schemas/Role.schema';
 import InternalServerException from '../exceptions/InternalServerError';
 import InvalidCredentialsException from '../exceptions/InvalidCredentialsException';
 import BadRequestException from '../exceptions/BadRequestException';
-import { UpdateUserInfoDto } from '../db/schemas/dtos/User';
 
 const { JWT_ACCESS_TOKEN_EXP, JWT_REFRESH_TOKEN_EXP } = envConfig;
 
