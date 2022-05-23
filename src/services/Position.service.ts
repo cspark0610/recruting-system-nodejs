@@ -1,8 +1,8 @@
 /* eslint-disable no-underscore-dangle */
 import { NextFunction } from 'express';
+import { IPositionNormal } from '../db/schemas/interfaces/IPosition.interface';
 import envConfig from '../config/env';
 import Position from '../db/schemas/Position.schema';
-import { IPositionNormal } from '../db/schemas/interfaces/IPosition.interface';
 import InternalServerException from '../exceptions/InternalServerError';
 import RequestExtended from '../interfaces/RequestExtended.interface';
 
