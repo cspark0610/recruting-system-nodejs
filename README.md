@@ -4,6 +4,8 @@
 
 First, make sure you have MongoDB installed on your system. If you do not have it, [click here](https://www.mongodb.com/try/download/community) to download it.
 
+**Also, make sure you are using Node `16.14.0` and NPM `8.3.1`, since these are the versions the project runs on.**
+
 Then, follow the below steps:
 
 - Download the repo and run the command `npm install` to install all the dependencies needed.
