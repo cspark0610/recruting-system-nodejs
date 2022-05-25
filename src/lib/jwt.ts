@@ -3,7 +3,6 @@ import jwt from 'jsonwebtoken';
 import { OAuth2Client } from 'google-auth-library';
 import { IUser } from '../db/schemas/interfaces/User';
 import envConfig from '../config/env';
-import TokenData from '../interfaces/TokenData.interface';
 import DataStoredInToken from '../interfaces/DataStoredInToken.interface';
 import ICandidate from '../db/schemas/interfaces/ICandidate.interface';
 
@@ -19,31 +18,25 @@ export function createToken(
   expiresIn: string,
   tokenType: string,
   short_url?: string,
-): TokenData {
+): string {
   const dataStoredInToken: DataStoredInToken = {
     _id: data._id as string,
     url_id: short_url as string,
   };
 
   if (tokenType === 'access') {
-    return {
-      token: jwt.sign(dataStoredInToken, JWT_ACCESS_TOKEN_SECRET, {
-        expiresIn,
-      }),
-    };
+    return jwt.sign(dataStoredInToken, JWT_ACCESS_TOKEN_SECRET, {
+      expiresIn,
+    });
   }
 
   if (tokenType === 'video') {
-    return {
-      token: jwt.sign(dataStoredInToken, JWT_VIDEO_TOKEN_SECRET, {
-        expiresIn,
-      }),
-    };
+    return jwt.sign(dataStoredInToken, JWT_VIDEO_TOKEN_SECRET, {
+      expiresIn,
+    });
   }
 
-  return {
-    token: jwt.sign(dataStoredInToken, JWT_REFRESH_TOKEN_SECRET, { expiresIn }),
-  };
+  return jwt.sign(dataStoredInToken, JWT_REFRESH_TOKEN_SECRET, { expiresIn });
 }
 
 export function decodeToken(

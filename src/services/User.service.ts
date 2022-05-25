@@ -54,7 +54,7 @@ export const SignUp = async (userInfo: IUser, next: NextFunction) => {
 
     const refreshToken = createToken(newUser, JWT_REFRESH_TOKEN_EXP, 'refresh');
 
-    newUser.refresh_token = refreshToken.token;
+    newUser.refresh_token = refreshToken;
     newUser.save();
 
     const userWithouthPassword = {

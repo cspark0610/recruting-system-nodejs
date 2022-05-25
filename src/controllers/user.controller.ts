@@ -47,7 +47,7 @@ export const signIn = async (
         );
       }
 
-      res.cookie('refresh', data.refreshToken.token, {
+      res.cookie('refresh', data.refreshToken, {
         httpOnly: true,
         sameSite: 'none',
         secure: true,
@@ -57,7 +57,7 @@ export const signIn = async (
 
       return res.status(200).send({
         status: 200,
-        access_token: data.accessToken.token,
+        access_token: data.accessToken,
         user: data.userWithouthPassword,
       });
     }
@@ -72,7 +72,7 @@ export const signIn = async (
       );
     }
 
-    res.cookie('refresh', data.refreshToken.token, {
+    res.cookie('refresh', data.refreshToken, {
       httpOnly: true,
       sameSite: 'none',
       secure: true,
@@ -82,7 +82,7 @@ export const signIn = async (
 
     return res.status(200).send({
       status: 200,
-      access_token: data.accessToken.token,
+      access_token: data.accessToken,
       user: data.userWithouthPassword,
     });
   } catch (e: any) {
@@ -109,7 +109,7 @@ export const signUp = async (
       );
     }
 
-    res.cookie('refresh', data.refreshToken.token, {
+    res.cookie('refresh', data.refreshToken, {
       httpOnly: true,
       sameSite: 'none',
       secure: true,
@@ -119,7 +119,7 @@ export const signUp = async (
 
     return res.status(201).send({
       status: 201,
-      access_token: data.accessToken.token,
+      access_token: data.accessToken,
       user: data!.userWithouthPassword,
     });
   } catch (e: any) {
