@@ -20,7 +20,6 @@ import Position from '../db/schemas/Position.schema';
 import User from '../db/schemas/User.schema';
 import VideoRecordingUrl from '../db/schemas/VideoRecordingUrl.schema';
 import InternalServerException from '../exceptions/InternalServerError';
-import TokenData from '../interfaces/TokenData.interface';
 
 const {
   AWS_VIDEO_BUCKET_NAME,
@@ -210,7 +209,7 @@ export const UpdateConclusions = async (
 export const GenerateUrl = async (
   candidate: ICandidate,
   next: NextFunction,
-): Promise<TokenData | undefined> => {
+) => {
   try {
     const newUrl = await VideoRecordingUrl.create({});
     const token = createToken(
@@ -222,8 +221,8 @@ export const GenerateUrl = async (
 
     const url =
       NODE_ENV === 'development'
-        ? `${REDIRECT_URL_DEVELOPMENT}/welcome?token=${token.token} `
-        : `${REDIRECT_URL_PRODUCTION}/welcome?token=${token.token} `;
+        ? `${REDIRECT_URL_DEVELOPMENT}/welcome?token=${token} `
+        : `${REDIRECT_URL_PRODUCTION}/welcome?token=${token} `;
 
     await Candidate.findByIdAndUpdate(candidate._id, {
       video_recording_url: newUrl._id,
