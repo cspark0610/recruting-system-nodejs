@@ -10,7 +10,6 @@ import {
   CreateCandidateDto,
   JwtValidationDto,
   UpdateCandidateInfoDto,
-  UpdateConclusionsDto,
   UpdateStatusDto,
 } from '../db/schemas/dtos/Candidate';
 import * as candidateController from '../controllers/candidate.controller';
