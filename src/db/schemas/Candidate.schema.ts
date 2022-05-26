@@ -1,4 +1,4 @@
-import { Schema, model } from 'mongoose';
+import { Schema, model, Types } from 'mongoose';
 import {
   valid_academic_trainings,
   valid_english_levels,
@@ -403,9 +403,37 @@ const CandidateSchema = new Schema<ICandidate>(
     birth_date: { type: String, required: true },
 
     conclusions: {
-      good: { type: [String], required: false },
+      good: {
+        type: [
+          {
+            comment: String,
+            context: String,
+            user: {
+              _id: Types.ObjectId,
+              name: String,
+              email: String,
+              picture: String,
+            },
+          },
+        ],
+        required: false,
+      },
 
-      bad: { type: [String], required: false },
+      bad: {
+        type: [
+          {
+            comment: String,
+            context: String,
+            user: {
+              _id: Types.ObjectId,
+              name: String,
+              email: String,
+              picture: String,
+            },
+          },
+        ],
+        required: false,
+      },
     },
 
     main_status: {

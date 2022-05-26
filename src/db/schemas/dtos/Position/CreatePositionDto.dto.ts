@@ -5,8 +5,10 @@ import {
   IsNotEmpty,
   IsArray,
   IsUrl,
+  IsOptional,
   ArrayNotEmpty,
 } from 'class-validator';
+import IQuestion from '../../../../interfaces/IQuestion.interface';
 import { IPositionNormal } from '../../interfaces/IPosition.interface';
 
 // eslint-disable-next-line import/prefer-default-export
@@ -36,4 +38,7 @@ export class CreatePositionDto implements IPositionNormal {
   @IsString()
   @IsNotEmpty({ message: 'You must select a priority' })
   priority!: string;
+
+  @IsOptional()
+  video_questions_list?: Array<IQuestion>;
 }
