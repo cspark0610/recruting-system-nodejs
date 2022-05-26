@@ -7,7 +7,6 @@ import { createToken } from '../lib/jwt';
 import {
   UpdateCandidateInfoDto,
   UpdateStatusDto,
-  UpdateConclusionsDto,
 } from '../db/schemas/dtos/Candidate';
 import { valid_main_status, valid_secondary_status } from '../config/constants';
 import envConfig from '../config/env';
@@ -20,6 +19,7 @@ import Position from '../db/schemas/Position.schema';
 import User from '../db/schemas/User.schema';
 import VideoRecordingUrl from '../db/schemas/VideoRecordingUrl.schema';
 import InternalServerException from '../exceptions/InternalServerError';
+import IConclusions from '../interfaces/IConclusions.interface';
 
 const {
   AWS_VIDEO_BUCKET_NAME,
@@ -187,7 +187,7 @@ export const UpdateStatus = async (
 
 export const UpdateConclusions = async (
   _id: string,
-  newConclusions: UpdateConclusionsDto,
+  newConclusions: IConclusions,
   next: NextFunction,
 ) => {
   try {
