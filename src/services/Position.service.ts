@@ -88,7 +88,12 @@ export const UpdateInfo = async (
   next: NextFunction,
 ) => {
   try {
-    await Position.findByIdAndUpdate(_id, newInfo);
+    await Position.findByIdAndUpdate(_id, {
+      ...newInfo,
+      $push: {
+        videos_question_list: newInfo.video_questions_list,
+      },
+    });
   } catch (e: any) {
     return next(
       new InternalServerException(
