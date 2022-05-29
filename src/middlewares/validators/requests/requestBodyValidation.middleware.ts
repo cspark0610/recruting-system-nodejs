@@ -4,7 +4,7 @@ import { validate, ValidationError } from 'class-validator';
 import { unlink } from 'fs';
 import { promisify } from 'util';
 import * as express from 'express';
-import BadRequestException from '../../../exceptions/BadRequestException';
+import { BadRequestException } from '../../../exceptions';
 
 const unlinkFile = promisify(unlink);
 

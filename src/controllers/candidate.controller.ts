@@ -8,11 +8,13 @@ import {
   UpdateStatusDto,
   UpdateCandidateInfoDto,
 } from '../db/schemas/dtos/Candidate';
+import {
+  NotFoundException,
+  BadRequestException,
+  InternalServerException,
+} from '../exceptions';
+import { RequestExtended } from '../interfaces';
 import ICandidate from '../db/schemas/interfaces/ICandidate.interface';
-import NotFoundException from '../exceptions/NotFoundException';
-import BadRequestException from '../exceptions/BadRequestException';
-import InternalServerException from '../exceptions/InternalServerError';
-import RequestExtended from '../interfaces/RequestExtended.interface';
 import * as candidateService from '../services/Candidate.Service';
 
 const unlinkFile = promisify(unlink);

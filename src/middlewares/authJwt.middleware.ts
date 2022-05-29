@@ -3,13 +3,15 @@
 /* eslint-disable no-underscore-dangle */
 import { Response, NextFunction } from 'express';
 import { decodeToken } from '../lib/jwt';
+import {
+  InvalidAccessToken,
+  InvalidRefreshToken,
+  ForbiddenException,
+  BadRequestException,
+} from '../exceptions';
+import { RequestExtended } from '../interfaces';
 import User from '../db/schemas/User.schema';
 import Role from '../db/schemas/Role.schema';
-import InvalidAccessToken from '../exceptions/InvalidAccessToken';
-import InvalidRefreshToken from '../exceptions/InvalidRefreshToken';
-import RequestExtended from '../interfaces/RequestExtended.interface';
-import ForbiddenException from '../exceptions/ForbiddenException';
-import BadRequestException from '../exceptions/BadRequestException';
 
 // checks if a JWT is valid
 export async function verifyJwt(

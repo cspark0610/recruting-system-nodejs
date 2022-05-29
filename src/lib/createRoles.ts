@@ -1,5 +1,5 @@
 import Role from '../db/schemas/Role.schema';
-import InternalServerException from '../exceptions/InternalServerError';
+import { InternalServerException } from '../exceptions';
 
 // sets the roles in the dabatase before app routes are loaded
 export default async function createRoles() {

@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import multer from 'multer';
-import storage from '../config/multer';
+import { storage } from '../config';
 import {
   requestBodyValidation,
   requestParamsValidation,

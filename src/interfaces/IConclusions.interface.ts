@@ -9,7 +9,7 @@ type IConclusionsInd = {
   };
 };
 
-export default interface IConclusions {
+export interface IConclusions {
   good: IConclusionsInd;
   bad: IConclusionsInd;
 }

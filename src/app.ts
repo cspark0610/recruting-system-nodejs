@@ -2,12 +2,10 @@ import express, { Express } from 'express';
 import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
-import corsOptions from './config/cors';
-import envConfig from './config/env';
+import { corsOptions, envConfig, swaggerDocs } from './config';
 import errorMiddleware from './middlewares/error.middleware';
 import createRoles from './lib/createRoles';
 import routes from './routes/index.routes';
-import swaggerDocs from './config/swagger';
 
 const app: Express = express();
 

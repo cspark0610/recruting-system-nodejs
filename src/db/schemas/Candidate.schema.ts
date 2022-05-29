@@ -4,7 +4,7 @@ import {
   valid_english_levels,
   valid_main_status,
   valid_secondary_status,
-} from '../../config/constants';
+} from '../../config';
 import ICandidate from './interfaces/ICandidate.interface';
 
 /**

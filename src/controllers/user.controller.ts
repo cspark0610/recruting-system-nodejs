@@ -3,9 +3,9 @@
 import { NextFunction, Request, Response } from 'express';
 import { IUser } from '../db/schemas/interfaces/User';
 import { createToken } from '../lib/jwt';
-import envConfig from '../config/env';
-import InternalServerException from '../exceptions/InternalServerError';
-import RequestExtended from '../interfaces/RequestExtended.interface';
+import { envConfig } from '../config';
+import { InternalServerException } from '../exceptions';
+import { RequestExtended } from '../interfaces';
 import * as userService from '../services/User.service';
 
 const { JWT_ACCESS_TOKEN_EXP, JWT_REFRESH_TOKEN_EXP } = envConfig;

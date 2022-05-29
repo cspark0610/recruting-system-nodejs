@@ -1,7 +1,7 @@
 import { diskStorage } from 'multer';
 
 // sets destination folder where files are temporarily uploaded
-const storage = diskStorage({
+export const storage = diskStorage({
   destination: (_req, _file, cb) => {
     cb(null, 'uploads');
   },
@@ -12,5 +12,3 @@ const storage = diskStorage({
     cb(null, `${file.originalname.split('.')[0]}-${Date.now()}.${fileType}`);
   },
 });
-
-export default storage;

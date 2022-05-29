@@ -3,15 +3,17 @@ import { Request, Response, NextFunction } from 'express';
 import { unlink } from 'fs';
 import { promisify } from 'util';
 import { decodeToken } from '../lib/jwt';
+import {
+  InternalServerException,
+  BadRequestException,
+  NotFoundException,
+  InvalidAccessToken,
+} from '../exceptions';
+import { RequestExtended } from '../interfaces';
 import Candidate from '../db/schemas/Candidate.schema';
 import ICandidate from '../db/schemas/interfaces/ICandidate.interface';
 import Position from '../db/schemas/Position.schema';
 import VideoRecordingUrlSchema from '../db/schemas/VideoRecordingUrl.schema';
-import InternalServerException from '../exceptions/InternalServerError';
-import BadRequestException from '../exceptions/BadRequestException';
-import RequestExtended from '../interfaces/RequestExtended.interface';
-import NotFoundException from '../exceptions/NotFoundException';
-import InvalidAccessToken from '../exceptions/InvalidAccessToken';
 
 const unlinkFile = promisify(unlink);
 

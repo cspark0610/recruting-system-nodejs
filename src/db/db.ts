@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import envConfig from '../config/env';
+import { envConfig } from '../config';
 
 const { NODE_ENV, MONGODB_STAGING_URI } = envConfig;
 

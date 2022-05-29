@@ -1,7 +1,7 @@
 import { Express, Request, Response } from 'express';
 import swaggerJsdoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
-import envConfig from './env';
+import { envConfig } from './env';
 
 const { NODE_ENV } = envConfig;
 
@@ -36,7 +36,7 @@ const options: swaggerJsdoc.Options = {
 
 const swaggerSpec = swaggerJsdoc(options);
 
-function swaggerDocs(app: Express, port: number) {
+export function swaggerDocs(app: Express, port: number) {
   app.get('/api-docs.json', (_req: Request, res: Response) => {
     res.setHeader('Content-Type', 'application/json');
     res.send(swaggerSpec);
@@ -51,5 +51,3 @@ function swaggerDocs(app: Express, port: number) {
 
   console.log(`Swagger docs available at ${docsUrl}`);
 }
-
-export default swaggerDocs;

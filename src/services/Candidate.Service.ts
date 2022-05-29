@@ -9,17 +9,14 @@ import {
   UpdateStatusDto,
 } from '../db/schemas/dtos/Candidate';
 import { valid_main_status, valid_secondary_status } from '../config/constants';
-import envConfig from '../config/env';
-import s3 from '../config/aws';
-import File from '../interfaces/File.interface';
-import UploadParams from '../interfaces/UploadParams.interface';
+import { envConfig, s3 } from '../config';
+import { InternalServerException } from '../exceptions';
+import { File, UploadParams, IConclusions } from '../interfaces';
 import Candidate from '../db/schemas/Candidate.schema';
 import ICandidate from '../db/schemas/interfaces/ICandidate.interface';
 import Position from '../db/schemas/Position.schema';
 import User from '../db/schemas/User.schema';
 import VideoRecordingUrl from '../db/schemas/VideoRecordingUrl.schema';
-import InternalServerException from '../exceptions/InternalServerError';
-import IConclusions from '../interfaces/IConclusions.interface';
 
 const {
   AWS_VIDEO_BUCKET_NAME,

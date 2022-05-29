@@ -1,10 +1,10 @@
 /* eslint-disable no-underscore-dangle */
 import { NextFunction } from 'express';
 import { IPositionNormal } from '../db/schemas/interfaces/IPosition.interface';
-import envConfig from '../config/env';
+import { envConfig } from '../config';
+import { InternalServerException } from '../exceptions';
+import { RequestExtended } from '../interfaces';
 import Position from '../db/schemas/Position.schema';
-import InternalServerException from '../exceptions/InternalServerError';
-import RequestExtended from '../interfaces/RequestExtended.interface';
 
 // eslint-disable-next-line operator-linebreak
 const { NODE_ENV, REDIRECT_URL_DEVELOPMENT, REDIRECT_URL_PRODUCTION } =
