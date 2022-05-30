@@ -5,6 +5,7 @@ import { envConfig } from '../config';
 import { InternalServerException } from '../exceptions';
 import { RequestExtended } from '../interfaces';
 import Position from '../db/schemas/Position.schema';
+import User from '../db/schemas/User.schema';
 
 // eslint-disable-next-line operator-linebreak
 const { NODE_ENV, REDIRECT_URL_DEVELOPMENT, REDIRECT_URL_PRODUCTION } =
@@ -39,7 +40,7 @@ export const GetAllPositions = async (
 
 export const GetPositionInfo = async (_id: string, next: NextFunction) => {
   try {
-    return await Position.findById(_id, { title: 1, designated: 0 });
+    return await Position.findById(_id);
   } catch (e: any) {
     next(
       new InternalServerException(
@@ -88,12 +89,11 @@ export const UpdateInfo = async (
   next: NextFunction,
 ) => {
   try {
-    await Position.findByIdAndUpdate(_id, {
-      ...newInfo,
-      $push: {
-        videos_question_list: newInfo.video_questions_list,
-      },
-    });
+    const designated = await User.find({ name: { $in: newInfo.designated } });
+
+    const users = designated?.map((user) => user._id);
+
+    await Position.findByIdAndUpdate(_id, { ...newInfo, designated: users });
   } catch (e: any) {
     return next(
       new InternalServerException(

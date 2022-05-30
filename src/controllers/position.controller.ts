@@ -103,30 +103,9 @@ export const updateInfo = async (
   next: NextFunction,
 ) => {
   const { _id } = req.params;
-  const {
-    title,
-    designated,
-    client_name,
-    rie_link,
-    recruiter_filter,
-    skills_required,
-    video_questions_list,
-  }: IPositionNormal = req.body;
 
   try {
-    await positionService.UpdateInfo(
-      _id,
-      {
-        title,
-        designated,
-        client_name,
-        rie_link,
-        recruiter_filter,
-        skills_required,
-        video_questions_list,
-      },
-      next,
-    );
+    await positionService.UpdateInfo(_id, req.body, next);
 
     return res
       .status(200)
