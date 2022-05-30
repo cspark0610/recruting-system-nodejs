@@ -11,4 +11,5 @@ export interface IUser {
   role?: Types.ObjectId;
   refresh_token?: string;
   working_since?: string;
+  google_sign_in?: boolean;
 }

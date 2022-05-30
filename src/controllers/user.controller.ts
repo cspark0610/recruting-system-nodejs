@@ -153,11 +153,12 @@ export const updateInfo = async (
   const { _id } = req.params;
 
   try {
-    await userService.UpdateInfo(_id, newInfo, next);
+    const user = await userService.UpdateInfo(_id, newInfo, next);
 
     return res.status(200).send({
       status: 200,
       message: 'User updated successfully',
+      user,
     });
   } catch (e: any) {
     return next(

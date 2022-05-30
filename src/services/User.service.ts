@@ -52,6 +52,7 @@ export const SignUp = async (userInfo: IUser, next: NextFunction) => {
       ...userInfo,
       password: hashedPassword,
       role: foundRoles?.map((role) => role._id),
+      google_sign_in: false,
     });
 
     const refreshToken = createToken(newUser, JWT_REFRESH_TOKEN_EXP, 'refresh');
@@ -64,6 +65,7 @@ export const SignUp = async (userInfo: IUser, next: NextFunction) => {
       name: newUser.name,
       email: newUser.email,
       position_name: newUser.position_name,
+      google_sign_in: newUser.google_sign_in,
       phone: newUser.phone,
       role: newUser.role,
     };
@@ -118,7 +120,7 @@ export const SignUpGoogle = async (tokenId: string, next: NextFunction) => {
         phone: userExists.phone,
         role: userExists.role,
         working_since: userExists.working_since,
-        google_sign_in: true,
+        google_sign_in: userExists.google_sign_in,
       };
 
       return { accessToken, refreshToken, userWithouthPassword };
@@ -128,6 +130,7 @@ export const SignUpGoogle = async (tokenId: string, next: NextFunction) => {
       name: userPayload?.name,
       email: userPayload?.email,
       password: 'hsdjakfhasf',
+      google_sign_in: true,
       picture: userPayload?.picture,
     });
 
@@ -140,7 +143,7 @@ export const SignUpGoogle = async (tokenId: string, next: NextFunction) => {
       phone: newUser.phone,
       role: newUser.role,
       working_since: newUser.working_since,
-      google_sign_in: true,
+      google_sign_in: newUser.google_sign_in,
     };
 
     const accessToken = createToken(newUser, JWT_ACCESS_TOKEN_EXP, 'access');
@@ -182,6 +185,7 @@ export const SignIn = async (
       email: userFound.email,
       position_name: userFound.position_name,
       phone: userFound.phone,
+      google_sign_in: userFound.google_sign_in,
       role: userFound.role,
       working_since: userFound.working_since,
     };
@@ -210,6 +214,22 @@ export const UpdateInfo = async (
 ) => {
   try {
     await User.findByIdAndUpdate(_id, newInfo);
+
+    const updatedUser = await User.findById(_id);
+
+    const userWithouthPassword = {
+      _id: updatedUser!._id,
+      name: updatedUser!.name,
+      email: updatedUser!.email,
+      picture: updatedUser!.picture,
+      position_name: updatedUser!.position_name,
+      phone: updatedUser!.phone,
+      role: updatedUser!.role,
+      working_since: updatedUser!.working_since,
+      google_sign_in: true,
+    };
+
+    return userWithouthPassword;
   } catch (e: any) {
     return next(
       new InternalServerException(
