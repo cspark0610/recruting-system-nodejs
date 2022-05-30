@@ -174,6 +174,8 @@ const UserSchema = new Schema<IUser, UserModel>(
     },
 
     role: { type: Schema.Types.ObjectId, ref: 'role', autopopulate: true },
+
+    working_since: { type: String, required: false },
   },
   { versionKey: false },
 );

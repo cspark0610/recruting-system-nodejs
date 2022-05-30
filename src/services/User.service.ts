@@ -114,6 +114,11 @@ export const SignUpGoogle = async (tokenId: string, next: NextFunction) => {
         name: userExists.name,
         email: userExists.email,
         picture: userExists.picture,
+        position_name: userExists.position_name,
+        phone: userExists.phone,
+        role: userExists.role,
+        working_since: userExists.working_since,
+        google_sign_in: true,
       };
 
       return { accessToken, refreshToken, userWithouthPassword };
@@ -131,6 +136,11 @@ export const SignUpGoogle = async (tokenId: string, next: NextFunction) => {
       name: newUser.name,
       email: newUser.email,
       picture: newUser.picture,
+      position_name: newUser.position_name,
+      phone: newUser.phone,
+      role: newUser.role,
+      working_since: newUser.working_since,
+      google_sign_in: true,
     };
 
     const accessToken = createToken(newUser, JWT_ACCESS_TOKEN_EXP, 'access');
@@ -173,6 +183,7 @@ export const SignIn = async (
       position_name: userFound.position_name,
       phone: userFound.phone,
       role: userFound.role,
+      working_since: userFound.working_since,
     };
 
     const accessToken = createToken(userFound, JWT_ACCESS_TOKEN_EXP, 'access');
