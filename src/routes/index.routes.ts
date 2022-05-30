@@ -4,7 +4,7 @@ import candidateRoutes from './candidate.routes';
 import positionRoutes from './position.routes';
 import userRoutes from './user.routes';
 
-import NotFoundException from '../exceptions/NotFoundException';
+import { NotFoundException } from '../exceptions';
 
 const router = Router();
 

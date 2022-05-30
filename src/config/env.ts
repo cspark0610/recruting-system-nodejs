@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 dotenv.config();
 
-const envConfig = {
+export const envConfig = {
   AWS_BUCKET_ACCESS_KEY: process.env.AWS_BUCKET_ACCESS_KEY as string,
   AWS_BUCKET_SECRET_ACCESS_KEY: process.env
     .AWS_BUCKET_SECRET_ACCESS_KEY as string,
@@ -22,5 +22,3 @@ const envConfig = {
   JWT_VIDEO_TOKEN_EXP: process.env.JWT_VIDEO_TOKEN_EXP as string,
   NODE_ENV: process.env.NODE_ENV as string,
 };
-
-export default envConfig;

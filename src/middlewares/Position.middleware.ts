@@ -1,11 +1,13 @@
 import { Request, Response, NextFunction } from 'express';
+import { IPositionNormal } from '../db/schemas/interfaces/IPosition.interface';
+import {
+  BadRequestException,
+  InternalServerException,
+  NotFoundException,
+} from '../exceptions';
+import { RequestExtended } from '../interfaces';
 import Position from '../db/schemas/Position.schema';
 import User from '../db/schemas/User.schema';
-import { IPositionNormal } from '../db/schemas/interfaces/IPosition.interface';
-import BadRequestException from '../exceptions/BadRequestException';
-import InternalServerException from '../exceptions/InternalServerError';
-import NotFoundException from '../exceptions/NotFoundException';
-import RequestExtended from '../interfaces/RequestExtended.interface';
 
 // checks if there is already a job created with the provided name before creation
 export async function validatePositionExists(

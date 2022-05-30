@@ -8,7 +8,7 @@ import {
   IsOptional,
   ArrayNotEmpty,
 } from 'class-validator';
-import IQuestion from '../../../../interfaces/IQuestion.interface';
+import { IQuestion } from '../../../../interfaces';
 import { IPositionNormal } from '../../interfaces/IPosition.interface';
 
 // eslint-disable-next-line import/prefer-default-export

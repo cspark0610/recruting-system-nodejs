@@ -1,7 +1,7 @@
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable indent */
 import { Schema, model, PaginateModel, Document } from 'mongoose';
-import { valid_priorities } from '../../config/constants';
+import { valid_priorities } from '../../config';
 import mongoosePaginate from 'mongoose-paginate-v2';
 import IPosition from '../schemas/interfaces/IPosition.interface';
 

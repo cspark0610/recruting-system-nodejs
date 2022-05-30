@@ -1,11 +1,10 @@
 /* eslint-disable no-underscore-dangle */
 import { Request, Response, NextFunction } from 'express';
 import { IUser } from '../db/schemas/interfaces/User';
+import { BadRequestException, InternalServerException } from '../exceptions';
+import { RequestExtended } from '../interfaces';
 import User from '../db/schemas/User.schema';
 import Role from '../db/schemas/Role.schema';
-import BadRequestException from '../exceptions/BadRequestException';
-import InternalServerException from '../exceptions/InternalServerError';
-import RequestExtended from '../interfaces/RequestExtended.interface';
 
 export async function validateSignUp(
   req: Request,

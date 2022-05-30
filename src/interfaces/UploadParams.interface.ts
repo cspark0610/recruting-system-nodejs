@@ -1,6 +1,6 @@
 import { Readable } from 'stream';
 
-export default interface UploadParams {
+export interface UploadParams {
   Bucket: string;
   Body: Readable;
   Key: string;

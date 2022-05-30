@@ -3,9 +3,8 @@
 /* eslint-disable no-underscore-dangle */
 import { Request, Response, NextFunction } from 'express';
 import { IPositionNormal } from '../db/schemas/interfaces/IPosition.interface';
-import InternalServerException from '../exceptions/InternalServerError';
-import RequestExtended from '../interfaces/RequestExtended.interface';
-import BadRequestException from '../exceptions/BadRequestException';
+import { InternalServerException, BadRequestException } from '../exceptions';
+import { RequestExtended } from '../interfaces';
 import * as positionService from '../services/Position.service';
 
 export const getAllPositions = async (
@@ -104,30 +103,9 @@ export const updateInfo = async (
   next: NextFunction,
 ) => {
   const { _id } = req.params;
-  const {
-    title,
-    designated,
-    client_name,
-    rie_link,
-    recruiter_filter,
-    skills_required,
-    video_questions_list,
-  }: IPositionNormal = req.body;
 
   try {
-    await positionService.UpdateInfo(
-      _id,
-      {
-        title,
-        designated,
-        client_name,
-        rie_link,
-        recruiter_filter,
-        skills_required,
-        video_questions_list,
-      },
-      next,
-    );
+    await positionService.UpdateInfo(_id, req.body, next);
 
     return res
       .status(200)

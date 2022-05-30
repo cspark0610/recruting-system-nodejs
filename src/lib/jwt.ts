@@ -2,8 +2,8 @@
 import jwt from 'jsonwebtoken';
 import { OAuth2Client } from 'google-auth-library';
 import { IUser } from '../db/schemas/interfaces/User';
-import envConfig from '../config/env';
-import DataStoredInToken from '../interfaces/DataStoredInToken.interface';
+import { envConfig } from '../config';
+import { DataStoredInToken } from '../interfaces';
 import ICandidate from '../db/schemas/interfaces/ICandidate.interface';
 
 const {

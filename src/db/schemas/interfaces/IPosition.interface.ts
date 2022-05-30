@@ -1,5 +1,5 @@
 import { Types, Document } from 'mongoose';
-import IQuestion from '../../../interfaces/IQuestion.interface';
+import { IQuestion } from '../../../interfaces';
 
 export default interface IPosition extends Document {
   _id?: Types.ObjectId;

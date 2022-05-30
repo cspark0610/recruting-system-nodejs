@@ -1,8 +1,5 @@
 import { IsString, IsNotEmpty, IsOptional, IsIn } from 'class-validator';
-import {
-  valid_main_status,
-  valid_secondary_status,
-} from '../../../../config/constants';
+import { valid_main_status, valid_secondary_status } from '../../../../config';
 
 export class UpdateStatusDto {
   @IsOptional()

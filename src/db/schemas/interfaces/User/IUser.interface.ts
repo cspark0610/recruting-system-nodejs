@@ -10,4 +10,6 @@ export interface IUser {
   phone?: string;
   role?: Types.ObjectId;
   refresh_token?: string;
+  working_since?: string;
+  google_sign_in?: boolean;
 }

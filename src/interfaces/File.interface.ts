@@ -1,6 +1,6 @@
 import { Readable } from 'stream';
 
-export default interface File {
+export interface File {
   fieldname: string;
   /** Name of the file on the uploader's computer. */
   originalname: string;
