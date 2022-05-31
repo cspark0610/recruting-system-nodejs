@@ -25,6 +25,7 @@ export default interface ICandidate {
   videos_question_list?: Array<IQuestion>;
   url_link_2?: string;
   cv?: string;
+  terms?: string;
   isRejected?: boolean;
   createdAt?: Date;
   updatedAt?: Date;
