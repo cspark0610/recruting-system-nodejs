@@ -8,6 +8,7 @@ export interface IUser {
   position_name?: string;
   picture?: string;
   phone?: string;
+  country?: string;
   role?: Types.ObjectId;
   refresh_token?: string;
   working_since?: string;
