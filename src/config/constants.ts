@@ -19,7 +19,7 @@ export const valid_english_levels = [
 ];
 
 export const valid_academic_trainings = [
-  'High School',
+  'University',
   'Bachelor',
   'Middle School',
   'No Studies',
