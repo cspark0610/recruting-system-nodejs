@@ -150,7 +150,14 @@ export const create = async (
     birth_date,
     linkedin,
     portfolio,
+    terms,
   }: ICandidate = req.body;
+
+  if (terms === 'false' || !terms) {
+    return next(
+      new BadRequestException('You must accept the terms and conditions'),
+    );
+  }
 
   try {
     // uploads CV file to S3. Then the file is removed automatically from the server

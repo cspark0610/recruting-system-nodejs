@@ -178,6 +178,8 @@ const UserSchema = new Schema<IUser, UserModel>(
     working_since: { type: String, required: false },
 
     google_sign_in: { type: Boolean, required: false },
+
+    country: { type: String, required: false },
   },
   { versionKey: false },
 );

@@ -57,13 +57,11 @@ export const SignUp = async (userInfo: IUser, next: NextFunction) => {
 
     const refreshToken = createToken(newUser, JWT_REFRESH_TOKEN_EXP, 'refresh');
 
-    newUser.refresh_token = refreshToken;
-    newUser.save();
-
     const userWithouthPassword = {
       _id: newUser._id,
       name: newUser.name,
       email: newUser.email,
+      country: newUser.country,
       position_name: newUser.position_name,
       google_sign_in: newUser.google_sign_in,
       phone: newUser.phone,
@@ -117,10 +115,13 @@ export const SignUpGoogle = async (tokenId: string, next: NextFunction) => {
         email: userExists.email,
         picture: userExists.picture,
         position_name: userExists.position_name,
+        country: userExists.country,
         phone: userExists.phone,
         role: userExists.role,
         working_since: userExists.working_since,
-        google_sign_in: userExists.google_sign_in,
+        google_sign_in: !userExists.google_sign_in
+          ? true
+          : userExists.google_sign_in,
       };
 
       return { accessToken, refreshToken, userWithouthPassword };
@@ -140,10 +141,11 @@ export const SignUpGoogle = async (tokenId: string, next: NextFunction) => {
       email: newUser.email,
       picture: newUser.picture,
       position_name: newUser.position_name,
+      country: newUser.country,
       phone: newUser.phone,
       role: newUser.role,
       working_since: newUser.working_since,
-      google_sign_in: newUser.google_sign_in,
+      google_sign_in: newUser.google_sign_in ? true : false,
     };
 
     const accessToken = createToken(newUser, JWT_ACCESS_TOKEN_EXP, 'access');
@@ -185,7 +187,8 @@ export const SignIn = async (
       email: userFound.email,
       position_name: userFound.position_name,
       phone: userFound.phone,
-      google_sign_in: userFound.google_sign_in,
+      google_sign_in: userFound.google_sign_in ? true : false,
+      country: userFound.country,
       role: userFound.role,
       working_since: userFound.working_since,
     };
@@ -222,11 +225,12 @@ export const UpdateInfo = async (
       name: updatedUser!.name,
       email: updatedUser!.email,
       picture: updatedUser!.picture,
+      country: updatedUser!.country,
       position_name: updatedUser!.position_name,
       phone: updatedUser!.phone,
       role: updatedUser!.role,
       working_since: updatedUser!.working_since,
-      google_sign_in: true,
+      google_sign_in: updatedUser!.google_sign_in,
     };
 
     return userWithouthPassword;
