@@ -8,7 +8,18 @@ export const storage = diskStorage({
 
   // sets the file name
   filename: (_req, file, cb) => {
-    const fileType = file.originalname.split('.').pop();
-    cb(null, `${file.originalname.split('.')[0]}-${Date.now()}.${fileType}`);
+    let fileType;
+
+    if (file.originalname === 'blob') {
+      fileType = file.mimetype.split('/')[1];
+    } else {
+      fileType = file.originalname.split('.').pop();
+    }
+    cb(
+      null,
+      file.originalname === 'blob'
+        ? `${file.fieldname}-${Date.now()}.${fileType}`
+        : `${file.originalname.split('.')[0]}-${Date.now()}.${fileType}`,
+    );
   },
 });
