@@ -280,12 +280,11 @@ export const SaveVideoKey = async (
   video_key: string,
 ) => {
   try {
-    const candidate = await Candidate.findOneAndUpdate(
+    await Candidate.findOneAndUpdate(
       { _id: id, $and: [{ 'videos_question_list.question_id': question_id }] },
       { $set: { 'videos_question_list.$.video_key': video_key } },
       { upsert: true },
     );
-    await candidate!.save();
   } catch (e: any) {
     return next(
       new InternalServerException(
