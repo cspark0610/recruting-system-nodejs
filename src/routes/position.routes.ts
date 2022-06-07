@@ -19,7 +19,7 @@ router.get(
 );
 
 router.post(
-  '/create',
+  '/',
   [
     authJwt.verifyJwt,
     requestBodyValidation(CreatePositionDto),
@@ -29,19 +29,15 @@ router.post(
 );
 
 router.put(
-  '/update/:_id',
+  '/:_id',
   [authJwt.verifyJwt, requestBodyValidation(UpdatePositionDto)],
   positionController.updateInfo,
 );
 
-router.put(
-  '/status/update/:_id',
-  authJwt.verifyJwt,
-  positionController.setIsActive,
-);
+router.put('/status/:_id', authJwt.verifyJwt, positionController.setIsActive);
 
 router.delete(
-  '/delete/:_id',
+  '/:_id',
   [authJwt.verifyJwt, positionAuth.verifyPositionDeleted],
   positionController.deletePosition,
 );
