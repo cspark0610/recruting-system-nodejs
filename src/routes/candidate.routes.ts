@@ -101,6 +101,15 @@ router.post(
   candidateController.uploadVideoToS3,
 );
 
+router.post(
+  '/url/validate',
+  [
+    requestQueryValidation(JwtValidationDto),
+    candidateAuth.validateCandidateJwt,
+  ],
+  candidateController.validateUrl,
+);
+
 /**
  * @openapi
  * "/candidate/url/create/{_id}": {
@@ -149,15 +158,6 @@ router.post(
     candidateAuth.verifyCandidateExistsBeforeUrlGeneration,
   ],
   candidateController.generateUniqueUrl,
-);
-
-router.post(
-  '/url/validate',
-  [
-    requestQueryValidation(JwtValidationDto),
-    candidateAuth.validateCandidateJwt,
-  ],
-  candidateController.validateUrl,
 );
 
 /**
