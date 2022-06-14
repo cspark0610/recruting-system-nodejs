@@ -275,3 +275,15 @@ export const ResetPassword = async (
     );
   }
 };
+
+export const DeleteUser = async (_id: string, next: NextFunction) => {
+  try {
+    await User.findByIdAndRemove(_id);
+  } catch (e: any) {
+    return next(
+      new InternalServerException(
+        `There was an unexpected error in the delete user service. ${e.message}`,
+      ),
+    );
+  }
+};

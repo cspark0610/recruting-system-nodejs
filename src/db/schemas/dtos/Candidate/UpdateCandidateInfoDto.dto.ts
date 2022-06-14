@@ -32,6 +32,5 @@ export class UpdateCandidateInfoDto {
 
   @IsOptional()
   @IsString()
-  @IsNotEmpty()
   working_reason?: string;
 }

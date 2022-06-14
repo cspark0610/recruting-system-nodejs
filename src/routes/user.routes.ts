@@ -126,13 +126,13 @@ router.post(
 );
 
 router.put(
-  '/info/update/:_id',
+  '/:_id',
   [authJwt.verifyJwt, requestBodyValidation(UpdateUserInfoDto)],
   userController.updateInfo,
 );
 
 router.put(
-  '/role/change/:_id',
+  '/role/:_id',
   [
     authJwt.verifyJwt,
     authJwt.authRole({ CEO: 'CEO' }),
@@ -143,7 +143,7 @@ router.put(
 );
 
 router.put(
-  '/password/change/:_id',
+  '/password/:_id',
   [
     authJwt.verifyJwt,
     requestBodyValidation(UpdatePasswordDto),
@@ -151,5 +151,7 @@ router.put(
   ],
   userController.resetPassword,
 );
+
+router.delete('/:_id', [authJwt.verifyJwt], userController.deleteUser);
 
 export default router;

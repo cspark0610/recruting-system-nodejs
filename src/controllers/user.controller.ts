@@ -213,3 +213,25 @@ export const resetPassword = async (
     .status(200)
     .send({ status: 200, message: 'Password updated successfully' });
 };
+
+export const deleteUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  const { _id } = req.params;
+
+  try {
+    await userService.DeleteUser(_id, next);
+
+    return res
+      .status(200)
+      .send({ status: 200, message: 'User deleted successfully' });
+  } catch (e: any) {
+    return next(
+      new InternalServerException(
+        `There was an unexpected error with the delete user controller. ${e.message}`,
+      ),
+    );
+  }
+};

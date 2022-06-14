@@ -79,7 +79,7 @@ router.get(
  * }
  * */
 router.post(
-  '/create',
+  '/',
   [
     upload.single('cv'),
     requestBodyValidation(CreateCandidateDto),
@@ -96,9 +96,18 @@ router.post(
 );
 
 router.post(
-  '/video/upload/:candidate_id',
+  '/video/:candidate_id',
   [upload.single('video'), requestParamsValidation(ValidateUrlParamsDto)],
   candidateController.uploadVideoToS3,
+);
+
+router.post(
+  '/url/validate',
+  [
+    requestQueryValidation(JwtValidationDto),
+    candidateAuth.validateCandidateJwt,
+  ],
+  candidateController.validateUrl,
 );
 
 /**
@@ -142,22 +151,13 @@ router.post(
  * }
  * */
 router.post(
-  '/url/create/:_id',
+  '/url/:_id',
   [
     authJwt.verifyJwt,
     requestParamsValidation(ValidateUrlParamsDto),
     candidateAuth.verifyCandidateExistsBeforeUrlGeneration,
   ],
   candidateController.generateUniqueUrl,
-);
-
-router.post(
-  '/url/validate',
-  [
-    requestQueryValidation(JwtValidationDto),
-    candidateAuth.validateCandidateJwt,
-  ],
-  candidateController.validateUrl,
 );
 
 /**
@@ -201,7 +201,7 @@ router.post(
  * }
  * */
 router.put(
-  '/info/update/:_id',
+  '/:_id',
   [
     requestParamsValidation(ValidateUrlParamsDto),
     requestBodyValidation(UpdateCandidateInfoDto),
@@ -210,13 +210,13 @@ router.put(
 );
 
 router.put(
-  '/status/update/:_id',
+  '/status/:_id',
   [authJwt.verifyJwt, requestBodyValidation(UpdateStatusDto)],
   candidateController.updateStatus,
 );
 
 router.put(
-  '/conclusions/set/:_id',
+  '/conclusions/:_id',
   [authJwt.verifyJwt],
   candidateController.updateConclusions,
 );
