@@ -1,17 +1,12 @@
 /* eslint-disable no-underscore-dangle */
-import jwt from 'jsonwebtoken';
 import { OAuth2Client } from 'google-auth-library';
 import { IUser } from '../db/schemas/interfaces/User';
 import { envConfig } from '../config';
 import { DataStoredInToken } from '../interfaces';
+import { jwtOptsSign, jwtOptsDecode } from '../utils/jwtOpts';
 import ICandidate from '../db/schemas/interfaces/ICandidate.interface';
 
-const {
-  JWT_ACCESS_TOKEN_SECRET,
-  JWT_REFRESH_TOKEN_SECRET,
-  JWT_VIDEO_TOKEN_SECRET,
-  GOOGLE_CLIENT_ID,
-} = envConfig;
+const { GOOGLE_CLIENT_ID } = envConfig;
 
 export function createToken(
   data: IUser | ICandidate,
@@ -24,34 +19,17 @@ export function createToken(
     url_id: short_url as string,
   };
 
-  if (tokenType === 'access') {
-    return jwt.sign(dataStoredInToken, JWT_ACCESS_TOKEN_SECRET, {
-      expiresIn,
-    });
-  }
-
-  if (tokenType === 'video') {
-    return jwt.sign(dataStoredInToken, JWT_VIDEO_TOKEN_SECRET, {
-      expiresIn,
-    });
-  }
-
-  return jwt.sign(dataStoredInToken, JWT_REFRESH_TOKEN_SECRET, { expiresIn });
+  return jwtOptsSign[tokenType as keyof typeof jwtOptsSign](
+    dataStoredInToken,
+    expiresIn,
+  );
 }
 
 export function decodeToken(
   token: string,
   tokenType: string,
 ): DataStoredInToken {
-  if (tokenType === 'access') {
-    return jwt.verify(token, JWT_ACCESS_TOKEN_SECRET) as DataStoredInToken;
-  }
-
-  if (tokenType === 'video') {
-    return jwt.verify(token, JWT_VIDEO_TOKEN_SECRET) as DataStoredInToken;
-  }
-
-  return jwt.verify(token, JWT_REFRESH_TOKEN_SECRET) as DataStoredInToken;
+  return jwtOptsDecode[tokenType as keyof typeof jwtOptsDecode](token);
 }
 
 export const verifyGoogleToken = async (token: string) => {
