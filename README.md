@@ -21,8 +21,8 @@ AWS_BUCKET_REGION=us-east-2
 AWS_VIDEO_BUCKET_NAME=videorecorderbucket
 AWS_CV_BUCKET_NAME=candidatescvbucket
 
-MONGODB_PRODUCTION_URI=mongodb+srv://nachohotz2:sempron3amd18@cluster0.ywin2.mongodb.net/videoInterview
-MONGODB_STAGING_URI=mongodb+srv://nachohotz2:sempron3amd18@cluster0.ywin2.mongodb.net/videoInterview-staging
+MONGODB_PRODUCTION_URI=mongodb+srv://devftf:fulltimeforcedevmongoworkat@cluster0.ywin2.mongodb.net/videoInterview
+MONGODB_STAGING_URI=mongodb+srv://devftf:fulltimeforcedevmongoworkat@cluster0.ywin2.mongodb.net/videoInterview-staging
 MONGODB_DEVELOPMENT_URI=mongodb://localhost:27017/videoInterview
 
 REDIRECT_URL_DEVELOPMENT=http://localhost:3000
