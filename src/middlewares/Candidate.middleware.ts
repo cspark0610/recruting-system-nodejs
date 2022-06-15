@@ -146,7 +146,7 @@ export async function validateCV(
   const cv = req.file;
 
   if (!cv) {
-    return next(new BadRequestException('No cv was provided'));
+    return next(new BadRequestException('You must add your resume'));
   }
 
   if (cv.mimetype !== 'application/pdf') {
