@@ -1,7 +1,7 @@
 /* eslint-disable prefer-arrow-callback */
-import { Schema, model } from 'mongoose';
-import bcrypt from 'bcrypt';
-import { IUser, UserModel } from './interfaces/User';
+import { Schema, model } from "mongoose";
+import { hashSync, compareSync } from "bcryptjs";
+import { IUser, UserModel } from "./interfaces/User";
 
 /**
  * @openapi
@@ -142,62 +142,58 @@ import { IUser, UserModel } from './interfaces/User';
  * */
 
 const UserSchema = new Schema<IUser, UserModel>(
-  {
-    name: {
-      type: String,
-      required: true,
-    },
+	{
+		name: {
+			type: String,
+			required: true,
+		},
 
-    email: {
-      type: String,
-      required: true,
-      unique: true,
-    },
+		email: {
+			type: String,
+			required: true,
+			unique: true,
+		},
 
-    password: {
-      type: String,
-      required: true,
-    },
+		password: {
+			type: String,
+			required: true,
+		},
 
-    picture: { type: String, required: false },
+		picture: { type: String, required: false },
 
-    refresh_token: { type: String, required: false },
+		refresh_token: { type: String, required: false },
 
-    position_name: {
-      type: String,
-      required: false,
-    },
+		position_name: {
+			type: String,
+			required: false,
+		},
 
-    phone: {
-      type: String,
-      required: false,
-    },
+		phone: {
+			type: String,
+			required: false,
+		},
 
-    role: { type: Schema.Types.ObjectId, ref: 'role', autopopulate: true },
+		role: { type: Schema.Types.ObjectId, ref: "role", autopopulate: true },
 
-    working_since: { type: String, required: false },
+		working_since: { type: String, required: false },
 
-    google_sign_in: { type: Boolean, required: false },
+		google_sign_in: { type: Boolean, required: false },
 
-    country: { type: String, required: false },
-  },
-  { versionKey: false },
+		country: { type: String, required: false },
+
+		google_id: { type: String, required: false },
+	},
+	{ versionKey: false }
 );
 
-UserSchema.plugin(require('mongoose-autopopulate'));
+UserSchema.plugin(require("mongoose-autopopulate"));
 
-UserSchema.static(
-  'hashPassword',
-  function hashPassword(password: string, salt: number) {
-    return bcrypt.hash(password, salt);
-  },
-);
+UserSchema.static("hashPassword", function hashPassword(password: string, salt: number) {
+	return hashSync(password, salt);
+});
 
-UserSchema.static(
-  'comparePassword',
-  function comparePassword(originalPassword, hashedPassword) {
-    return bcrypt.compare(originalPassword, hashedPassword);
-  },
-);
+UserSchema.static("comparePassword", function comparePassword(originalPassword, hashedPassword) {
+	return compareSync(originalPassword, hashedPassword);
+});
 
-export default model<IUser, UserModel>('user', UserSchema);
+export default model<IUser, UserModel>("user", UserSchema);

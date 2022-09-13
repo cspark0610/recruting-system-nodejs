@@ -1,20 +1,34 @@
-import { Router } from 'express';
+import { Router } from "express";
 import {
-  CreateUserDto,
-  UpdateUserInfoDto,
-  UpdatePasswordDto,
-  UserSignInParamsDto,
-} from '../db/schemas/dtos/User';
-import {
-  requestBodyValidation,
-  requestParamsValidation,
-} from '../middlewares/validators/requests';
-import * as userController from '../controllers/user.controller';
-import * as userAuth from '../middlewares/User.middleware';
-import * as authJwt from '../middlewares/authJwt.middleware';
-import ValidateUrlParamsDto from '../db/schemas/dtos/ValidateUrlParams.dto';
+	CreateUserDto,
+	UpdateUserInfoDto,
+	UpdatePasswordDto,
+	UserSignInParamsDto,
+} from "../db/schemas/dtos/User";
+import { requestBodyValidation, requestParamsValidation } from "../middlewares/validators/requests";
+import * as userController from "../controllers/user.controller";
+import * as userAuth from "../middlewares/User.middleware";
+import * as authJwt from "../middlewares/authJwt.middleware";
+import ValidateUrlParamsDto from "../db/schemas/dtos/ValidateUrlParams.dto";
+const passport = require("passport");
 
 const router = Router();
+
+/**
+ * consent screen
+ */
+router.get(
+	"/auth/google",
+	passport.authenticate("google", {
+		scope: ["profile", "email"],
+	})
+);
+/**
+ * passport.authenticate("google") callback
+ */
+router.get("/auth/google/callback", passport.authenticate("google"), (req, res) => {
+	res.redirect("/apply");
+});
 
 /**
  * @openapi
@@ -26,7 +40,7 @@ const router = Router();
  * ]
  * */
 
-router.get('/', [authJwt.verifyJwt], userController.getAllUsers);
+router.get("/", [authJwt.verifyJwt], userController.getAllUsers);
 
 /**
  * @openapi
@@ -66,11 +80,7 @@ router.get('/', [authJwt.verifyJwt], userController.getAllUsers);
  *  },
  * }
  * */
-router.post(
-  '/signIn',
-  [requestBodyValidation(UserSignInParamsDto)],
-  userController.signIn,
-);
+router.post("/signIn", [requestBodyValidation(UserSignInParamsDto)], userController.signIn);
 
 /**
  * @openapi
@@ -112,46 +122,38 @@ router.post(
  *
  * */
 router.post(
-  '/signUp',
-  [requestBodyValidation(CreateUserDto), userAuth.validateSignUp],
-  userController.signUp,
+	"/signUp",
+	[requestBodyValidation(CreateUserDto), userAuth.validateSignUp],
+	userController.signUp
 );
 
-router.post('/signOut', userController.signOut);
+router.post("/signOut", userController.signOut);
 
-router.post(
-  '/token/refresh',
-  authJwt.verifyRefreshJwt,
-  userController.refreshToken,
+router.post("/token/refresh", authJwt.verifyRefreshJwt, userController.refreshToken);
+
+router.put(
+	"/:_id",
+	[authJwt.verifyJwt, requestBodyValidation(UpdateUserInfoDto)],
+	userController.updateInfo
 );
 
 router.put(
-  '/:_id',
-  [authJwt.verifyJwt, requestBodyValidation(UpdateUserInfoDto)],
-  userController.updateInfo,
+	"/role/:_id",
+	[
+		authJwt.verifyJwt,
+		authJwt.authRole({ CEO: "CEO" }),
+		requestParamsValidation(ValidateUrlParamsDto),
+		userAuth.validateNewRole,
+	],
+	userController.changeRole
 );
 
 router.put(
-  '/role/:_id',
-  [
-    authJwt.verifyJwt,
-    authJwt.authRole({ CEO: 'CEO' }),
-    requestParamsValidation(ValidateUrlParamsDto),
-    userAuth.validateNewRole,
-  ],
-  userController.changeRole,
+	"/password/:_id",
+	[authJwt.verifyJwt, requestBodyValidation(UpdatePasswordDto), userAuth.validateNewPassword],
+	userController.resetPassword
 );
 
-router.put(
-  '/password/:_id',
-  [
-    authJwt.verifyJwt,
-    requestBodyValidation(UpdatePasswordDto),
-    userAuth.validateNewPassword,
-  ],
-  userController.resetPassword,
-);
-
-router.delete('/:_id', [authJwt.verifyJwt], userController.deleteUser);
+router.delete("/:_id", [authJwt.verifyJwt], userController.deleteUser);
 
 export default router;
