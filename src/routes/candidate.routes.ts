@@ -75,7 +75,7 @@ router.get("/video/:key", authJwt.verifyJwt, candidateController.getVideoFromS3)
  * }
  * */
 router.post(
-	"/",
+	"/create",
 	[
 		upload.single("cv"),
 		requestBodyValidation(CreateCandidateDto),
