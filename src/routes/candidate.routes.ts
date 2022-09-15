@@ -190,7 +190,7 @@ router.post(
  * }
  * */
 router.put(
-	"/:_id",
+	"/info/update/:_id",
 	[requestParamsValidation(ValidateUrlParamsDto), requestBodyValidation(UpdateCandidateInfoDto)],
 	candidateController.updateInfo
 );
