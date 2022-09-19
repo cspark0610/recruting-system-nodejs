@@ -5,11 +5,12 @@ import { envConfig } from "../config";
 import { DataStoredInToken } from "../interfaces";
 import { jwtOptsSign, jwtOptsDecode } from "../utils/jwtOpts";
 import ICandidate from "../db/schemas/interfaces/ICandidate.interface";
+import IPostulation from "../db/schemas/interfaces/IPostulation.interface";
 
 const { GOOGLE_CLIENT_ID } = envConfig;
 
 export function createToken(
-	data: IUser | ICandidate,
+	data: IUser | ICandidate | IPostulation,
 	expiresIn: string,
 	tokenType: string,
 	short_url?: string

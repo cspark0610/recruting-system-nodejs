@@ -3,25 +3,33 @@
 /* eslint-disable no-underscore-dangle */
 import { NextFunction } from "express";
 import { createReadStream } from "fs";
-import { createToken } from "../lib/jwt";
-import { UpdateCandidateInfoDto, UpdateStatusDto } from "../db/schemas/dtos/Candidate";
-import { valid_main_status, valid_secondary_status } from "../config/constants";
+
+// utils
+// import { createToken } from "../lib/jwt";
 import { envConfig, s3 } from "../config";
+
+// exceptions
 import { InternalServerException } from "../exceptions";
-import { File, UploadParams, IConclusions } from "../interfaces";
+
+//schemas
 import Candidate from "../db/schemas/Candidate.schema";
-import ICandidate from "../db/schemas/interfaces/ICandidate.interface";
-import Position from "../db/schemas/Position.schema";
+import Postulation from "../db/schemas/Postulation.schema";
 import User from "../db/schemas/User.schema";
-import VideoRecordingUrl from "../db/schemas/VideoRecordingUrl.schema";
+import Position from "../db/schemas/Position.schema";
+//import VideoRecordingUrl from "../db/schemas/VideoRecordingUrl.schema";
+
+//interfaces
+import { File, UploadParams, IConclusions } from "../interfaces";
+//import ICandidate from "../db/schemas/interfaces/ICandidate.interface";
+import ICandidateInfo from "../db/schemas/interfaces/ICandidateInfo.interface";
 
 const {
-	AWS_VIDEO_BUCKET_NAME,
+	// AWS_VIDEO_BUCKET_NAME,
 	AWS_CV_BUCKET_NAME,
-	NODE_ENV,
-	REDIRECT_URL_DEVELOPMENT,
-	REDIRECT_URL_PRODUCTION,
-	JWT_VIDEO_TOKEN_EXP,
+	//NODE_ENV,
+	//REDIRECT_URL_DEVELOPMENT,
+	//REDIRECT_URL_PRODUCTION,
+	//JWT_VIDEO_TOKEN_EXP,
 } = envConfig;
 
 export const GetAllCandidates = async (next: NextFunction) => {
@@ -82,24 +90,60 @@ export const GetOneCandidate = async (_id: string, next: NextFunction) => {
 	}
 };
 
-export const Create = async (candidateInfo: ICandidate, next: NextFunction) => {
+export const Create = async (candidateInfo: ICandidateInfo, next: NextFunction) => {
 	try {
-		let position = await Position.findById(candidateInfo.position);
+		const position = await Position.findById(candidateInfo.position);
 		const designatedUsers = await User.find({
 			_id: { $in: position?.designated },
 		});
 
-		const userNames = designatedUsers.map((user) => user.name);
+		const userNames = designatedUsers.length > 0 && designatedUsers.map((user) => user.name);
+
+		const previousPostulations = [];
+		const queryEmailObj = {
+			email: candidateInfo.email.trim(),
+		};
+		const previousCandidate = await Candidate.findOne(queryEmailObj);
+
+		previousCandidate &&
+			previousCandidate.postulations.forEach((postulation) => {
+				previousPostulations.push(postulation);
+			});
+
+		//create new Postulation
+		const newPostulation = await Postulation.create({
+			position: position._id,
+			linkedin: candidateInfo.linkedin,
+			portfolio: candidateInfo.portfolio,
+			main_status: "interested",
+			secondary_status: "new entry",
+		});
+
+		if (previousCandidate) {
+			const previousCandidateUpdated = await Candidate.findByIdAndUpdate(
+				previousCandidate._id,
+				{ ...candidateInfo, postulations: [...previousPostulations, newPostulation] },
+				{ new: true }
+			);
+			return previousCandidateUpdated;
+		}
 
 		const newCandidate = await Candidate.create({
 			...candidateInfo,
-			main_status: "interested",
-			secondary_status: "new entry",
-			videos_question_list: position?.video_questions_list,
+			position,
 			designated_recruiters: userNames,
+			videos_question_list: position?.video_questions_list,
 		});
-
-		return newCandidate;
+		const updatedCandidate = await Candidate.findByIdAndUpdate(
+			newCandidate._id,
+			{
+				$push: {
+					postulations: { ...newPostulation },
+				},
+			},
+			{ new: true }
+		);
+		return updatedCandidate;
 	} catch (e: any) {
 		return next(
 			new InternalServerException(
@@ -109,61 +153,65 @@ export const Create = async (candidateInfo: ICandidate, next: NextFunction) => {
 	}
 };
 
-export const UpdateInfo = async (
-	_id: string,
-	newCandidateInfo: UpdateCandidateInfoDto,
-	next: NextFunction
-) => {
-	try {
-		await Candidate.findByIdAndUpdate(_id, newCandidateInfo);
-	} catch (e: any) {
-		return next(
-			new InternalServerException(
-				`There was an unexpected error with the candidate info update service. ${e.message}`
-			)
-		);
-	}
-};
+/** NO SE USA */
+// export const UpdateInfo = async (
+// 	_id: string,
+// 	newCandidateInfo: UpdateCandidateInfoDto,
+// 	next: NextFunction
+// ) => {
+// 	try {
+// 		const foundCandidate = await Candidate.findById(_id);
 
-export const UpdateStatus = async (_id: string, newStatus: UpdateStatusDto, next: NextFunction) => {
-	try {
-		if (newStatus.secondary_status === valid_secondary_status[valid_secondary_status.length - 1]) {
-			const currentCandidate = await Candidate.findById(_id);
-			const newMainStatus = valid_main_status.indexOf(currentCandidate!.main_status!) + 1;
+// 		await Candidate.findByIdAndUpdate(_id, newCandidateInfo, { new: true });
+// 	} catch (e: any) {
+// 		return next(
+// 			new InternalServerException(
+// 				`There was an unexpected error with the candidate info update service. ${e.message}`
+// 			)
+// 		);
+// 	}
+// };
 
-			if (currentCandidate?.main_status! !== valid_main_status[valid_main_status.length - 1]) {
-				await Candidate.findByIdAndUpdate(_id, {
-					main_status: valid_main_status[newMainStatus],
-					secondary_status: valid_secondary_status[0],
-				});
+/** NO SE USA */
+// export const UpdateStatus = async (_id: string, newStatus: UpdateStatusDto, next: NextFunction) => {
+// 	try {
+// 		if (newStatus.secondary_status === valid_secondary_status[valid_secondary_status.length - 1]) {
+// 			const currentCandidate = await Candidate.findById(_id);
+// 			const newMainStatus = valid_main_status.indexOf(currentCandidate!.main_status!) + 1;
 
-				return {
-					main_status: valid_main_status[newMainStatus],
-					secondary_status: valid_secondary_status[0],
-				};
-			}
+// 			if (currentCandidate?.main_status! !== valid_main_status[valid_main_status.length - 1]) {
+// 				await Candidate.findByIdAndUpdate(_id, {
+// 					main_status: valid_main_status[newMainStatus],
+// 					secondary_status: valid_secondary_status[0],
+// 				});
 
-			await Candidate.findByIdAndUpdate(_id, {
-				secondary_status: newStatus.secondary_status,
-			});
+// 				return {
+// 					main_status: valid_main_status[newMainStatus],
+// 					secondary_status: valid_secondary_status[0],
+// 				};
+// 			}
 
-			return {
-				main_status: currentCandidate!.main_status!,
-				secondary_status: newStatus.secondary_status,
-			};
-		}
+// 			await Candidate.findByIdAndUpdate(_id, {
+// 				secondary_status: newStatus.secondary_status,
+// 			});
 
-		await Candidate.findByIdAndUpdate(_id, newStatus);
+// 			return {
+// 				main_status: currentCandidate!.main_status!,
+// 				secondary_status: newStatus.secondary_status,
+// 			};
+// 		}
 
-		return newStatus;
-	} catch (e: any) {
-		return next(
-			new InternalServerException(
-				`There was an unexpected error with the candidate status update service. ${e.message}`
-			)
-		);
-	}
-};
+// 		await Candidate.findByIdAndUpdate(_id, newStatus);
+
+// 		return newStatus;
+// 	} catch (e: any) {
+// 		return next(
+// 			new InternalServerException(
+// 				`There was an unexpected error with the candidate status update service. ${e.message}`
+// 			)
+// 		);
+// 	}
+// };
 
 export const UpdateConclusions = async (
 	_id: string,
@@ -186,88 +234,93 @@ export const UpdateConclusions = async (
 	}
 };
 
-export const GenerateUrl = async (candidate: ICandidate, next: NextFunction) => {
-	try {
-		const newUrl = await VideoRecordingUrl.create({});
-		const token = createToken(candidate, JWT_VIDEO_TOKEN_EXP, "video", newUrl.short_url);
+/**
+ * PARA GENERAR EL url_link2 y le actualiza al Candidate el campol url_link2 y genera un docuemnto nuevo en la collecion video_recording_url
+	 TRASLADADO A Postulation.Service
+*/
 
-		const url =
-			NODE_ENV === "development"
-				? `${REDIRECT_URL_DEVELOPMENT}/welcome?token=${token} `
-				: `${REDIRECT_URL_PRODUCTION}/welcome?token=${token} `;
+// export const GenerateUrl = async (candidate: ICandidate, next: NextFunction) => {
+// 	try {
+// 		const newUrl = await VideoRecordingUrl.create({});
+// 		const token = createToken(candidate, JWT_VIDEO_TOKEN_EXP, "video", newUrl.short_url);
 
-		const candidateUpdated = await Candidate.findByIdAndUpdate(candidate._id, {
-			video_recording_url: newUrl._id,
-			url_link_2: url,
-		});
+// 		const url =
+// 			NODE_ENV === "development"
+// 				? `${REDIRECT_URL_DEVELOPMENT}/welcome?token=${token} `
+// 				: `${REDIRECT_URL_PRODUCTION}/welcome?token=${token} `;
 
-		return token;
-	} catch (e: any) {
-		next(
-			new InternalServerException(
-				`There was an unexpected error with the url creation service. ${e.message}`
-			)
-		);
-	}
-};
+// 		const candidateUpdated = await Candidate.findByIdAndUpdate(candidate._id, {
+// 			video_recording_url: newUrl._id,
+// 			url_link_2: url,
+// 		});
 
-export const GetVideoFromS3 = (key: string, next: NextFunction) => {
-	try {
-		const getParams = {
-			Bucket: AWS_VIDEO_BUCKET_NAME,
-			Key: key,
-		};
+// 		return token;
+// 	} catch (e: any) {
+// 		next(
+// 			new InternalServerException(
+// 				`There was an unexpected error with the url creation service. ${e.message}`
+// 			)
+// 		);
+// 	}
+// };
 
-		return s3.getObject(getParams).createReadStream();
-	} catch (e: any) {
-		return next(
-			new InternalServerException(
-				`There was an unexpected error with the video download service. ${e.message}`
-			)
-		);
-	}
-};
+// export const GetVideoFromS3 = (key: string, next: NextFunction) => {
+// 	try {
+// 		const getParams = {
+// 			Bucket: AWS_VIDEO_BUCKET_NAME,
+// 			Key: key,
+// 		};
 
-export const UploadVideoToS3 = async (file: File, next: NextFunction) => {
-	try {
-		const fileStream = createReadStream(file.path);
+// 		return s3.getObject(getParams).createReadStream();
+// 	} catch (e: any) {
+// 		return next(
+// 			new InternalServerException(
+// 				`There was an unexpected error with the video download service. ${e.message}`
+// 			)
+// 		);
+// 	}
+// };
 
-		const uploadParams: UploadParams = {
-			Bucket: AWS_VIDEO_BUCKET_NAME,
-			Body: fileStream,
-			Key: file.filename,
-		};
+// export const UploadVideoToS3 = async (file: File, next: NextFunction) => {
+// 	try {
+// 		const fileStream = createReadStream(file.path);
 
-		return await s3.upload(uploadParams).promise();
-	} catch (e: any) {
-		next(
-			new InternalServerException(
-				`There was an unexpected error with the video upload service. ${e.message}`
-			)
-		);
-	}
-};
+// 		const uploadParams: UploadParams = {
+// 			Bucket: AWS_VIDEO_BUCKET_NAME,
+// 			Body: fileStream,
+// 			Key: file.filename,
+// 		};
 
-export const SaveVideoKey = async (
-	question_id: number,
-	id: string,
-	next: NextFunction,
-	video_key: string
-) => {
-	try {
-		await Candidate.findOneAndUpdate(
-			{ _id: id, $and: [{ "videos_question_list.question_id": question_id }] },
-			{ $set: { "videos_question_list.$.video_key": video_key } },
-			{ upsert: true }
-		);
-	} catch (e: any) {
-		return next(
-			new InternalServerException(
-				`There was an unexpected error with the candidate question and video key setting service. ${e.message}`
-			)
-		);
-	}
-};
+// 		return await s3.upload(uploadParams).promise();
+// 	} catch (e: any) {
+// 		next(
+// 			new InternalServerException(
+// 				`There was an unexpected error with the video upload service. ${e.message}`
+// 			)
+// 		);
+// 	}
+// };
+
+// export const SaveVideoKey = async (
+// 	question_id: number,
+// 	id: string,
+// 	next: NextFunction,
+// 	video_key: string
+// ) => {
+// 	try {
+// 		await Candidate.findOneAndUpdate(
+// 			{ _id: id, $and: [{ "videos_question_list.question_id": question_id }] },
+// 			{ $set: { "videos_question_list.$.video_key": video_key } },
+// 			{ upsert: true }
+// 		);
+// 	} catch (e: any) {
+// 		return next(
+// 			new InternalServerException(
+// 				`There was an unexpected error with the candidate question and video key setting service. ${e.message}`
+// 			)
+// 		);
+// 	}
+// };
 
 export const GetCV = async (key: string, next: NextFunction) => {
 	try {
@@ -321,14 +374,17 @@ export const SetIsRejected = async (_id: string, next: NextFunction) => {
 	}
 };
 
-export const DisableUrl = async (short_url: string, next: NextFunction): Promise<void> => {
-	try {
-		await VideoRecordingUrl.findOneAndUpdate({ short_url }, { isDisabled: true });
-	} catch (e: any) {
-		return next(
-			new InternalServerException(
-				`There was an unexpected error with the url deletion service. ${e.message}`
-			)
-		);
-	}
-};
+/**
+ * TRASLADADO A Postulation.Service
+ */
+// export const DisableUrl = async (short_url: string, next: NextFunction): Promise<void> => {
+// 	try {
+// 		await VideoRecordingUrl.findOneAndUpdate({ short_url }, { isDisabled: true });
+// 	} catch (e: any) {
+// 		return next(
+// 			new InternalServerException(
+// 				`There was an unexpected error with the url deletion service. ${e.message}`
+// 			)
+// 		);
+// 	}
+// };

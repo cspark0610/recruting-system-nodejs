@@ -9,7 +9,8 @@ import { requestBodyValidation, requestParamsValidation } from "../middlewares/v
 import * as userController from "../controllers/user.controller";
 import * as userAuth from "../middlewares/User.middleware";
 import * as authJwt from "../middlewares/authJwt.middleware";
-import ValidateUrlParamsDto from "../db/schemas/dtos/ValidateUrlParams.dto";
+import ValidateRoleUrlParamsDto from "../db/schemas/dtos/ValidateRoleUrlParams.dto";
+
 const passport = require("passport");
 
 const router = Router();
@@ -26,9 +27,9 @@ router.get(
 /**
  * passport.authenticate("google") callback
  */
-router.get("/auth/google/callback", passport.authenticate("google"), (req, res) => {
-	res.redirect("/apply");
-});
+// router.get("/auth/google/callback", passport.authenticate("google"), (req, res) => {
+// 	res.redirect("/apply");
+// });
 
 /**
  * @openapi
@@ -142,7 +143,7 @@ router.put(
 	[
 		authJwt.verifyJwt,
 		authJwt.authRole({ CEO: "CEO" }),
-		requestParamsValidation(ValidateUrlParamsDto),
+		requestParamsValidation(ValidateRoleUrlParamsDto),
 		userAuth.validateNewRole,
 	],
 	userController.changeRole

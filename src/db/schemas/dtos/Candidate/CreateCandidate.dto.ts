@@ -1,32 +1,59 @@
 /* eslint-disable object-curly-newline */
 /* eslint-disable indent */
-import { IsString, IsNotEmpty, IsEmail, IsNumberString } from 'class-validator';
-import ICandidate from '../../interfaces/ICandidate.interface';
+import {
+	IsString,
+	IsNotEmpty,
+	IsEmail,
+	IsNumberString,
+	IsOptional,
+	MaxLength,
+} from "class-validator";
+
+// import ICandidate from "../../interfaces/ICandidate.interface";
 
 // eslint-disable-next-line import/prefer-default-export
-export class CreateCandidateDto implements ICandidate {
-  @IsNotEmpty()
-  @IsString()
-  name!: string;
+//implements ICandidate
+export class CreateCandidateDto {
+	@IsNotEmpty()
+	@IsString()
+	name!: string;
 
-  @IsNotEmpty()
-  @IsString()
-  @IsEmail()
-  email!: string;
+	@IsNotEmpty()
+	@IsString()
+	@IsEmail()
+	email!: string;
 
-  @IsNotEmpty()
-  @IsNumberString()
-  phone!: number;
+	@IsNotEmpty()
+	@IsNumberString()
+	@MaxLength(9)
+	phone!: string;
 
-  @IsNotEmpty()
-  @IsString()
-  english_level!: string;
+	@IsNotEmpty()
+	@IsString()
+	position!: string;
 
-  @IsString()
-  @IsNotEmpty()
-  birth_date!: string;
+	@IsNotEmpty()
+	@IsString()
+	english_level!: string;
 
-  @IsNotEmpty()
-  @IsString()
-  country!: string;
+	@IsNotEmpty()
+	@IsString()
+	country!: string;
+
+	@IsString()
+	@IsNotEmpty()
+	birth_date!: string;
+
+	@IsString()
+	@IsNotEmpty()
+	linkedin!: string;
+
+	@IsString()
+	//@IsNotEmpty()
+	@IsOptional()
+	portfolio?: string;
+
+	@IsString()
+	@IsNotEmpty()
+	terms!: string;
 }

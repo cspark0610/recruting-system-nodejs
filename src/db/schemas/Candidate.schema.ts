@@ -1,11 +1,11 @@
-import { Schema, model, Types } from 'mongoose';
+import { Schema, model, Types } from "mongoose";
 import {
-  valid_academic_trainings,
-  valid_english_levels,
-  valid_main_status,
-  valid_secondary_status,
-} from '../../config';
-import ICandidate from './interfaces/ICandidate.interface';
+	valid_academic_trainings,
+	valid_english_levels,
+	// valid_main_status,
+	// valid_secondary_status,
+} from "../../config";
+import ICandidate from "./interfaces/ICandidate.interface";
 
 /**
  * @openapi
@@ -371,118 +371,87 @@ import ICandidate from './interfaces/ICandidate.interface';
  * }
  * */
 const CandidateSchema = new Schema<ICandidate>(
-  {
-    name: { type: String, required: true },
+	{
+		name: { type: String, required: true },
 
-    email: { type: String, required: true },
+		email: { type: String, required: true },
 
-    phone: { type: Number, required: true },
+		phone: { type: Number, required: true },
 
-    country: { type: String, required: true },
+		country: { type: String, required: true },
 
-    academic_training: {
-      type: String,
-      enum: valid_academic_trainings,
-      required: false,
-    },
+		academic_training: {
+			type: String,
+			enum: valid_academic_trainings,
+			required: false,
+		},
 
-    salary_expectations: { type: String, required: false },
+		available_from: { type: String, required: false },
 
-    available_from: { type: String, required: false },
+		english_level: { type: String, enum: valid_english_levels, required: true },
 
-    english_level: { type: String, enum: valid_english_levels, required: true },
+		birth_date: { type: String, required: true },
 
-    skills: { type: [String], required: false },
+		conclusions: {
+			good: {
+				type: [
+					{
+						comment: String,
+						context: String,
+						user: {
+							_id: Types.ObjectId,
+							name: String,
+							email: String,
+							picture: String,
+						},
+					},
+				],
+				required: false,
+			},
 
-    linkedin: { type: String, required: false },
+			bad: {
+				type: [
+					{
+						comment: String,
+						context: String,
+						user: {
+							_id: Types.ObjectId,
+							name: String,
+							email: String,
+							picture: String,
+						},
+					},
+				],
+				required: false,
+			},
+		},
 
-    portfolio: { type: String, required: false },
+		position: {
+			type: Schema.Types.ObjectId,
+			ref: "position",
+			autopopulate: true,
+		},
 
-    working_reason: { type: String, required: false },
+		postulations: {
+			type: [Schema.Types.ObjectId],
+			ref: "postulation",
+			default: [],
+			autopopulate: true,
+		},
 
-    birth_date: { type: String, required: true },
+		designated_recruiters: { type: [String], required: false, default: [] },
 
-    conclusions: {
-      good: {
-        type: [
-          {
-            comment: String,
-            context: String,
-            user: {
-              _id: Types.ObjectId,
-              name: String,
-              email: String,
-              picture: String,
-            },
-          },
-        ],
-        required: false,
-      },
+		cv: {
+			type: String,
+			required: true,
+		},
 
-      bad: {
-        type: [
-          {
-            comment: String,
-            context: String,
-            user: {
-              _id: Types.ObjectId,
-              name: String,
-              email: String,
-              picture: String,
-            },
-          },
-        ],
-        required: false,
-      },
-    },
+		isRejected: { type: Boolean, required: true, default: false },
+	},
 
-    main_status: {
-      type: String,
-      enum: valid_main_status,
-      required: true,
-    },
-
-    secondary_status: {
-      type: String,
-      enum: valid_secondary_status,
-      required: true,
-    },
-
-    position: {
-      type: Schema.Types.ObjectId,
-      ref: 'position',
-      autopopulate: true,
-    },
-
-    designated_recruiters: { type: [String], required: false },
-
-    video_recording_url: {
-      type: Schema.Types.ObjectId,
-      ref: 'video_recording_url',
-      autopopulate: true,
-    },
-
-    videos_question_list: [
-      {
-        question_id: Number,
-        question_title: String,
-        video_key: String,
-      },
-    ],
-
-    cv: {
-      type: String,
-      required: true,
-    },
-
-    isRejected: { type: Boolean, required: true, default: false },
-
-    url_link_2: { type: String, required: false },
-  },
-
-  { versionKey: false, timestamps: true },
+	{ versionKey: false, timestamps: true }
 );
 
-CandidateSchema.plugin(require('mongoose-autopopulate'));
+CandidateSchema.plugin(require("mongoose-autopopulate"));
 
-export default model<ICandidate>('candidate', CandidateSchema);
+export default model<ICandidate>("candidate", CandidateSchema);
