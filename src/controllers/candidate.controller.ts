@@ -7,6 +7,7 @@ import { decodeToken } from "../lib/jwt";
 import { CreateCandidateDto } from "../db/schemas/dtos/Candidate";
 import { NotFoundException, BadRequestException, InternalServerException } from "../exceptions";
 import * as candidateService from "../services/Candidate.Service";
+import * as postulationService from "../services/Postulation.Service";
 import { DataStoredInToken } from "../interfaces/DataStoredInToken.interface";
 
 const unlinkFile = promisify(unlink);
@@ -328,12 +329,15 @@ export const validateUrl = async (req: Request, res: Response, next: NextFunctio
 		const token = req.query.token as string;
 
 		const decoded: DataStoredInToken = decodeToken(token, "video");
-
-		const candidateInfo = await candidateService.GetOneCandidate(decoded._id, next);
+		const candidateInfo = await postulationService.GetCandidateByPostulationId(decoded._id, next);
+		//const postulationInfo = await postulationService.GetPostulationById(decoded._id, next);
 
 		return res.status(200).send({
 			status: 200,
-			decoded: { candidate: candidateInfo, url_id: decoded.url_id },
+			decoded: {
+				candidate: candidateInfo,
+				url_id: decoded.url_id,
+			},
 		});
 	} catch (e: any) {
 		return next(

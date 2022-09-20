@@ -80,7 +80,7 @@ export const GetCandidatesFiltered = async (
 
 export const GetOneCandidate = async (_id: string, next: NextFunction) => {
 	try {
-		return await Candidate.findById(_id);
+		return Candidate.findById(_id);
 	} catch (e: any) {
 		return next(
 			new InternalServerException(

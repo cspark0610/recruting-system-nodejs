@@ -42,6 +42,23 @@ export const GetPostulationById = async (_id: string, next: NextFunction) => {
 	}
 };
 
+export const GetCandidateByPostulationId = async (postulationId: string, next: NextFunction) => {
+	try {
+		const candidate = await Candidate.findOne({
+			postulations: {
+				$all: [`${postulationId}`],
+			},
+		});
+		return candidate;
+	} catch (e: any) {
+		return next(
+			new InternalServerException(
+				`There was an unexpected error with the GetCandidateByPostulationId service. ${e.message}`
+			)
+		);
+	}
+};
+
 export const Create = async (
 	postulationInfo: IPostulation,
 	next: NextFunction,
