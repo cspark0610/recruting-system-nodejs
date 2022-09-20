@@ -330,12 +330,13 @@ export const validateUrl = async (req: Request, res: Response, next: NextFunctio
 
 		const decoded: DataStoredInToken = decodeToken(token, "video");
 		const candidateInfo = await postulationService.GetCandidateByPostulationId(decoded._id, next);
-		//const postulationInfo = await postulationService.GetPostulationById(decoded._id, next);
+		const postulationInfo = await postulationService.GetPostulationById(decoded._id, next);
 
 		return res.status(200).send({
 			status: 200,
 			decoded: {
 				candidate: candidateInfo,
+				postulation: postulationInfo,
 				url_id: decoded.url_id,
 			},
 		});
