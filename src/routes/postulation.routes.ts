@@ -70,7 +70,7 @@ router.get("/video/:key", authJwt.verifyJwt, postulationController.getVideoFromS
  * ruta para crear un video en S3
  */
 router.post(
-	"/video/:postulation_id",
+	"/video/upload/:postulation_id",
 	[upload.single("video"), requestParamsValidation(ValidatePostulationUrlParams)],
 	postulationController.uploadVideoToS3
 );
