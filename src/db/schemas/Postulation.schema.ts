@@ -38,13 +38,23 @@ const PostulationSchema = new Schema(
 			autopopulate: true,
 		},
 
-		videos_question_list: [
-			{
-				question_id: Number,
-				question_title: String,
-				video_key: String,
-			},
-		],
+		// video_questions_list: [
+		// 	{
+		// 		question_id: Number,
+		// 		question_title: String,
+		// 		video_key: String,
+		// 	},
+		// ],
+		video_questions_list: {
+			type: [
+				{
+					question_id: Number,
+					question_title: String,
+					video_key: String,
+				},
+			],
+			required: false,
+		},
 
 		url_link_2: { type: String, required: false },
 	},

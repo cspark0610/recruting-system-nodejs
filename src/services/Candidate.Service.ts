@@ -4,6 +4,9 @@
 import { NextFunction } from "express";
 import { createReadStream } from "fs";
 
+//constants
+import { valid_video_question_titles } from "../config/constants";
+
 // utils
 // import { createToken } from "../lib/jwt";
 import { envConfig, s3 } from "../config";
@@ -90,6 +93,24 @@ export const GetOneCandidate = async (_id: string, next: NextFunction) => {
 	}
 };
 
+const createVideoQuestions = () => {
+	const video_question_1 = {
+		question_id: 1,
+		question_title: valid_video_question_titles[0],
+		video_key: "",
+	};
+	const video_question_2 = {
+		question_id: 2,
+		question_title: valid_video_question_titles[1],
+		video_key: "",
+	};
+
+	return {
+		video_question_1,
+		video_question_2,
+	};
+};
+
 export const Create = async (candidateInfo: ICandidateInfo, next: NextFunction) => {
 	try {
 		const position = await Position.findById(candidateInfo.position);
@@ -119,10 +140,22 @@ export const Create = async (candidateInfo: ICandidateInfo, next: NextFunction) 
 			secondary_status: "new entry",
 		});
 
+		const { video_question_1, video_question_2 } = createVideoQuestions();
+
+		const updatedPostulation = await Postulation.findOneAndUpdate(
+			{ _id: newPostulation._id },
+			{
+				$push: {
+					video_questions_list: { $each: [{ ...video_question_1 }, { ...video_question_2 }] },
+				},
+			},
+			{ new: true }
+		);
+
 		if (previousCandidate) {
 			const previousCandidateUpdated = await Candidate.findByIdAndUpdate(
 				previousCandidate._id,
-				{ ...candidateInfo, postulations: [...previousPostulations, newPostulation] },
+				{ ...candidateInfo, postulations: [...previousPostulations, updatedPostulation] },
 				{ new: true }
 			);
 			return previousCandidateUpdated;
@@ -138,7 +171,7 @@ export const Create = async (candidateInfo: ICandidateInfo, next: NextFunction) 
 			newCandidate._id,
 			{
 				$push: {
-					postulations: { ...newPostulation },
+					postulations: { ...updatedPostulation },
 				},
 			},
 			{ new: true }

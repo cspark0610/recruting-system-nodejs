@@ -10,7 +10,7 @@ import { RequestExtended } from "../interfaces";
 // dtos
 import { UpdatePostulationInfoDto } from "../db/schemas/dtos/Candidate/UpdatePostulationInfoDto.dto";
 //schemas
-// import { UpdateStatusDto } from "../db/schemas/dtos/Candidate/UpdateStatusDto.dto";
+
 //services
 import * as postulationService from "../services/Postulation.Service";
 import { ManagedUpload } from "aws-sdk/lib/s3/managed_upload";
@@ -133,8 +133,6 @@ export const uploadVideoToS3 = async (req: Request, res: Response, next: NextFun
 				message: "Video uploaded successfully",
 			});
 		}
-		// await unlinkFile(newCandidateVideo.path);
-		// await postulationService.SaveVideoKey(question_id, postulation_id, next, result!.Key);
 	} catch (e: any) {
 		return next(
 			new InternalServerException(

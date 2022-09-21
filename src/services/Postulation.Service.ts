@@ -68,6 +68,7 @@ export const Create = async (
 		const newPostulation = await Postulation.create({
 			...postulationInfo,
 		});
+
 		return newPostulation;
 	} catch (e: any) {
 		return next(
@@ -233,8 +234,8 @@ export const SaveVideoKey = async (
 ) => {
 	try {
 		await Postulation.findOneAndUpdate(
-			{ _id: id, $and: [{ "videos_question_list.question_id": question_id }] },
-			{ $set: { "videos_question_list.$.video_key": video_key } },
+			{ _id: id, $and: [{ "video_questions_list.question_id": question_id }] },
+			{ $set: { "video_questions_list.$.video_key": video_key } },
 			{ upsert: true }
 		);
 	} catch (e: any) {
