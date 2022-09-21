@@ -1,10 +1,5 @@
 import { Schema, model, Types } from "mongoose";
-import {
-	valid_academic_trainings,
-	valid_english_levels,
-	// valid_main_status,
-	// valid_secondary_status,
-} from "../../config";
+import { valid_academic_trainings, valid_english_levels } from "../../config";
 import ICandidate from "./interfaces/ICandidate.interface";
 
 /**

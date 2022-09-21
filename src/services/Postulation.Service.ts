@@ -93,9 +93,13 @@ export const UpdateInfo = async (
 		});
 
 		if (candidate && foundPostulation) {
-			const { academic_training } = newPostulationInfo;
+			const { academic_training, available_from } = newPostulationInfo;
 			const promisesArr = [
-				Candidate.findByIdAndUpdate(candidate._id, { academic_training }, { new: true }),
+				Candidate.findByIdAndUpdate(
+					candidate._id,
+					{ academic_training, available_from },
+					{ new: true }
+				),
 				Postulation.findByIdAndUpdate(_id, newPostulationInfo, { new: true }),
 			];
 
