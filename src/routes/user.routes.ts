@@ -10,8 +10,7 @@ import * as userController from "../controllers/user.controller";
 import * as userAuth from "../middlewares/User.middleware";
 import * as authJwt from "../middlewares/authJwt.middleware";
 import ValidateRoleUrlParamsDto from "../db/schemas/dtos/ValidateRoleUrlParams.dto";
-
-const passport = require("passport");
+import passport from "passport";
 
 const router = Router();
 
@@ -24,12 +23,6 @@ router.get(
 		scope: ["profile", "email"],
 	})
 );
-/**
- * passport.authenticate("google") callback
- */
-// router.get("/auth/google/callback", passport.authenticate("google"), (req, res) => {
-// 	res.redirect("/apply");
-// });
 
 /**
  * @openapi

@@ -31,7 +31,7 @@ export const GetAllUsers = async (next: NextFunction) => {
 export const SignUp = async (userInfo: IUser, next: NextFunction) => {
 	try {
 		const hashedPassword = await User.hashPassword(userInfo.password, 12);
-		let foundRoles;
+		let foundRoles: any[];
 
 		// checks if the role that will be set to the user indeed exists
 		if (userInfo.role) {
@@ -96,7 +96,7 @@ export const SignUpGoogle = async (tokenId: string, next: NextFunction) => {
 				_id: userExists._id,
 				name: userExists.name,
 				email: userExists.email,
-				picture: userExists.picture,
+				picture: userExists?.picture,
 				position_name: userExists.position_name,
 				country: userExists.country,
 				phone: userExists.phone,
