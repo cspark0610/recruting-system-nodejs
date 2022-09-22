@@ -1,13 +1,15 @@
-import { CorsOptions } from 'cors';
-import { envConfig } from './env';
+import { CorsOptions } from "cors";
+import { envConfig } from "./env";
 
 const { NODE_ENV } = envConfig;
 
 export const corsOptions: CorsOptions = {
-  origin:
-    NODE_ENV === 'development'
-      ? 'http://localhost:3000'
-      : 'https://workat-five.vercel.app',
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+	origin: [
+		"http://localhost:3000",
+		"https://workat-five.vercel.app",
+		"https://fulltimeforce-video-interview.herokuapp.com",
+	],
+	// origin: NODE_ENV === "development" ? "http://localhost:3000" : "https://fulltimeforce-video-interview.herokuapp.com/",
+	// credentials: true,
+	// methods: ["GET", "POST", "PUT", "DELETE"],
 };
