@@ -9,10 +9,6 @@ import {
 	MaxLength,
 } from "class-validator";
 
-// import ICandidate from "../../interfaces/ICandidate.interface";
-
-// eslint-disable-next-line import/prefer-default-export
-//implements ICandidate
 export class CreateCandidateDto {
 	@IsNotEmpty()
 	@IsString()
@@ -45,11 +41,11 @@ export class CreateCandidateDto {
 	birth_date!: string;
 
 	@IsString()
-	@IsNotEmpty()
-	linkedin!: string;
+	//@IsNotEmpty()
+	@IsOptional()
+	linkedin?: string;
 
 	@IsString()
-	//@IsNotEmpty()
 	@IsOptional()
 	portfolio?: string;
 
