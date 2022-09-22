@@ -17,7 +17,7 @@ if (envConfig.NODE_ENV === "development") {
 
 app.use(express.urlencoded({ extended: true, limit: "25mb" }));
 app.use(express.json({ limit: "25mb" }));
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(cookieParser());
 app.use(helmet());
 
