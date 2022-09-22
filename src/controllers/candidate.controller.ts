@@ -350,17 +350,16 @@ export const validateUrl = async (req: Request, res: Response, next: NextFunctio
 export const setIsRejected = async (req: Request, res: Response, next: NextFunction) => {
 	try {
 		const { _id } = req.params;
-
 		await candidateService.SetIsRejected(_id, next);
 
 		return res.status(200).send({
 			status: 200,
-			message: "Candidate status updated successfully",
+			message: "Candidate rejected status updated successfully",
 		});
 	} catch (e: any) {
 		return next(
 			new InternalServerException(
-				`There was an error with the candidate status update controller. ${e.message}`
+				`There was an error with the setIsRejected method controller. ${e.message}`
 			)
 		);
 	}

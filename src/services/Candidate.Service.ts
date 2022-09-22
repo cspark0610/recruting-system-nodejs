@@ -392,14 +392,13 @@ export const UploadCV = async (cv: File, next: NextFunction) => {
 
 export const SetIsRejected = async (_id: string, next: NextFunction) => {
 	try {
-		const currentCandidateStatus = await Candidate.findById(_id);
 		await Candidate.findByIdAndUpdate(_id, {
-			isRejected: !currentCandidateStatus!.isRejected,
+			isRejected: true,
 		});
 	} catch (e: any) {
 		return next(
 			new InternalServerException(
-				`There was an unexpected error with the candidate rejection setting service. ${e.message}`
+				`There was an unexpected error with SetIsRejected method service. ${e.message}`
 			)
 		);
 	}

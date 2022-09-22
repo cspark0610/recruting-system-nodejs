@@ -80,13 +80,6 @@ router.post(
 
 router.post("/filter", authJwt.verifyJwt, candidateController.getCandidatesFiltered);
 
-/* SE LO PASA A Postulation.routes */
-// router.post(
-// 	"/video/:candidate_id",
-// 	[upload.single("video"), requestParamsValidation(ValidateRoleUrlParamsDto)],
-// 	candidateController.uploadVideoToS3
-// );
-
 /**
  * valida el token del url_link_2
  */
@@ -136,23 +129,6 @@ router.post(
  *  },
  * }
  * */
-/* VAMOS A ANULAR ESTA RUTA PORQUE ahora ESTA EN LA ruta de "/postulation/url/create/:_id" */
-// router.post(
-// 	"/url/create/:_id",
-// 	[
-// 		authJwt.verifyJwt,
-// 		requestParamsValidation(ValidateUrlParamsDto),
-// 		candidateAuth.verifyCandidateExistsBeforeUrlGeneration,
-// 	],
-// 	candidateController.generateUniqueUrl
-// );
-
-/* VAMOS A ANULAR ESTA RUTA PORQUE ESTA EN LA ruta de "/postulation/url/disable/:_id" */
-// router.put(
-// 	"/url/disable/:url_id",
-// 	candidateAuth.verifyCandidateUrlDisabled,
-// 	candidateController.disableUrl
-// );
 
 //@openapi
 /**
@@ -194,22 +170,15 @@ router.post(
  *  },
  * }
  * */
-/* VAMOS A ANULAR ESTA RUTA PORQUE ESTA EN LA ruta de "/postulation/info/update/:_id" */
-// router.put(
-// 	"/info/update/:_id",
-// 	[requestParamsValidation(ValidateUrlParamsDto), requestBodyValidation(UpdateCandidateInfoDto)],
-// 	candidateController.updateInfo
-// );
 
-/* VAMOS A ANULAR ESTA RUTA PORQUE ESTA EN LA ruta de "/postulation/status/update/:_id" */
-// router.put(
-// 	"/status/update/:_id",
-// 	[authJwt.verifyJwt, requestBodyValidation(UpdateStatusDto)],
-// 	candidateController.updateStatus
-// );
+/**
+ * ruta para actualizar el campo "conclusions" de un Candidate
+ */
+router.put("/conclusions/set/:_id", [authJwt.verifyJwt], candidateController.updateConclusions);
 
-router.put("/conclusions/:_id", [authJwt.verifyJwt], candidateController.updateConclusions);
-
+/**
+ * ruta para actualizar el campo "isRejected" de un Candidate a true
+ */
 router.put("/reject/:_id", [authJwt.verifyJwt], candidateController.setIsRejected);
 
 export default router;
