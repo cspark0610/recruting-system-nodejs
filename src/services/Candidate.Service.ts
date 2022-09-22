@@ -19,21 +19,13 @@ import Candidate from "../db/schemas/Candidate.schema";
 import Postulation from "../db/schemas/Postulation.schema";
 import User from "../db/schemas/User.schema";
 import Position from "../db/schemas/Position.schema";
-//import VideoRecordingUrl from "../db/schemas/VideoRecordingUrl.schema";
 
 //interfaces
 import { File, UploadParams, IConclusions } from "../interfaces";
 //import ICandidate from "../db/schemas/interfaces/ICandidate.interface";
 import ICandidateInfo from "../db/schemas/interfaces/ICandidateInfo.interface";
 
-const {
-	// AWS_VIDEO_BUCKET_NAME,
-	AWS_CV_BUCKET_NAME,
-	//NODE_ENV,
-	//REDIRECT_URL_DEVELOPMENT,
-	//REDIRECT_URL_PRODUCTION,
-	//JWT_VIDEO_TOKEN_EXP,
-} = envConfig;
+const { AWS_CV_BUCKET_NAME } = envConfig;
 
 export const GetAllCandidates = async (next: NextFunction) => {
 	try {
@@ -93,7 +85,11 @@ export const GetOneCandidate = async (_id: string, next: NextFunction) => {
 	}
 };
 
-const createVideoQuestions = () => {
+const createVideoQuestions = async (postulationId: string) => {
+	const postulation = await Postulation.findOne({
+		_id: postulationId,
+	});
+
 	const video_question_1 = {
 		question_id: 1,
 		question_title: valid_video_question_titles[0],
@@ -101,7 +97,7 @@ const createVideoQuestions = () => {
 	};
 	const video_question_2 = {
 		question_id: 2,
-		question_title: valid_video_question_titles[1],
+		question_title: valid_video_question_titles[1] + `${postulation.position["title"]}`,
 		video_key: "",
 	};
 
@@ -140,7 +136,9 @@ export const Create = async (candidateInfo: ICandidateInfo, next: NextFunction) 
 			secondary_status: "new entry",
 		});
 
-		const { video_question_1, video_question_2 } = createVideoQuestions();
+		const { video_question_1, video_question_2 } = await createVideoQuestions(
+			newPostulation._id.toString()
+		);
 
 		const updatedPostulation = await Postulation.findOneAndUpdate(
 			{ _id: newPostulation._id },

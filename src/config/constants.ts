@@ -11,7 +11,5 @@ export const valid_user_roles = ["CEO", "CTO", "RRHH ADMIN", "RRHH", "COMMON"];
 
 export const valid_video_question_titles = [
 	"Tell us about yourself briefly",
-	"Tell us about your experience with react",
-	"Tell us about your experience with node",
-	"Tell us about your experience with java",
+	"Tell us about your experience as ",
 ];
