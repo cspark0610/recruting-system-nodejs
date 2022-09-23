@@ -33,9 +33,10 @@ export const updateInfo = async (req: Request, res: Response, next: NextFunction
 };
 
 export const UpdatePostulationStatus = async (req: Request, res: Response, next: NextFunction) => {
-	const { _id } = req.params;
 	try {
-		const data = await postulationService.UpdatePostulationStatus(_id, { ...req.body }, next);
+		const { _id } = req.params;
+		const body = req.body;
+		const data = await postulationService.UpdatePostulationStatus(_id, body, next);
 
 		if (!data) {
 			return next(
