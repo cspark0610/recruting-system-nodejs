@@ -17,7 +17,23 @@ if (envConfig.NODE_ENV === "development") {
 
 app.use(express.urlencoded({ extended: true, limit: "25mb" }));
 app.use(express.json({ limit: "25mb" }));
-app.use(cors());
+app.use(cors(corsOptions));
+
+// app.use(
+// 	cors({
+// 		origin: "*",
+// 		methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
+// 		preflightContinue: false,
+// 	})
+// );
+
+// app.use(function (req, res, next) {
+// 	res.header("Access-Control-Allow-Origin", "*");
+// 	res.header("Access-Control-Allow-Methods", "DELETE, PUT, GET, POST, OPTIONS");
+// 	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+// 	next();
+// });
+
 app.use(cookieParser());
 app.use(helmet());
 

@@ -18,9 +18,8 @@ import { ManagedUpload } from "aws-sdk/lib/s3/managed_upload";
 export const updateInfo = async (req: Request, res: Response, next: NextFunction) => {
 	const { _id } = req.params;
 
-	const newPostulationInfo: UpdatePostulationInfoDto = { ...req.body };
-
 	try {
+		const newPostulationInfo: UpdatePostulationInfoDto = req.body;
 		await postulationService.UpdateInfo(_id, newPostulationInfo, next);
 
 		return res.status(200).send({ status: 200, message: "Postulation updated successfully" });
