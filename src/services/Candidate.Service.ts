@@ -48,7 +48,7 @@ export const GetCandidatesFiltered = async (
 	try {
 		if (query !== "") {
 			let re = new RegExp(query, "i");
-			console.log(re, "re");
+			//console.log(re, "re");
 			const result = await Candidate.find({
 				$or: [
 					{ position: { $in: position } },
