@@ -35,6 +35,9 @@ export const getAllCandidates = async (_req: Request, res: Response, next: NextF
 
 export const getCandidatesFiltered = async (req: Request, res: Response, next: NextFunction) => {
 	const { position, status, query } = req.body;
+	// console.log(position, "positon");
+	// console.log(status, "status");
+	// console.log(query, "query");
 
 	try {
 		const candidatesFiltered = await candidateService.GetCandidatesFiltered(

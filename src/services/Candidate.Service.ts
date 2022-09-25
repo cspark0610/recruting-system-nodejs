@@ -47,21 +47,25 @@ export const GetCandidatesFiltered = async (
 ) => {
 	try {
 		if (query !== "") {
-			return await Candidate.find({
+			let re = new RegExp(query, "i");
+			console.log(re, "re");
+			const result = await Candidate.find({
 				$or: [
 					{ position: { $in: position } },
-					{ secondary_status: { $in: status } },
-					{ name: { $regex: query, $options: "i" } },
-					{ skills: { $regex: query, $options: "i" } },
-					{ academic_training: { $regex: query, $options: "i" } },
-					{ english_level: { $regex: query, $options: "i" } },
-					{ country: { $regex: query, $options: "i" } },
-					{ designated_recruiters: { $regex: query, $options: "i" } },
+					{ name: { $regex: re } },
+					{ skills: { $regex: re } },
+					{ academic_training: { $regex: re } },
+					{ english_level: { $regex: re } },
+					{ country: { $regex: query } },
+					//{ designated_recruiters: { $regex: query } },
 				],
 			});
+			//console.log(result);
+
+			return result;
 		} else {
-			return await Candidate.find({
-				$or: [{ position: { $in: position } }, { secondary_status: { $in: status } }],
+			return Candidate.find({
+				position: { $in: position },
 			});
 		}
 	} catch (e: any) {
