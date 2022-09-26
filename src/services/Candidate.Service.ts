@@ -140,6 +140,16 @@ export const GetCandidatesFiltered = async (
 			});
 			return res;
 		}
+		//llega solo position & status
+		if (position.length && status.length && query === "") {
+			const res = await Candidate.find({
+				$or: [
+					{ "postulations.secondary_status": { $in: status } },
+					{ position: { $in: position } },
+				],
+			});
+			return res;
+		}
 	} catch (e: any) {
 		return next(
 			new InternalServerException(
