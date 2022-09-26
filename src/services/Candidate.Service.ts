@@ -24,6 +24,7 @@ import Position from "../db/schemas/Position.schema";
 import { File, UploadParams, IConclusions } from "../interfaces";
 //import ICandidate from "../db/schemas/interfaces/ICandidate.interface";
 import ICandidateInfo from "../db/schemas/interfaces/ICandidateInfo.interface";
+import ICandidate from "../db/schemas/interfaces/ICandidate.interface";
 
 const { AWS_CV_BUCKET_NAME } = envConfig;
 
@@ -46,27 +47,98 @@ export const GetCandidatesFiltered = async (
 	query: string
 ) => {
 	try {
-		if (query !== "") {
+		//llega status  & position & query
+		if (query !== "" && status.length && position.length) {
 			let re = new RegExp(query, "i");
-			//console.log(re, "re");
-			const result = await Candidate.find({
+			const res = await Candidate.find({
+				position: { $in: position },
+				"postulations.secondary_status": { $in: status },
 				$or: [
-					{ position: { $in: position } },
 					{ name: { $regex: re } },
-					{ skills: { $regex: re } },
 					{ academic_training: { $regex: re } },
+					{ available_from: { $regex: re } },
 					{ english_level: { $regex: re } },
-					{ country: { $regex: query } },
-					//{ designated_recruiters: { $regex: query } },
+					{ country: { $regex: re } },
+					{ designated_recruiters: { $all: [`${query}`] } },
 				],
 			});
-			//console.log(result);
+			return res;
+		}
 
+		// solo llega query
+		if (query !== "" && !status.length && !position.length) {
+			let re = new RegExp(query, "i");
+			const result = await Candidate.find({
+				$or: [
+					{ name: { $regex: re } },
+					{ academic_training: { $regex: re } },
+					{ available_from: { $regex: re } },
+					{ english_level: { $regex: re } },
+					{ country: { $regex: re } },
+					{ designated_recruiters: { $all: [`${query}`] } },
+				],
+			});
 			return result;
-		} else {
-			return Candidate.find({
+		}
+		//llega solo status
+		if (!position.length && status.length && query === "") {
+			const res: ICandidate[] = await Candidate.aggregate([
+				{
+					$lookup: {
+						from: "postulations",
+						localField: "postulations",
+						foreignField: "_id",
+						as: "postulations",
+					},
+				},
+				{
+					$match: {
+						"postulations.secondary_status": { $in: status },
+					},
+				},
+			]);
+			return res;
+		}
+
+		//llega solo position
+		if (position.length && !status.length && query === "") {
+			const res = await Candidate.find({
 				position: { $in: position },
 			});
+			return res;
+		}
+
+		// llega position & query
+		if (position.length && !status.length && query !== "") {
+			let re = new RegExp(query, "i");
+			const res = await Candidate.find({
+				position: { $in: position },
+				$or: [
+					{ name: { $regex: re } },
+					{ academic_training: { $regex: re } },
+					{ available_from: { $regex: re } },
+					{ english_level: { $regex: re } },
+					{ country: { $regex: re } },
+					{ designated_recruiters: { $all: [`${query}`] } },
+				],
+			});
+			return res;
+		}
+		//llega status & query
+		if (!position.length && status.length && query !== "") {
+			let re = new RegExp(query, "i");
+			const res = await Candidate.find({
+				"postulations.secondary_status": { $in: status },
+				$or: [
+					{ name: { $regex: re } },
+					{ academic_training: { $regex: re } },
+					{ available_from: { $regex: re } },
+					{ english_level: { $regex: re } },
+					{ country: { $regex: re } },
+					{ designated_recruiters: { $all: [`${query}`] } },
+				],
+			});
+			return res;
 		}
 	} catch (e: any) {
 		return next(
@@ -188,66 +260,6 @@ export const Create = async (candidateInfo: ICandidateInfo, next: NextFunction) 
 	}
 };
 
-/** NO SE USA */
-// export const UpdateInfo = async (
-// 	_id: string,
-// 	newCandidateInfo: UpdateCandidateInfoDto,
-// 	next: NextFunction
-// ) => {
-// 	try {
-// 		const foundCandidate = await Candidate.findById(_id);
-
-// 		await Candidate.findByIdAndUpdate(_id, newCandidateInfo, { new: true });
-// 	} catch (e: any) {
-// 		return next(
-// 			new InternalServerException(
-// 				`There was an unexpected error with the candidate info update service. ${e.message}`
-// 			)
-// 		);
-// 	}
-// };
-
-/** NO SE USA */
-// export const UpdateStatus = async (_id: string, newStatus: UpdateStatusDto, next: NextFunction) => {
-// 	try {
-// 		if (newStatus.secondary_status === valid_secondary_status[valid_secondary_status.length - 1]) {
-// 			const currentCandidate = await Candidate.findById(_id);
-// 			const newMainStatus = valid_main_status.indexOf(currentCandidate!.main_status!) + 1;
-
-// 			if (currentCandidate?.main_status! !== valid_main_status[valid_main_status.length - 1]) {
-// 				await Candidate.findByIdAndUpdate(_id, {
-// 					main_status: valid_main_status[newMainStatus],
-// 					secondary_status: valid_secondary_status[0],
-// 				});
-
-// 				return {
-// 					main_status: valid_main_status[newMainStatus],
-// 					secondary_status: valid_secondary_status[0],
-// 				};
-// 			}
-
-// 			await Candidate.findByIdAndUpdate(_id, {
-// 				secondary_status: newStatus.secondary_status,
-// 			});
-
-// 			return {
-// 				main_status: currentCandidate!.main_status!,
-// 				secondary_status: newStatus.secondary_status,
-// 			};
-// 		}
-
-// 		await Candidate.findByIdAndUpdate(_id, newStatus);
-
-// 		return newStatus;
-// 	} catch (e: any) {
-// 		return next(
-// 			new InternalServerException(
-// 				`There was an unexpected error with the candidate status update service. ${e.message}`
-// 			)
-// 		);
-// 	}
-// };
-
 export const UpdateConclusions = async (
 	_id: string,
 	newConclusions: IConclusions,
@@ -268,94 +280,6 @@ export const UpdateConclusions = async (
 		);
 	}
 };
-
-/**
- * PARA GENERAR EL url_link2 y le actualiza al Candidate el campol url_link2 y genera un docuemnto nuevo en la collecion video_recording_url
-	 TRASLADADO A Postulation.Service
-*/
-
-// export const GenerateUrl = async (candidate: ICandidate, next: NextFunction) => {
-// 	try {
-// 		const newUrl = await VideoRecordingUrl.create({});
-// 		const token = createToken(candidate, JWT_VIDEO_TOKEN_EXP, "video", newUrl.short_url);
-
-// 		const url =
-// 			NODE_ENV === "development"
-// 				? `${REDIRECT_URL_DEVELOPMENT}/welcome?token=${token} `
-// 				: `${REDIRECT_URL_PRODUCTION}/welcome?token=${token} `;
-
-// 		const candidateUpdated = await Candidate.findByIdAndUpdate(candidate._id, {
-// 			video_recording_url: newUrl._id,
-// 			url_link_2: url,
-// 		});
-
-// 		return token;
-// 	} catch (e: any) {
-// 		next(
-// 			new InternalServerException(
-// 				`There was an unexpected error with the url creation service. ${e.message}`
-// 			)
-// 		);
-// 	}
-// };
-
-// export const GetVideoFromS3 = (key: string, next: NextFunction) => {
-// 	try {
-// 		const getParams = {
-// 			Bucket: AWS_VIDEO_BUCKET_NAME,
-// 			Key: key,
-// 		};
-
-// 		return s3.getObject(getParams).createReadStream();
-// 	} catch (e: any) {
-// 		return next(
-// 			new InternalServerException(
-// 				`There was an unexpected error with the video download service. ${e.message}`
-// 			)
-// 		);
-// 	}
-// };
-
-// export const UploadVideoToS3 = async (file: File, next: NextFunction) => {
-// 	try {
-// 		const fileStream = createReadStream(file.path);
-
-// 		const uploadParams: UploadParams = {
-// 			Bucket: AWS_VIDEO_BUCKET_NAME,
-// 			Body: fileStream,
-// 			Key: file.filename,
-// 		};
-
-// 		return await s3.upload(uploadParams).promise();
-// 	} catch (e: any) {
-// 		next(
-// 			new InternalServerException(
-// 				`There was an unexpected error with the video upload service. ${e.message}`
-// 			)
-// 		);
-// 	}
-// };
-
-// export const SaveVideoKey = async (
-// 	question_id: number,
-// 	id: string,
-// 	next: NextFunction,
-// 	video_key: string
-// ) => {
-// 	try {
-// 		await Candidate.findOneAndUpdate(
-// 			{ _id: id, $and: [{ "videos_question_list.question_id": question_id }] },
-// 			{ $set: { "videos_question_list.$.video_key": video_key } },
-// 			{ upsert: true }
-// 		);
-// 	} catch (e: any) {
-// 		return next(
-// 			new InternalServerException(
-// 				`There was an unexpected error with the candidate question and video key setting service. ${e.message}`
-// 			)
-// 		);
-// 	}
-// };
 
 export const GetCV = async (key: string, next: NextFunction) => {
 	try {
@@ -407,18 +331,3 @@ export const SetIsRejected = async (_id: string, next: NextFunction) => {
 		);
 	}
 };
-
-/**
- * TRASLADADO A Postulation.Service
- */
-// export const DisableUrl = async (short_url: string, next: NextFunction): Promise<void> => {
-// 	try {
-// 		await VideoRecordingUrl.findOneAndUpdate({ short_url }, { isDisabled: true });
-// 	} catch (e: any) {
-// 		return next(
-// 			new InternalServerException(
-// 				`There was an unexpected error with the url deletion service. ${e.message}`
-// 			)
-// 		);
-// 	}
-// };
