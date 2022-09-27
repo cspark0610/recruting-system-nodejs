@@ -21,6 +21,7 @@ import VideoRecordingUrl from "../db/schemas/VideoRecordingUrl.schema";
 // dtos
 import { UpdatePostulationInfoDto } from "../db/schemas/dtos/Candidate/UpdatePostulationInfoDto.dto";
 import { UpdateStatusDto } from "../db/schemas/dtos/Candidate/UpdateStatusDto.dto";
+import { AWSError, S3 } from "aws-sdk";
 
 const {
 	AWS_VIDEO_BUCKET_NAME,
@@ -258,7 +259,8 @@ export const GetVideoFromS3 = (key: string, next: NextFunction) => {
 			Key: key,
 		};
 
-		return s3.getObject(getParams).createReadStream();
+		const signedUrl: string = s3.getSignedUrl("getObject", getParams);
+		return signedUrl;
 	} catch (e: any) {
 		return next(
 			new InternalServerException(

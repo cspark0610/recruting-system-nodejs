@@ -146,13 +146,12 @@ export const getVideoFromS3 = (req: Request, res: Response, next: NextFunction) 
 	try {
 		const { key } = req.params;
 
-		const candidateVideo = postulationService.GetVideoFromS3(key, next);
+		const candidateVideo: string | void = postulationService.GetVideoFromS3(key, next);
 
 		if (!candidateVideo) {
 			return next(new NotFoundException(`No video found`));
 		}
-
-		candidateVideo.pipe(res);
+		return res.send(candidateVideo);
 	} catch (e: any) {
 		return next(
 			new InternalServerException(
