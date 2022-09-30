@@ -40,6 +40,65 @@ export const GetAllCandidates = async (next: NextFunction) => {
 	}
 };
 
+export const GetCandidatesFilteredExpert = async (
+	next: NextFunction,
+	candidate_name: string,
+	skills: Array<string>,
+	employment_status: Array<string>
+) => {
+	try {
+		//  solo llega skills
+		if (candidate_name === "" && skills.length && !employment_status.length) {
+			const candidates: ICandidate[] = await Candidate.aggregate([
+				{
+					$lookup: {
+						from: "postulations",
+						localField: "postulations",
+						foreignField: "_id",
+						as: "postulations",
+					},
+				},
+				{
+					$match: {
+						"postulations.skills": { $all: [...skills] },
+					},
+				},
+			]);
+			return candidates;
+		}
+
+		// solo llega name
+		if (candidate_name !== "" && !skills.length && !employment_status.length) {
+			let re = new RegExp(candidate_name, "i");
+			const res = await Candidate.find({
+				name: { $regex: re },
+			});
+			return res;
+		}
+		// solo llega employment_status
+		if (candidate_name === "" && !skills.length && employment_status.length) {
+			const res = await Candidate.find({
+				employment_status: { $all: [...employment_status] },
+			});
+			return res;
+		}
+		//llega name & employment_status
+		if (candidate_name !== "" && !skills.length && employment_status.length) {
+			let re = new RegExp(candidate_name, "i");
+			const res = await Candidate.find({
+				$or: [{ name: { $regex: re } }, { employment_status: { $all: [...employment_status] } }],
+			});
+			return res;
+		}
+	} catch (e: any) {
+		return next(
+			new InternalServerException(
+				`There was an unexpected error with the GetCandidatesFilteredExpert service. ${e.message}`
+			)
+		);
+	}
+};
+
 export const GetCandidatesFiltered = async (
 	next: NextFunction,
 	position: Array<string>,
@@ -47,7 +106,7 @@ export const GetCandidatesFiltered = async (
 	query: string
 ) => {
 	try {
-		//llega status  & position & query
+		// llega status  & position & query
 		if (query !== "" && status.length && position.length) {
 			let re = new RegExp(query, "i");
 			const res = await Candidate.find({
@@ -102,10 +161,11 @@ export const GetCandidatesFiltered = async (
 
 		//llega solo position
 		if (position.length && !status.length && query === "") {
-			const res = await Candidate.find({
-				position: { $in: position },
-			});
-			return res;
+			const candidates = await Candidate.find({});
+			const filtered = candidates.filter((candidate) =>
+				position.includes(candidate.position._id.toString())
+			);
+			return filtered;
 		}
 
 		// llega position & query
@@ -161,7 +221,18 @@ export const GetCandidatesFiltered = async (
 
 export const GetOneCandidate = async (_id: string, next: NextFunction) => {
 	try {
-		return Candidate.findById(_id);
+		const candidate = await Candidate.findById(_id);
+		const cvUrl = await GetCV(candidate.cv!, next);
+
+		const updatedCandidate = await Candidate.findOneAndUpdate(
+			{ _id: candidate._id },
+			{
+				cv: cvUrl,
+			},
+			{ new: true }
+		);
+
+		return updatedCandidate;
 	} catch (e: any) {
 		return next(
 			new InternalServerException(
@@ -196,6 +267,7 @@ const createVideoQuestions = async (postulationId: string) => {
 export const Create = async (candidateInfo: ICandidateInfo, next: NextFunction) => {
 	try {
 		const position = await Position.findById(candidateInfo.position);
+
 		const designatedUsers = await User.find({
 			_id: { $in: position?.designated },
 		});
@@ -298,7 +370,8 @@ export const GetCV = async (key: string, next: NextFunction) => {
 			Key: key,
 		};
 
-		return s3.getObject(getParams).createReadStream();
+		const signedUrl: string = s3.getSignedUrl("getObject", getParams);
+		return signedUrl;
 	} catch (e: any) {
 		next(
 			new InternalServerException(

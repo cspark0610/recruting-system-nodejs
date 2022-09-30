@@ -20,4 +20,5 @@ export default interface ICandidate {
 	isRejected?: boolean;
 	createdAt?: Date;
 	updatedAt?: Date;
+	employment_status?: string;
 }

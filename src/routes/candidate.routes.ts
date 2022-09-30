@@ -25,10 +25,6 @@ const upload = multer({ storage });
 router.get("/", authJwt.verifyJwt, candidateController.getAllCandidates);
 
 router.get("/:_id", authJwt.verifyJwt, candidateController.getOneCandidate);
-router.get("/cv/:key", authJwt.verifyJwt, candidateController.getCV);
-
-/* SE LO PASA A Postulation.routes */
-//router.get("/video/:key", authJwt.verifyJwt, candidateController.getVideoFromS3);
 
 /**
  * @openapi
@@ -79,6 +75,7 @@ router.post(
 );
 
 router.post("/filter", authJwt.verifyJwt, candidateController.getCandidatesFiltered);
+router.post("/expert/filter", authJwt.verifyJwt, candidateController.getCandidatesFilteredExpert);
 
 /**
  * valida el token del url_link_2
