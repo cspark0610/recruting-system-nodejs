@@ -1,5 +1,9 @@
 import { Schema, model, Types } from "mongoose";
-import { valid_academic_trainings, valid_english_levels } from "../../config";
+import {
+	valid_academic_trainings,
+	valid_english_levels,
+	valid_employment_status,
+} from "../../config";
 import ICandidate from "./interfaces/ICandidate.interface";
 
 /**
@@ -442,6 +446,8 @@ const CandidateSchema = new Schema<ICandidate>(
 		},
 
 		isRejected: { type: Boolean, required: true, default: false },
+
+		employment_status: { type: String, enum: valid_employment_status, default: "in_process" },
 	},
 
 	{ versionKey: false, timestamps: true }

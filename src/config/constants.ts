@@ -1,5 +1,6 @@
-export const valid_main_status = ["interested", "applying", "meeting", "chosen"];
+export const valid_main_status = ["interested", "applying", "meeting", "chosen", "hired"];
 export const valid_secondary_status = ["new entry", "doubting", "dismissed", "approved"];
+export const valid_employment_status = ["in_process", "former", "active"];
 
 export const valid_english_levels = ["Basic", "Intermediate", "Advanced", "Native"];
 

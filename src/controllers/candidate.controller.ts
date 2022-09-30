@@ -61,6 +61,40 @@ export const getCandidatesFiltered = async (req: Request, res: Response, next: N
 	}
 };
 
+export const getCandidatesFilteredExpert = async (
+	req: Request,
+	res: Response,
+	next: NextFunction
+) => {
+	const { candidate_name, skills, employment_status } = req.body;
+
+	try {
+		const candidatesFiltered = await candidateService.GetCandidatesFilteredExpert(
+			next,
+			candidate_name,
+			skills,
+			employment_status
+		);
+
+		if (!candidatesFiltered || candidatesFiltered.length === 0) {
+			return next(
+				new NotFoundException("No candidates were found getCandidatesFilteredExpert method")
+			);
+		}
+
+		return res.status(200).send({
+			status: 200,
+			candidatesFiltered,
+		});
+	} catch (e: any) {
+		return next(
+			new InternalServerException(
+				`There was an unexpected error with the getCandidatesFiltered controller. ${e.message}`
+			)
+		);
+	}
+};
+
 export const getOneCandidate = async (req: Request, res: Response, next: NextFunction) => {
 	const { _id } = req.params;
 
@@ -92,10 +126,10 @@ export const getCV = async (req: Request, res: Response, next: NextFunction) => 
 		const candidateCV = await candidateService.GetCV(key, next);
 
 		if (!candidateCV) {
-			return next(new NotFoundException(`CV file not found`));
+			return next(new NotFoundException(`Candidate CV file not found`));
 		}
-
-		candidateCV.pipe(res);
+		//candidateCV.pipe(res);
+		return res.send(candidateCV);
 	} catch (e: any) {
 		return next(
 			new InternalServerException(
@@ -163,67 +197,6 @@ export const create = async (req: Request, res: Response, next: NextFunction) =>
 	}
 };
 
-// export const updateInfo = async (req: Request, res: Response, next: NextFunction) => {
-// 	const { _id } = req.params;
-// 	const {
-// 		academic_training,
-// 		salary_expectations,
-// 		available_from,
-// 		skills,
-// 		working_reason,
-// 	}: UpdateCandidateInfoDto = req.body;
-
-// 	const newCandidateInfo = {
-// 		academic_training: academic_training,
-// 		salary_expectations: salary_expectations,
-// 		available_from,
-// 		skills: skills,
-// 		working_reason,
-// 	};
-
-// 	try {
-// 		await candidateService.UpdateInfo(_id, newCandidateInfo, next);
-
-// 		return res.status(200).send({ status: 200, message: "Candidate updated successfully" });
-// 	} catch (e: any) {
-// 		return next(
-// 			new InternalServerException(
-// 				`There was an error with the candidate info update controller. ${e.message}`
-// 			)
-// 		);
-// 	}
-// };
-
-// export const updateStatus = async (req: Request, res: Response, next: NextFunction) => {
-// 	const { _id } = req.params;
-// 	const { main_status, secondary_status }: UpdateStatusDto = req.body;
-
-// 	try {
-// 		const data = await candidateService.UpdateStatus(_id, { main_status, secondary_status }, next);
-
-// 		if (!data) {
-// 			return next(
-// 				new InternalServerException(
-// 					"There was an error updating the candidate status. Please try again"
-// 				)
-// 			);
-// 		}
-
-// 		return res.status(200).send({
-// 			status: 200,
-// 			message: "Candidate status updated successfully",
-// 			main_status: data.main_status,
-// 			secondary_status: data.secondary_status,
-// 		});
-// 	} catch (e: any) {
-// 		return next(
-// 			new InternalServerException(
-// 				`There was an error with the candidate status update controller. ${e.message}`
-// 			)
-// 		);
-// 	}
-// };
-
 export const updateConclusions = async (req: Request, res: Response, next: NextFunction) => {
 	const { _id } = req.params;
 	const { good, bad } = req.body;
@@ -243,86 +216,6 @@ export const updateConclusions = async (req: Request, res: Response, next: NextF
 		);
 	}
 };
-
-/* ACA PARA GENERAR EL url_link2 y video_recording_url*/
-// export const generateUniqueUrl = async (
-// 	req: RequestExtended,
-// 	res: Response,
-// 	next: NextFunction
-// ) => {
-// 	try {
-// 		const { candidate } = req;
-// 		const token = await candidateService.GenerateUrl(candidate!, next);
-
-// 		if (!token) {
-// 			return next(
-// 				new InternalServerException("There was an error creating the url. Please try again")
-// 			);
-// 		}
-
-// 		return res.status(201).send({
-// 			status: 201,
-// 			message: "Url generated successfully",
-// 		});
-// 	} catch (e: any) {
-// 		return next(
-// 			new InternalServerException(
-// 				`There was an unexpected error with the url creation controller. ${e.message}`
-// 			)
-// 		);
-// 	}
-// };
-
-// export const getVideoFromS3 = (req: Request, res: Response, next: NextFunction) => {
-// 	try {
-// 		const { key } = req.params;
-
-// 		const candidateVideo = candidateService.GetVideoFromS3(key, next);
-
-// 		if (!candidateVideo) {
-// 			return next(new NotFoundException(`No video found`));
-// 		}
-
-// 		candidateVideo.pipe(res);
-// 	} catch (e: any) {
-// 		return next(
-// 			new InternalServerException(
-// 				`There was an unexpected error with the video download controller. ${e.message}`
-// 			)
-// 		);
-// 	}
-// };
-
-// export const uploadVideoToS3 = async (req: Request, res: Response, next: NextFunction) => {
-// 	try {
-// 		const newCandidateVideo = req.file;
-
-// 		const { candidate_id } = req.params;
-// 		const { question_id } = req.body;
-
-// 		if (!newCandidateVideo) {
-// 			return next(new BadRequestException("No video file was received"));
-// 		}
-
-// 		const result = await candidateService.UploadVideoToS3(newCandidateVideo, next);
-
-// 		await unlinkFile(newCandidateVideo.path);
-
-// 		// sets the video_key property in candidate schema after video is uploaded to S3
-// 		await candidateService.SaveVideoKey(question_id, candidate_id, next, result!.Key);
-
-// 		return res.status(201).send({
-// 			status: 201,
-// 			message: "Video uploaded successfully",
-// 		});
-// 	} catch (e: any) {
-// 		return next(
-// 			new InternalServerException(
-// 				`There was an unexpected error with the video upload controller. ${e.message}`
-// 			)
-// 		);
-// 	}
-// };
 
 export const validateUrl = async (req: Request, res: Response, next: NextFunction) => {
 	try {
@@ -364,14 +257,3 @@ export const setIsRejected = async (req: Request, res: Response, next: NextFunct
 		);
 	}
 };
-
-// export const disableUrl = async (req: Request, res: Response, next: NextFunction) => {
-// 	const { url_id } = req.params;
-
-// 	await candidateService.DisableUrl(url_id, next);
-
-// 	return res.status(200).send({
-// 		status: 200,
-// 		message: "Url disabled successfully",
-// 	});
-// };
