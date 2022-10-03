@@ -348,7 +348,7 @@ export const UpdateConclusions = async (
 	next: NextFunction
 ) => {
 	try {
-		await Candidate.findByIdAndUpdate(_id, {
+		return await Candidate.findByIdAndUpdate(_id, {
 			$push: {
 				"conclusions.good": newConclusions.good,
 				"conclusions.bad": newConclusions.bad,
@@ -410,6 +410,28 @@ export const SetIsRejected = async (_id: string, next: NextFunction) => {
 		return next(
 			new InternalServerException(
 				`There was an unexpected error with SetIsRejected method service. ${e.message}`
+			)
+		);
+	}
+};
+
+export const UpdateCandidateEmploymentStatus = async (
+	_id: string,
+	employment_status: string,
+	next: NextFunction
+) => {
+	try {
+		const candidate = await Candidate.findById(_id);
+		if (candidate.isRejected) {
+			return next(
+				new InternalServerException(`Cannot update employment_status of rejected candidates.`)
+			);
+		}
+		return await Candidate.findOneAndUpdate({ _id }, { employment_status }, { new: true });
+	} catch (e: any) {
+		return next(
+			new InternalServerException(
+				`There was an unexpected error with the candidate employment_status service. ${e.message}`
 			)
 		);
 	}

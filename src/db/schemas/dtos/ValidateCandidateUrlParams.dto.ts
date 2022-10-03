@@ -2,12 +2,12 @@
 import { IsMongoId, IsOptional } from "class-validator";
 import { Types } from "mongoose";
 
-export default class ValidatePostulationUrlParamsDto {
-	@IsOptional()
+export default class ValidateCandidateUrlParamsDto {
+	//@IsOptional()
 	@IsMongoId()
 	_id!: Types.ObjectId;
 
-	@IsOptional()
+	//@IsOptional()
 	@IsMongoId()
-	postulation_id!: Types.ObjectId;
+	candidate_id!: Types.ObjectId;
 }

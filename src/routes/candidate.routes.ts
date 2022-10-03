@@ -1,7 +1,11 @@
 import { Router } from "express";
 import multer from "multer";
 import { storage } from "../config";
-import { requestBodyValidation, requestQueryValidation } from "../middlewares/validators/requests";
+import {
+	requestBodyValidation,
+	// requestParamsValidation,
+	requestQueryValidation,
+} from "../middlewares/validators/requests";
 import { CreateCandidateDto, JwtValidationDto } from "../db/schemas/dtos/Candidate";
 import * as candidateController from "../controllers/candidate.controller";
 import * as candidateAuth from "../middlewares/Candidate.middleware";
@@ -172,6 +176,15 @@ router.post(
  * ruta para actualizar el campo "conclusions" de un Candidate
  */
 router.put("/conclusions/set/:_id", [authJwt.verifyJwt], candidateController.updateConclusions);
+
+/**
+ * ruta para actualizar campo employment_status del Candidate
+ */
+router.put(
+	"/employment_status/update/:_id",
+	[authJwt.verifyJwt],
+	candidateController.updateCandidateEmploymentStatus
+);
 
 /**
  * ruta para actualizar el campo "isRejected" de un Candidate a true

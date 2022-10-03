@@ -8,7 +8,7 @@ import { promisify } from "util";
 import { BadRequestException, InternalServerException, NotFoundException } from "../exceptions";
 import { RequestExtended } from "../interfaces";
 // dtos
-import { UpdatePostulationInfoDto } from "../db/schemas/dtos/Candidate/UpdatePostulationInfoDto.dto";
+import { UpdatePostulationInfoDto } from "../db/schemas/dtos/Postulations/UpdatePostulationInfoDto.dto";
 //schemas
 
 //services

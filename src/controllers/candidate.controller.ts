@@ -217,6 +217,30 @@ export const updateConclusions = async (req: Request, res: Response, next: NextF
 	}
 };
 
+export const updateCandidateEmploymentStatus = async (
+	req: Request,
+	res: Response,
+	next: NextFunction
+) => {
+	const { _id } = req.params;
+	const { employment_status } = req.body;
+
+	try {
+		await candidateService.UpdateCandidateEmploymentStatus(_id, employment_status, next);
+
+		return res.status(200).send({
+			status: 200,
+			message: "Candidate employment status updated successfully",
+		});
+	} catch (e: any) {
+		return next(
+			new InternalServerException(
+				`There was an error with UpdateCandidateInfo method. ${e.message}`
+			)
+		);
+	}
+};
+
 export const validateUrl = async (req: Request, res: Response, next: NextFunction) => {
 	try {
 		const token = req.query.token as string;

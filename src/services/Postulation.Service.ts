@@ -19,7 +19,7 @@ import Candidate from "../db/schemas/Candidate.schema";
 import VideoRecordingUrl from "../db/schemas/VideoRecordingUrl.schema";
 
 // dtos
-import { UpdatePostulationInfoDto } from "../db/schemas/dtos/Candidate/UpdatePostulationInfoDto.dto";
+import { UpdatePostulationInfoDto } from "../db/schemas/dtos/Postulations/UpdatePostulationInfoDto.dto";
 import { UpdateStatusDto } from "../db/schemas/dtos/Candidate/UpdateStatusDto.dto";
 import { AWSError, S3 } from "aws-sdk";
 
