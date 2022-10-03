@@ -3,7 +3,7 @@ import multer from "multer";
 import { storage } from "../config";
 
 // dtos
-import { UpdatePostulationInfoDto } from "../db/schemas/dtos/Candidate/UpdatePostulationInfoDto.dto";
+import { UpdatePostulationInfoDto } from "../db/schemas/dtos/Postulations/UpdatePostulationInfoDto.dto";
 import ValidatePostulationUrlParams from "../db/schemas/dtos/ValidatePostulationUrlParams.dto";
 import { UpdateStatusDto } from "../db/schemas/dtos/Candidate/UpdateStatusDto.dto";
 
