@@ -281,3 +281,21 @@ export const setIsRejected = async (req: Request, res: Response, next: NextFunct
 		);
 	}
 };
+
+export const addPostulation = async (req: Request, res: Response, next: NextFunction) => {
+	const { _id } = req.params;
+
+	try {
+		const data = await candidateService.AddPostulationToCandidate(_id, req.body, next);
+
+		return res.status(200).send({
+			status: 200,
+			message: "Postulation was added to candidate successfully",
+			data,
+		});
+	} catch (e: any) {
+		return next(
+			new InternalServerException(`There was an error with addPostulation method. ${e.message}`)
+		);
+	}
+};

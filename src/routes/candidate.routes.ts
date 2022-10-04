@@ -191,4 +191,6 @@ router.put(
  */
 router.put("/reject/:_id", [authJwt.verifyJwt], candidateController.setIsRejected);
 
+router.put("/add_postulation/:_id", [authJwt.verifyJwt], candidateController.addPostulation);
+
 export default router;
