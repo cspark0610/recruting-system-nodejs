@@ -22,7 +22,7 @@ import Position from "../db/schemas/Position.schema";
 
 //interfaces
 import { File, UploadParams, IConclusions } from "../interfaces";
-//import ICandidate from "../db/schemas/interfaces/ICandidate.interface";
+//import ICandidate from '../db/schemas/interfaces/ICandidate.interface';
 import ICandidateInfo from "../db/schemas/interfaces/ICandidateInfo.interface";
 import ICandidate from "../db/schemas/interfaces/ICandidate.interface";
 
@@ -432,6 +432,61 @@ export const UpdateCandidateEmploymentStatus = async (
 		return next(
 			new InternalServerException(
 				`There was an unexpected error with the candidate employment_status service. ${e.message}`
+			)
+		);
+	}
+};
+
+export const AddPostulationToCandidate = async (
+	_id: string,
+	{ _id: positionId, linkedin, portfolio },
+	next: NextFunction
+) => {
+	try {
+		const candidate: ICandidate = await Candidate.findById(_id);
+		if (!candidate) {
+			return next(
+				new InternalServerException(
+					`There was an unexpected error with candidate with _id ${candidate._id} does not exists`
+				)
+			);
+		}
+		const newPostulation = await Postulation.create({
+			position: positionId,
+			linkedin,
+			portfolio,
+			main_status: "interested",
+			secondary_status: "new entry",
+		});
+		const { video_question_1, video_question_2 } = await createVideoQuestions(
+			newPostulation._id.toString()
+		);
+		const updatedPostulation = await Postulation.findOneAndUpdate(
+			{ _id: newPostulation._id },
+			{
+				$push: {
+					video_questions_list: { $each: [{ ...video_question_1 }, { ...video_question_2 }] },
+				},
+			},
+			{ new: true }
+		);
+		if (updatedPostulation && candidate) {
+			await Candidate.findOneAndUpdate(
+				{ _id: candidate._id },
+				{
+					$push: {
+						postulations: { ...updatedPostulation },
+					},
+					position: positionId,
+				},
+				{ new: true }
+			);
+			return updatedPostulation;
+		}
+	} catch (e) {
+		return next(
+			new InternalServerException(
+				`There was an unexpected error with the candidate AddPostulationToCandidate service. ${e.message}`
 			)
 		);
 	}
