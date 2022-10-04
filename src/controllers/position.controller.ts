@@ -1,11 +1,13 @@
+import * as positionService from '../services/Position.service';
+
+import { BadRequestException, InternalServerException } from '../exceptions';
 /* eslint-disable operator-linebreak */
 /* eslint-disable object-curly-newline */
 /* eslint-disable no-underscore-dangle */
-import { Request, Response, NextFunction } from 'express';
+import { NextFunction, Request, Response } from 'express';
+
 import { IPositionNormal } from '../db/schemas/interfaces/IPosition.interface';
-import { InternalServerException, BadRequestException } from '../exceptions';
 import { RequestExtended } from '../interfaces';
-import * as positionService from '../services/Position.service';
 
 export const getAllPositions = async (
   req: RequestExtended,
@@ -13,7 +15,7 @@ export const getAllPositions = async (
   next: NextFunction,
 ) => {
   try {
-    const { page, limit, list } = req.query;
+    const { page, limit, list, orderBy } = req.query;
 
     const parsedPage = parseInt(page as string, 10) || 1;
     const parsedLimit = parseInt(limit as string, 10) || 10;
@@ -23,6 +25,7 @@ export const getAllPositions = async (
       list as string,
       parsedLimit,
       parsedPage,
+      orderBy as string
     );
 
     res.status(200).send({ status: 200, data: positions });

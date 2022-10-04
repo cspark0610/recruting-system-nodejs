@@ -1,34 +1,37 @@
+import { AggregatePaginateResult, PaginateDocument, PaginateResult } from "mongoose";
+
+import { IPositionNormal } from "../db/schemas/interfaces/IPosition.interface";
+import { InternalServerException } from "../exceptions";
 /* eslint-disable no-underscore-dangle */
 import { NextFunction } from "express";
-import { IPositionNormal } from "../db/schemas/interfaces/IPosition.interface";
-import { envConfig } from "../config";
-import { InternalServerException } from "../exceptions";
-import { RequestExtended } from "../interfaces";
 import Position from "../db/schemas/Position.schema";
+import { RequestExtended } from "../interfaces";
 import User from "../db/schemas/User.schema";
+import { envConfig } from "../config";
+import { positionAggregates } from "../utils/aggregations";
 
 // eslint-disable-next-line operator-linebreak
 const { NODE_ENV, REDIRECT_URL_DEVELOPMENT, REDIRECT_URL_PRODUCTION } = envConfig;
+
 
 export const GetAllPositions = async (
 	next: NextFunction,
 	list: string,
 	limit?: number,
-	page?: number
-) => {
+	page?: number,
+	orderBy:string = "priority"
+)=> {
 	try {
-		if (list === "all") {
+		if (list === "all" || orderBy !== "priority") {
 			return await Position.paginate();
 		}
 
-		if (list === "active") {
-			return await Position.paginate({ isActive: true }, { page, limit });
-		}
-
-		if (list === "inactive") {
-			return await Position.paginate({ isActive: false }, { page, limit });
-		}
+		const OrderedAggregate = positionAggregates[orderBy](list)
+		return await Position.aggregatePaginate(OrderedAggregate, { page, limit });
+		
 	} catch (e: any) {
+		console.log('err');
+		
 		next(new InternalServerException(`There was an unexpected error: ${e.message}`));
 	}
 };

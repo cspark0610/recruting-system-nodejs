@@ -1,9 +1,11 @@
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable indent */
-import { Schema, model, PaginateModel, Document } from 'mongoose';
-import { valid_priorities } from '../../config';
-import mongoosePaginate from 'mongoose-paginate-v2';
+import { Aggregate, AggregatePaginateModel, Document, PaginateModel, PaginateOptions, Schema, model } from 'mongoose';
+
 import IPosition from '../schemas/interfaces/IPosition.interface';
+import aggregatePaginate from 'mongoose-aggregate-paginate-v2'
+import mongoosePaginate from 'mongoose-paginate-v2';
+import { valid_priorities } from '../../config';
 
 const PositionSchema = new Schema<IPosition>(
   {
@@ -53,9 +55,10 @@ const PositionSchema = new Schema<IPosition>(
 
 PositionSchema.plugin(require('mongoose-autopopulate'));
 PositionSchema.plugin(mongoosePaginate);
+PositionSchema.plugin(aggregatePaginate)
 
-interface PositionModel<T extends Document> extends PaginateModel<T> {}
-
+interface PositionModel<T extends Document> extends  AggregatePaginateModel<T>,PaginateModel<T> {
+}
 const PositionModel: PositionModel<IPosition> = model<IPosition>(
   'position',
   PositionSchema,
