@@ -27,8 +27,6 @@ export const getAllPositions = async (
       parsedPage,
       orderBy as string
     );
-    console.log(positions);
-    
 
     res.status(200).send({ status: 200, data: positions });
   } catch (e: any) {
