@@ -18,6 +18,8 @@ import * as postulationController from "../controllers/postulation.controller";
 const router = Router();
 const upload = multer({ storage });
 
+router.get("/:_id", authJwt.verifyJwt, postulationController.getOnePostulation);
+
 /**
  * ruta para actualizar los campos del schema postulation
  */
