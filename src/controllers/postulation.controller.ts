@@ -15,6 +15,30 @@ import { UpdatePostulationInfoDto } from "../db/schemas/dtos/Postulations/Update
 import * as postulationService from "../services/Postulation.Service";
 import { ManagedUpload } from "aws-sdk/lib/s3/managed_upload";
 
+export const getOnePostulation = async (req: Request, res: Response, next: NextFunction) => {
+	const { _id } = req.params;
+
+	if (!_id) {
+		return next(new BadRequestException("No postulation id was provided"));
+	}
+
+	try {
+		const postulation = await postulationService.GetPostulationById(_id, next);
+
+		if (!postulation) {
+			return next(new NotFoundException(`No postulation with id ${_id} was found`));
+		}
+
+		return res.status(200).send({ status: 200, postulation });
+	} catch (e: any) {
+		return next(
+			new InternalServerException(
+				`There was an unexpected error with the GetOnePostulation controller. ${e.message}`
+			)
+		);
+	}
+};
+
 export const updateInfo = async (req: Request, res: Response, next: NextFunction) => {
 	const { _id } = req.params;
 
